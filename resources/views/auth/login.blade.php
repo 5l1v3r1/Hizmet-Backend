@@ -166,7 +166,7 @@
                 </form>
 
                 <div class="text-center" style="padding:5px;">
-                    <a href="http://hizmet.site" title="Enerji Takibi" target="_blank">
+                    <a href="http://hizmet.site" title="Hizmet guru" target="_blank">
                         <img class="img-responsive" alt="Logo" style="max-height: 50px;display:inline;" src="/img/hizmet_logo.jpg" />
                     </a>
                 </div>

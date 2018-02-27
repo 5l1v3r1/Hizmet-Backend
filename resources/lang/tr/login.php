@@ -9,8 +9,8 @@ return [
     |
     */
 
-    'title' => 'Enerji Takibi  | Login',
-	'definition' => 'Enerji Takip Programı',
+    'title' => 'Hizmet Guru  | Login',
+	'definition' => 'Hizmet ayağınıza geldi',
 	'email' => 'E-posta Adresiniz',
 	'password' => 'Parolanız',
 	'login' => 'Giriş',

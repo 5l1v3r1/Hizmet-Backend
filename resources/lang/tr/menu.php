@@ -12,12 +12,6 @@ return [
     'dashboard' => 'Gösterge Paneli',
     'system_summary' => 'Genel Durum',
     'asset_map' => 'Varlık Haritası',
-    'consumption_map' => 'Enerji Tüketim Haritası',
-    'modem_management' => 'Modem Yönetimi',
-    'modem' => 'Modem',
-    'meter' => 'Sayaçlar',
-    'relay' => 'Röleler',
-    'analyzer' => 'Analizörler',
     'system_management' => 'Sistem Yönetimi',
     'my_profile' => 'Profil Sayfam',
     'client_management' => 'Müşteri Yönetimi',
@@ -30,14 +24,15 @@ return [
     'server_status' => 'Sunucu Durumu',
     'contact_us' => 'İletişim',
 	'user_management' => 'Kullanıcı Yönetimi',
-    'device_management' => 'Cihaz Yönetimi',
-    'all_devices' => 'Tüm Cihazlar',
-    'event_logs' => 'Olay Kayıtları',
+    'booking_management' => 'İlan Yönetimi',
+    'order_management' => 'Sipariş Yönetimi',
+    'finance' => 'Finans Sistemi',
+    'blog' => 'Blog Yönetimi',
+    'support' => 'Destek',
     'statistics' => 'İstatistikler',
+    'reporting' => 'Raporlar',
     'graphs' => 'Grafikler',
-    'comparison' => 'Karşılaştırmalar',
-    'reporting' => 'Raporlama',
-    'organization_schema' => 'Organizasyon Şeması',
-    'temperature' => 'Sıcaklık Verileri'
+    'comparison' => 'Karşılaştırmalar'
+
 
 ];
