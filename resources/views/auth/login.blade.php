@@ -125,7 +125,7 @@
         <div class="middle-box text-center loginscreen animated fadeInDown">
             <div>
                 <div>
-                    <h1 class="logo-name" style="color: #96BC3D;">2M</h1>
+                    <h1 class="logo-name" style="color: #96BC3D;">HG</h1>
                 </div>
 
                 <h3 style="color: #00e600;; background-color: black; opacity: 0.7; border-radius: 10px; padding: 3px;">{{ trans('login.definition') }}</h3>
@@ -166,12 +166,12 @@
                 </form>
 
                 <div class="text-center" style="padding:5px;">
-                    <a href="http://www.2menerji.com/" title="2M Enerji" target="_blank">
-                        <img class="img-responsive" alt="2M_Logo" style="max-height: 50px;display:inline;" src="/img/2m_logo.png" />
+                    <a href="http://hizmet.site" title="Enerji Takibi" target="_blank">
+                        <img class="img-responsive" alt="Logo" style="max-height: 50px;display:inline;" src="/img/hizmet_logo.jpg" />
                     </a>
                 </div>
 
-                <p class="m-t" style="color: #ffffff;font-weight: bold;"> <small> Copyright 2m Enerji &copy; 2016</small> </p>
+                <p class="m-t" style="color: #ffffff;font-weight: bold;"> <small> Copyright Osman Aras | Hizmet Guru &copy; 2018</small> </p>
             </div>
 
         </div>

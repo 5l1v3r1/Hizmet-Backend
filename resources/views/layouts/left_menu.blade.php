@@ -32,7 +32,7 @@
 
                 </div>
                 <div class="logo-element">
-                    <a href="http://www.2menerji.com" target="_blank"> 2M </a>
+                    <a href="http://hizmet.site" target="_blank"> HG </a>
                 </div>
             </li>
 
@@ -49,8 +49,8 @@
 
             <div class="hr-line-dashed"></div>
             <div class="text-center" style="padding:5px;">
-                <a href="http://www.2menerji.com/" title="2M Enerji" target="_blank">
-                    <img class="img-responsive" alt="2M_Logo" style="max-height: 50px;display:inline;" src="/img/2m_logo.png" />
+                <a href="http://hizmet.site" title="hizmet.site" target="_blank">
+                    <img class="img-responsive" alt="3Faz_Logo" style="max-height: 50px;display:inline;" src="/img/hizmet_logo.jpg" />
                 </a>
             </div>
         </ul>

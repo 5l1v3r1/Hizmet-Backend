@@ -9,7 +9,7 @@ return [
     |
     */
 
-    'title' => '2M Enerji | Login',
+    'title' => 'Enerji Takibi  | Login',
 	'definition' => 'Enerji Takip Programı',
 	'email' => 'E-posta Adresiniz',
 	'password' => 'Parolanız',

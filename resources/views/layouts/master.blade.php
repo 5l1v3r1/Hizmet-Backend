@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="description" content="{{ trans('global.description') }}">
         <meta name="keywords" content="{{ trans('global.description') }}">
-        <title>2M | @yield('title')</title>
+        <title>3Faz | @yield('title')</title>
 
         <!-- Mobile Specific Metas ================================================== -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
@@ -62,7 +62,7 @@
                     <strong><i>{{ trans('global.motto') }}...</i></strong>
                 </div>
                 <div>
-                    <strong>Copyright</strong> 2M Enerji Toptan Elektrik Ticaret A.Ş. &copy; 2016
+                    <strong>Copyright</strong> Osman Aras Bitirme projesi. &copy; 2018
                 </div>
             </div> <!-- .footer -->
         </div>
