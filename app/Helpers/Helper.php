@@ -1,7 +1,7 @@
 <?php
 
 /*
-Created by kadir/uk to operate custom functions
+Created by osman/uk to operate custom functions
 */
 namespace App\Helpers;
 

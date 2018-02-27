@@ -14,7 +14,7 @@ class Reporting
 
 
     public static function createReport(){
-        echo ("denemeulas");
+        echo ("denemeosman");
     }
 
 }
