@@ -11,15 +11,11 @@ return [
 
     'dashboard' => 'Gösterge Paneli',
     'system_summary' => 'Genel Durum',
-    'asset_map' => 'Varlık Haritası',
     'system_management' => 'Sistem Yönetimi',
     'my_profile' => 'Profil Sayfam',
     'client_management' => 'Müşteri Yönetimi',
-    'distributor_management' => 'Bayi Yönetimi',
-    'fee_scale' => 'Tarifeler',
     'authorization' => 'Yetkilendirme',
     'system_status' => 'Sistem Durumu',
-    'alerts' => 'Alarmlar',
     'announcement' => 'Duyurular',
     'server_status' => 'Sunucu Durumu',
     'contact_us' => 'İletişim',
@@ -32,7 +28,7 @@ return [
     'statistics' => 'İstatistikler',
     'reporting' => 'Raporlar',
     'graphs' => 'Grafikler',
-    'comparison' => 'Karşılaştırmalar'
+    'seller_management' => 'Satıcı Yönetimi'
 
 
 ];
