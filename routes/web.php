@@ -80,25 +80,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/cm_get_data', 'ClientManagementController@getData')->middleware('custom_authorization:view_client_management');
 
-    Route::get('/cdu_get_data/{type}/{id}', 'UserManagementController@getData')->middleware('custom_authorization:view_client_detail')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
 
-    Route::get('/cdm_get_data/{type}/{id}', 'ModemManagementController@getData')->middleware('custom_authorization:view_client_detail')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
-
-    Route::get('/cdd_get_data/{device_type}/{type}/{id}', 'DeviceController@getDeviceData')->middleware('custom_authorization:view_client_detail')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
-
-    Route::get('/client_management/detail/{id}', 'ClientManagementController@clientDetail')->middleware('custom_authorization:view_client_detail')->where('id', '[0-9]{1,5}');
-
-    Route::post('/client_management/add', 'ClientManagementController@create')->middleware('custom_authorization:add_new_client');
-
-    Route::post('/client_management/upload_image', 'ClientManagementController@uploadImage')->middleware('custom_authorization:add_new_client');
-
-    Route::post('/client_management/edit_profile', 'ClientManagementController@create')->middleware('custom_authorization:edit_profile_info');
-
-    Route::post('/client_management/edit_image', 'ClientManagementController@uploadImage')->middleware('custom_authorization:edit_profile_info');
-
-    Route::post('/client_management/get_info', 'ClientManagementController@getInfo')->middleware('custom_authorization:add_new_client');
-
-    Route::post('/client_management/delete', 'ClientManagementController@delete')->middleware('custom_authorization:delete_client');
 
 });
 
