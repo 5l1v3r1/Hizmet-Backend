@@ -106,11 +106,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/sm_get_data', 'SellerManagementController@getData')->middleware('custom_authorization:view_seller_management');
 
-    Route::get('/cdu_get_data/{type}/{id}', 'SellerManagementController@getData')->middleware('custom_authorization:view_seller_management')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
+    Route::get('/sdu_get_data/{type}/{id}', 'SellerManagementController@getData')->middleware('custom_authorization:view_seller_management')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
 
-    Route::get('/cdb_get_data/{id}', 'BookingManagementController@getData')->middleware('custom_authorization:view_seller_management');
+    Route::get('/sob_get_data/{id}', 'BookingManagementController@getData')->middleware('custom_authorization:view_seller_management');
 
-    Route::get('/cdo_get_data/{type}/{id}', 'OrderController@getData')->middleware('custom_authorization:view_seller_management');
+    Route::get('/soo_get_data/{type}/{id}', 'OrderController@getData')->middleware('custom_authorization:view_seller_management');
 
     Route::get('/seller_management/detail/{id}', 'SellerManagementController@clientDetail')->middleware('custom_authorization:view_seller_management')->where('id', '[0-9]{1,5}');
 

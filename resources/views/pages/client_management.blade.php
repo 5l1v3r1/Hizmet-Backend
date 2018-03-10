@@ -72,7 +72,35 @@
                                     <input type="number" placeholder="" class="form-control" id="new_client_gsm_phone" name="new_client_gsm_phone" required>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> {{ trans('client_detail.phone') }} </label>
+                                <div class="col-sm-6">
+                                    <input type="number" class="form-control" id="new_client_phone" name="new_client_phone">
+                                </div>
+                            </div>
 
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> {{ trans('client_detail.province') }} </label>
+                                <div class="col-sm-6">
+                                    <input type="number"  class="form-control" id="new_client_province" name="new_client_province" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> {{ trans('client_detail.district') }} </label>
+                                <div class="col-sm-6">
+                                    <input type="number"  class="form-control" id="new_client_district" name="new_client_district" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> {{ trans('client_detail.location') }} <span style="color:red;">*</span></label>
+                                <div class="col-sm-6">
+                                     <textarea class="form-control" id="new_client_location" name="new_client_location">
+
+                                    </textarea>
+                                </div>
+                            </div>
 
 
                             <input type="hidden" value="new" id="client_op_type" name="client_op_type">
@@ -168,7 +196,7 @@
             $("#div_client_dataTable").hide();
         }
 
-        function edit_user(id){
+        function edit_client(id){
             $('body').prepend("<div id='bg_block_screen'> <div class='loader'></div>{{ trans("global.preparing") }}...</div>");
 
             $("#modal_title").html("{{ trans('client_management.update_title') }}");
@@ -186,6 +214,13 @@
 
                         $("#new_client_name").val(the_info["name"]);
                         $("#new_client_email").val(the_info["email"]);
+                        $("#new_client_name").val(the_info["name"]);
+                        $("#new_client_email").val(the_info["email"]);
+                        $("#new_client_phone").val(the_info["phone"]);
+                        $("#new_client_gsm_phone").val(the_info["gsm_phone"]);
+                        $("#new_client_province").val(the_info["province"]);
+                        $("#new_client_district").val(the_info["district"]);
+                        $("#new_client_location").val(the_info["location"]);
 
                         $("#new_client_password").val("");
                         $('#new_client_password').removeAttr('required');
@@ -195,31 +230,6 @@
                             minimumResultsForSearch: Infinity
                         }).val(the_info["client_type"]).trigger("change");
 
-                        if( the_info["client_type"] == 3 ){
-                            $("#new_client_distributors").show();
-                            $('#new_client_clients').removeAttr('required');
-                            $('#new_client_distributors').attr('required', '');
-                            $("#new_client_distributors").select2({
-                                minimumResultsForSearch: 10
-                            }).val(the_info["org_id"]).trigger("change");
-                        }
-                        else if( the_info["client_type"] == 4 ){
-                            $("#new_client_clients").show();
-                            $('#new_client_distributors').removeAttr('required');
-                            $('#new_client_clients').attr('required', '');
-                            $("#new_client_clients").select2({
-                                minimumResultsForSearch: 10
-                            }).val(the_info["org_id"]).trigger("change");
-                        }
-                        else{
-                            $("#new_client_clients").hide();
-                            $('#new_client_clients').removeAttr('required');
-                            $("#new_client_distributors").hide();
-                            $('#new_client_distributors').removeAttr('required');
-                        }
-
-                        $('#edit_client_logo').attr('src', '/img/avatar/user/' + the_info["avatar"]);
-                        $('#edit_image_name').val('/img/avatar/user/' + the_info["avatar"]);
 
                         $("#password_label_for_new").hide();
                         $("#password_label_for_edit").show();

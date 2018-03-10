@@ -15,7 +15,7 @@ class SellerManagementController extends Controller
 {
     private $columns;
     private $user_columns;
-    private $booking_columns;
+    private $offer_columns;
     private $order_columns;
     private $event_columns;
     private $message_columns;
@@ -42,7 +42,7 @@ class SellerManagementController extends Controller
             "created_at"=>array(),
             "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
         );
-        $this->booking_columns = array(
+        $this->offer_columns = array(
 
             "name"=>array("name"=>"username"),
             "user_type"=>array("visible"=>false),
@@ -181,7 +181,7 @@ class SellerManagementController extends Controller
 
         if($detail_type == "") {
             if (Helper::has_right(Auth::user()->operations, "add_new_client")) {
-                $return_value .= '<a href="javascript:void(1);" title="' . trans('seller_management.edit') . '" onclick="edit_client(' . $item_id . ');" class="btn btn-warning btn-sm"><i class="fa fa-edit fa-lg"></i></a> ';
+                $return_value .= '<a href="javascript:void(1);" title="' . trans('seller_management.edit') . '" onclick="edit_seller(' . $item_id . ');" class="btn btn-warning btn-sm"><i class="fa fa-edit fa-lg"></i></a> ';
             }
 
 
@@ -222,7 +222,169 @@ class SellerManagementController extends Controller
 
     }
 
+    public function create(Request $request){
+        $op_type = "new";
+        $password = "";
+        $null = "";
+        $json = "{\"text\": \"Esentepe Mahallesi, Eski Büyükdere Cd. No:193, 34394 Şişli/İstanbul, Türkiye\", \"verbal\": \"Şişli/İstanbul\", \"latitude\": \"41.0793246\", \"longitude\": \"29.01125479999996\"}";
+        $created_by = Auth::user()->id;
+        $name_validator = 'bail|required|unique:clients,name|max:255|min:3';
 
+        $password_validator = 'bail|required|min:6|max:20';
+        $email_validator = 'bail|required|email|max:255|unique:users,email';
+
+        if( $request->has('seller_op_type') && $request->input('seller_op_type') == "edit") {
+            $op_type = "edit";
+
+            if( $request->has('seller_edit_id') && is_numeric($request->input("seller_edit_id")) ){
+                $result = DB::table("clients")
+                    ->where("id", $request->input("seller_edit_id"))
+                    ->where('status', '<>', 0)
+                    ->first();
+
+
+
+
+            }
+
+
+            $password = $result->password;
+
+
+
+        }
+
+
+
+        if( $op_type == "new" ){
+            $last_insert_id = DB::table('clients')->insertGetId(
+                [
+                    'name' => $request->input("new_seller_name"),
+                    'email' => $request->input("new_seller_email"),
+                    'gsm_phone' => $request->input("new_seller_gsm_phone"),
+                    'password' => $password,
+                    'status' => 1,
+                    'adress' => $null,
+                    'province' => 1,
+                    'district' => 1,
+                    'location' => $json,
+                    'type' => 2,
+                    'distributor_id' => 1,
+                    'created_by' => $created_by
+                ]
+            );
+
+            //fire event
+            Helper::fire_event("create",Auth::user(),"clients",$last_insert_id);
+            //return insert operation result via global session object
+            session(['new_seller_insert_success' => true]);
+
+        }
+        else if( $op_type == "edit" ){
+
+            // update client's info
+            DB::table('clients')->where('id', $request->input("seller_edit_id"))
+                ->update(
+                    [
+                        'name' => $request->input("new_seller_name"),
+                        'email' => $request->input("new_seller_email"),
+                        'gsm_phone' => $request->input("new_seller_gsm_phone"),
+                        'phone' => $request->input("new_seller_phone"),
+                        'password' => $password,
+                        'province' => $request->input("new_seller_province"),
+                        'district' => $request->input("new_seller_district"),
+                        'location' => $request->input("new_seller_location"),
+
+
+                    ]
+                );
+
+            //fire event
+            Helper::fire_event("update",Auth::user(),"clients",$request->input("seller_edit_id"));
+
+            //return update operation result via global session object
+            session(['seller_update_success' => true]);
+
+        }
+
+        return redirect()->back();
+
+    }
+
+    public function delete(Request $request){
+        if(!($request->has("id") && is_numeric($request->input("id"))))
+            return "ERROR";
+
+        $result = DB::select('SELECT C.distributor_id as distributor,MS.modem_name as modem_name FROM clients C LEFT JOIN distributors D ON C.distributor_id=D.id LEFT JOIN (SELECT M.client_id as client_id,GROUP_CONCAT(M.serial_no ORDER BY M.serial_no SEPARATOR \', \') as modem_name FROM modems M WHERE M.status<>0 GROUP BY M.client_id) MS ON MS.client_id=C.id WHERE C.id=?',array($request->input("id")));
+
+
+        if(trim($result[0]->modem_name) == ""){
+
+            if((Auth::user()->user_type == 3 && Auth::user()->org_id == $result[0]->distributor) || Auth::user()->user_type==1 || Auth::user()->user_type == 2 ){
+
+                DB::table('clients')->where('id', $request->input("id"))
+                    ->update(
+                        [
+                            'status' => 0
+                        ]
+                    );
+
+                //fire event
+                Helper::fire_event("delete",Auth::user(),"clients",$request->input("id"));
+
+                session(['seller_delete_success' => true]);
+                return "SUCCESS";
+            }
+            else{
+                return "ERROR";
+            }
+
+        }
+        else
+            return "ERROR";
+
+
+    }
+    public function clientChange(Request $request, $id){
+        if( $op == "changeStatus" ){
+            if(!(Helper::has_right(Auth::user()->operations,'change_user_status'))){
+                return "ERROR";
+            }
+
+            if( !($id == $request->input('id') && ($request->input('status') == 1 || $request->input('status') == 2)) ){
+                return "ERROR";
+            }
+
+            DB::table('clients')
+                ->where('id', $request->input("id"))
+                ->where('status', '<>', 0)
+                ->update(
+                    [
+                        'status' => $request->input("status")
+                    ]
+                );
+
+            //return update operation result via global session object
+            if($request->input('status') == 1) {
+
+                //fire event
+                Helper::fire_event("user_status_activated",Auth::user(),"users",$request->input("id"));
+
+                session(['user_status_activated' => true]);
+            }
+            else {
+
+                //fire event
+                Helper::fire_event("user_status_deactivated",Auth::user(),"users",$request->input("id"));
+
+                session(['user_status_deactivated' => true]);
+            }
+
+            return "SUCCESS";
+        }
+
+
+    }
 
     public function clientDetail(Request $request, $id){
 
@@ -241,7 +403,7 @@ class SellerManagementController extends Controller
 
         //prepare user table obj which belongs to this client
         $prefix = "cdu";
-        $url = "cdu_get_data/client/".$id;
+        $url = "sdu_get_data/seller/".$id;
         $default_order = '[5,"desc"]';
         $user_data_table = new DataTable($prefix,$url, $this->user_columns, $default_order,$request);
         $user_data_table->set_add_right(false);
@@ -249,16 +411,16 @@ class SellerManagementController extends Controller
 
         // prepare booking table obj which belongs to this client
         $prefix = "cdb";
-        $url = "cdb_get_data/".$id;
+        $url = "sob_get_data/".$id;
         $default_order = '[6,"desc"]';
-        $booking_data_table = new DataTable($prefix,$url, $this->booking_columns, $default_order,$request);
-        $booking_data_table->set_add_right(false);
+        $offer_data_table = new DataTable($prefix,$url, $this->offer_columns, $default_order,$request);
+        $offer_data_table->set_add_right(false);
 
         // prepare order table obj which belongs to this client
         $prefix = "cdo";
-        $url = "cdo_get_data/".$id;
+        $url = "soo_get_data/".$id;
         $default_order = '[6,"desc"]';
-        $order_data_table = new DataTable($prefix,$url, $this->booking_columns, $default_order,$request);
+        $order_data_table = new DataTable($prefix,$url, $this->order_columns, $default_order,$request);
         $order_data_table->set_add_right(false);
 
 
@@ -270,7 +432,7 @@ class SellerManagementController extends Controller
         return view('pages.seller_detail', [
                 'the_seller' => json_encode($the_seller),
                 'UserDataTableObj' => $user_data_table,
-                'BookingDataTableObj' => $booking_data_table,
+                'OfferDataTableObj' => $offer_data_table,
                 'OrderDataTableObj' => $order_data_table
 
             ]

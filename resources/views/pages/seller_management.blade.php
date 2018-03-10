@@ -73,6 +73,35 @@
                                 </div>
                             </div>
 
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> {{ trans('seller_detail.phone') }} </label>
+                                <div class="col-sm-6">
+                                    <input type="number" class="form-control" id="new_seller_phone" name="new_seller_phone">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> {{ trans('seller_detail.province') }} </label>
+                                <div class="col-sm-6">
+                                    <input type="number"  class="form-control" id="new_seller_province" name="new_seller_province" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> {{ trans('seller_detail.district') }} </label>
+                                <div class="col-sm-6">
+                                    <input type="number"  class="form-control" id="new_seller_district" name="new_seller_district" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"> {{ trans('seller_detail.location') }} <span style="color:red;">*</span></label>
+                                <div class="col-sm-6">
+                                     <textarea class="form-control" id="new_seller_location" name="new_seller_location">
+
+                                    </textarea>
+                                </div>
+                            </div>
 
 
                             <input type="hidden" value="new" id="seller_op_type" name="seller_op_type">
@@ -168,7 +197,7 @@
             $("#div_seller_dataTable").hide();
         }
 
-        function edit_user(id){
+        function edit_seller(id){
             $('body').prepend("<div id='bg_block_screen'> <div class='loader'></div>{{ trans("global.preparing") }}...</div>");
 
             $("#modal_title").html("{{ trans('seller_management.update_title') }}");
@@ -186,40 +215,17 @@
 
                         $("#new_seller_name").val(the_info["name"]);
                         $("#new_seller_email").val(the_info["email"]);
+                        $("#new_seller_phone").val(the_info["phone"]);
+                        $("#new_seller_gsm_phone").val(the_info["gsm_phone"]);
+                        $("#new_seller_province").val(the_info["province"]);
+                        $("#new_seller_district").val(the_info["district"]);
+                        $("#new_seller_location").val(the_info["location"]);
 
                         $("#new_seller_password").val("");
                         $('#new_seller_password').removeAttr('required');
                         $("#new_seller_password").attr('disabled','disabled');
 
-                        $("#new_seller_type").select2({
-                            minimumResultsForSearch: Infinity
-                        }).val(the_info["seller_type"]).trigger("change");
 
-                        if( the_info["seller_type"] == 3 ){
-                            $("#new_seller_distributors").show();
-                            $('#new_seller_clients').removeAttr('required');
-                            $('#new_seller_distributors').attr('required', '');
-                            $("#new_seller_distributors").select2({
-                                minimumResultsForSearch: 10
-                            }).val(the_info["org_id"]).trigger("change");
-                        }
-                        else if( the_info["seller_type"] == 4 ){
-                            $("#new_seller_clients").show();
-                            $('#new_seller_distributors').removeAttr('required');
-                            $('#new_seller_clients').attr('required', '');
-                            $("#new_seller_clients").select2({
-                                minimumResultsForSearch: 10
-                            }).val(the_info["org_id"]).trigger("change");
-                        }
-                        else{
-                            $("#new_seller_clients").hide();
-                            $('#new_seller_clients').removeAttr('required');
-                            $("#new_seller_distributors").hide();
-                            $('#new_seller_distributors').removeAttr('required');
-                        }
-
-                        $('#edit_seller_logo').attr('src', '/img/avatar/user/' + the_info["avatar"]);
-                        $('#edit_image_name').val('/img/avatar/user/' + the_info["avatar"]);
 
                         $("#password_label_for_new").hide();
                         $("#password_label_for_edit").show();
