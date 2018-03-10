@@ -15,6 +15,10 @@ class ClientManagementController extends Controller
 {
     private $columns;
     private $user_columns;
+    private $booking_columns;
+    private $order_columns;
+    private $event_columns;
+    private $message_columns;
 
 
     public function __construct()
@@ -29,7 +33,47 @@ class ClientManagementController extends Controller
         );
 
         $this->user_columns = array(
-            "avatar"=>array("orderable"=>false,"name"=>false),
+
+            "name"=>array("name"=>"username"),
+            "user_type"=>array("visible"=>false),
+            "org_name"=>array("visible"=>false),
+            "email"=>array(),
+            "status"=>array("orderable"=>false),
+            "created_at"=>array(),
+            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
+        );
+        $this->booking_columns = array(
+
+            "name"=>array("name"=>"username"),
+            "user_type"=>array("visible"=>false),
+            "org_name"=>array("visible"=>false),
+            "email"=>array(),
+            "status"=>array("orderable"=>false),
+            "created_at"=>array(),
+            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
+        );
+        $this->order_columns = array(
+
+            "name"=>array("name"=>"username"),
+            "user_type"=>array("visible"=>false),
+            "org_name"=>array("visible"=>false),
+            "email"=>array(),
+            "status"=>array("orderable"=>false),
+            "created_at"=>array(),
+            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
+        );
+        $this->event_columns = array(
+
+            "name"=>array("name"=>"username"),
+            "user_type"=>array("visible"=>false),
+            "org_name"=>array("visible"=>false),
+            "email"=>array(),
+            "status"=>array("orderable"=>false),
+            "created_at"=>array(),
+            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
+        );
+        $this->message_columns = array(
+
             "name"=>array("name"=>"username"),
             "user_type"=>array("visible"=>false),
             "org_name"=>array("visible"=>false),
@@ -152,23 +196,198 @@ class ClientManagementController extends Controller
     }
 
     public function getInfo(Request $request){
+        if($request->has("id") && is_numeric($request->input("id"))){
+
+            $result = DB::table("clients")->where('status','<>',0)->where("id",$request->input("id"))->first();
+
+            if(isset($result->id)){
+
+                if(Auth::user()->user_type == 3){
+                    if($result->distributor_id != Auth::user()->org_id)
+                        return "ERROR";
+                }
+
+                echo json_encode($result);
+            }
+
+        }
+        else{
+            echo "NEXIST";
+        }
 
     }
 
     public function uploadImage(Request $request){
 
+
     }
 
     public function create(Request $request){
+        $op_type = "new";
+        $password = "";
+        $null = "";
+        $json = "{\"text\": \"Esentepe Mahallesi, Eski Büyükdere Cd. No:193, 34394 Şişli/İstanbul, Türkiye\", \"verbal\": \"Şişli/İstanbul\", \"latitude\": \"41.0793246\", \"longitude\": \"29.01125479999996\"}";
+        $created_by = Auth::user()->id;
+        $name_validator = 'bail|required|unique:clients,name|max:255|min:3';
+
+        $password_validator = 'bail|required|min:6|max:20';
+        $email_validator = 'bail|required|email|max:255|unique:users,email';
+
+        if( $request->has('client_op_type') && $request->input('client_op_type') == "edit") {
+            $op_type = "edit";
+
+            if( $request->has('client_edit_id') && is_numeric($request->input("client_edit_id")) ){
+                $result = DB::table("clients")
+                    ->where("id", $request->input("client_edit_id"))
+                    ->where('status', '<>', 0)
+                    ->first();
+
+
+
+
+            }
+
+
+            $password = $result->password;
+
+
+
+           }
+
+
+
+        if( $op_type == "new" ){
+            $last_insert_id = DB::table('clients')->insertGetId(
+                [
+                    'name' => $request->input("new_client_name"),
+                    'email' => $request->input("new_client_email"),
+                    'gsm_phone' => $request->input("new_client_gsm_phone"),
+                    'password' => $password,
+                    'status' => 1,
+                    'adress' => $null,
+                    'province' => 1,
+                    'district' => 1,
+                    'location' => $json,
+                    'type' => 1,
+                    'distributor_id' => 1,
+                    'created_by' => $created_by
+                ]
+            );
+
+            //fire event
+            Helper::fire_event("create",Auth::user(),"clients",$last_insert_id);
+            //return insert operation result via global session object
+            session(['new_client_insert_success' => true]);
+
+        }
+        else if( $op_type == "edit" ){
+
+            // update client's info
+            DB::table('clients')->where('id', $request->input("client_edit_id"))
+                ->update(
+                    [
+                        'name' => $request->input("new_client_name"),
+                        'email' => $request->input("new_client_email"),
+                        'gsm_phone' => $request->input("new_client_gsm_phone"),
+                        'phone' => $request->input("new_client_phone"),
+                        'password' => $password,
+                        'province' => $request->input("new_client_province"),
+                        'district' => $request->input("new_client_district"),
+                        'location' => $request->input("new_client_location"),
+
+
+                    ]
+                );
+
+            //fire event
+            Helper::fire_event("update",Auth::user(),"clients",$request->input("client_edit_id"));
+
+            //return update operation result via global session object
+            session(['client_update_success' => true]);
+
+        }
+
+        return redirect()->back();
 
     }
 
     public function delete(Request $request){
+        if(!($request->has("id") && is_numeric($request->input("id"))))
+            return "ERROR";
+
+        $result = DB::select('SELECT C.distributor_id as distributor,MS.modem_name as modem_name FROM clients C LEFT JOIN distributors D ON C.distributor_id=D.id LEFT JOIN (SELECT M.client_id as client_id,GROUP_CONCAT(M.serial_no ORDER BY M.serial_no SEPARATOR \', \') as modem_name FROM modems M WHERE M.status<>0 GROUP BY M.client_id) MS ON MS.client_id=C.id WHERE C.id=?',array($request->input("id")));
+
+
+        if(trim($result[0]->modem_name) == ""){
+
+            if((Auth::user()->user_type == 3 && Auth::user()->org_id == $result[0]->distributor) || Auth::user()->user_type==1 || Auth::user()->user_type == 2 ){
+
+                DB::table('clients')->where('id', $request->input("id"))
+                    ->update(
+                        [
+                            'status' => 0
+                        ]
+                    );
+
+                //fire event
+                Helper::fire_event("delete",Auth::user(),"clients",$request->input("id"));
+
+                session(['client_delete_success' => true]);
+                return "SUCCESS";
+            }
+            else{
+                return "ERROR";
+            }
+
+        }
+        else
+            return "ERROR";
+
+
+    }
+    public function clientChange(Request $request, $id){
+        if( $op == "changeStatus" ){
+            if(!(Helper::has_right(Auth::user()->operations,'change_user_status'))){
+                return "ERROR";
+            }
+
+            if( !($id == $request->input('id') && ($request->input('status') == 1 || $request->input('status') == 2)) ){
+                return "ERROR";
+            }
+
+            DB::table('clients')
+                ->where('id', $request->input("id"))
+                ->where('status', '<>', 0)
+                ->update(
+                    [
+                        'status' => $request->input("status")
+                    ]
+                );
+
+            //return update operation result via global session object
+            if($request->input('status') == 1) {
+
+                //fire event
+                Helper::fire_event("user_status_activated",Auth::user(),"users",$request->input("id"));
+
+                session(['user_status_activated' => true]);
+            }
+            else {
+
+                //fire event
+                Helper::fire_event("user_status_deactivated",Auth::user(),"users",$request->input("id"));
+
+                session(['user_status_deactivated' => true]);
+            }
+
+            return "SUCCESS";
+        }
 
 
     }
 
     public function clientDetail(Request $request, $id){
+
         $the_client = DB::table("clients as C")
             ->select(
                 "C.*",
@@ -190,15 +409,31 @@ class ClientManagementController extends Controller
         $user_data_table->set_add_right(false);
 
 
+        // prepare booking table obj which belongs to this client
+        $prefix = "cdb";
+        $url = "cdb_get_data/".$id;
+        $default_order = '[6,"desc"]';
+        $booking_data_table = new DataTable($prefix,$url, $this->booking_columns, $default_order,$request);
+        $booking_data_table->set_add_right(false);
+
+        // prepare order table obj which belongs to this client
+        $prefix = "cdo";
+        $url = "cdo_get_data/".$id;
+        $default_order = '[6,"desc"]';
+        $order_data_table = new DataTable($prefix,$url, $this->booking_columns, $default_order,$request);
+        $order_data_table->set_add_right(false);
+
 
 
         //get event logs table from eventlogController
         $eventsTable = new EventlogsController();
-        $eventsTable = $eventsTable->prepareEventTableObject($request,"client",$id);
+        $eventsTable = $eventsTable->prepareEventTableObject($request,"user",$id);
 
         return view('pages.client_detail', [
                 'the_client' => json_encode($the_client),
                 'UserDataTableObj' => $user_data_table,
+                'BookingDataTableObj' => $booking_data_table,
+                'OrderDataTableObj' => $order_data_table
 
             ]
         );

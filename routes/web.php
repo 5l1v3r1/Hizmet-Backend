@@ -70,7 +70,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/user_management/get_info', 'UserManagementController@getInfo')->middleware('custom_authorization:add_new_user');
 
-    Route::post('/user_management/detail/{id}/{op}', 'UserManagementController@userDetail')->middleware(['custom_authorization:view_user_detail','custom_authorization:add_new_user']);
+    Route::post('/user_management/change/{id}/{op}', 'UserManagementController@userChange')->middleware(['custom_authorization:view_user_detail','custom_authorization:add_new_user']);
 
 });
 
@@ -80,10 +80,33 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/cm_get_data', 'ClientManagementController@getData')->middleware('custom_authorization:view_client_management');
 
+    Route::get('/cdu_get_data/{type}/{id}', 'UserManagementController@getData')->middleware('custom_authorization:view_client_detail')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
+
+    Route::get('/cdb_get_data/{id}', 'BookingManagementController@getData')->middleware('custom_authorization:view_client_detail');
+
+    Route::get('/cdo_get_data/{type}/{id}', 'OrderController@getData')->middleware('custom_authorization:view_client_detail');
+
+    Route::get('/client_management/detail/{id}', 'ClientManagementController@clientDetail')->middleware('custom_authorization:view_client_detail')->where('id', '[0-9]{1,5}');
+
+    Route::post('/client_management/edit_image', 'ClientManagementController@uploadImage')->middleware('custom_authorization:edit_profile_info');
+
+    Route::post('/client_management/get_info', 'ClientManagementController@getInfo')->middleware('custom_authorization:add_new_client');
+
+    Route::post('/client_management/delete', 'ClientManagementController@delete')->middleware('custom_authorization:delete_client');
+
+    Route::post('/client_management/add', 'ClientManagementController@create')->middleware('custom_authorization:add_new_client');
+
+    Route::post('/client_management/detail/{id}/{op}', 'ClientManagementController@userDetail')->middleware(['custom_authorization:view_user_detail','custom_authorization:add_new_user']);
+
 
 
 });
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/event_logs', 'EventlogsController@showTable')->middleware('custom_authorization:view_event_logs');
+
+    Route::get('/el_get_data/{type}/{id}', 'EventlogsController@getData')->middleware('custom_authorization:view_event_logs');
+});
 
 Route::group(['middleware'=>'auth'],function (){
 	Route::get('/simulate_alert', function () {
