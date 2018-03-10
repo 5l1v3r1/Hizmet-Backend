@@ -101,6 +101,32 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 });
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/seller_management', 'SellerManagementController@showTable')->middleware('custom_authorization:view_seller_management');
+
+    Route::get('/sm_get_data', 'SellerManagementController@getData')->middleware('custom_authorization:view_seller_management');
+
+    Route::get('/cdu_get_data/{type}/{id}', 'SellerManagementController@getData')->middleware('custom_authorization:view_seller_management')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
+
+    Route::get('/cdb_get_data/{id}', 'BookingManagementController@getData')->middleware('custom_authorization:view_seller_management');
+
+    Route::get('/cdo_get_data/{type}/{id}', 'OrderController@getData')->middleware('custom_authorization:view_seller_management');
+
+    Route::get('/seller_management/detail/{id}', 'SellerManagementController@clientDetail')->middleware('custom_authorization:view_seller_management')->where('id', '[0-9]{1,5}');
+
+    Route::post('/seller_management/edit_image', 'SellerManagementController@uploadImage')->middleware('custom_authorization:edit_profile_info');
+
+    Route::post('/seller_management/get_info', 'SellerManagementController@getInfo')->middleware('custom_authorization:add_new_seller');
+
+    Route::post('/seller_management/delete', 'SellerManagementController@delete')->middleware('custom_authorization:delete_seller');
+
+    Route::post('/seller_management/add', 'SellerManagementController@create')->middleware('custom_authorization:add_new_seller');
+
+    Route::post('/seller_management/detail/{id}/{op}', 'SellerManagementController@userDetail')->middleware(['custom_authorization:view_seller_detail','custom_authorization:add_new_seller']);
+
+
+
+});
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/event_logs', 'EventlogsController@showTable')->middleware('custom_authorization:view_event_logs');
