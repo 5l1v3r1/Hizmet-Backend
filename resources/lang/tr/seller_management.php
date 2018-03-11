@@ -42,7 +42,6 @@ return [
     'location' => 'Adres',
     'username' => 'Kullanıcı',
     'status' => 'Durum',
-    'trademark_model' => 'Marka/Model',
     'last_connection_at' => 'Son Bağlantı',
     'device_no' => 'Cihaz No',
     'modem_no' => 'Modem No',

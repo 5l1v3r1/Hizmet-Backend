@@ -129,10 +129,26 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/booking_management', 'BookingManagementController@showTable')->middleware('custom_authorization:view_booking_management');
+
+    Route::get('/bm_get_data', 'BookingManagementController@getData')->middleware('custom_authorization:view_user_management');
+
+    Route::get('/booking_management/detail/{id}', 'BookingManagementController@bookingDetail')->middleware('custom_authorization:view_user_detail')->where('id', '[0-9]{1,5}');
+
+    Route::post('/booking_management/add', 'BookingManagementController@create')->middleware('custom_authorization:add_new_user');
+
+    Route::post('/booking_management/get_info', 'BookingManagementController@getInfo')->middleware('custom_authorization:add_new_user');
+
+    Route::post('/booking_management/change/{id}/{op}', 'BookingManagementController@bookingChange')->middleware(['custom_authorization:view_user_detail','custom_authorization:add_new_user']);
+});
+
+
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/event_logs', 'EventlogsController@showTable')->middleware('custom_authorization:view_event_logs');
 
     Route::get('/el_get_data/{type}/{id}', 'EventlogsController@getData')->middleware('custom_authorization:view_event_logs');
 });
+
 
 Route::group(['middleware'=>'auth'],function (){
 	Route::get('/simulate_alert', function () {
