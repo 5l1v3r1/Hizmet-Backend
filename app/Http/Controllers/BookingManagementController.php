@@ -15,6 +15,7 @@ class BookingManagementController extends Controller
 {
     private $columns;
     private $booking_columns;
+    private $offer_columns;
 
 
 
@@ -34,6 +35,14 @@ class BookingManagementController extends Controller
             "client_name"=>array(),
             "status"=>array("orderable"=>false),
             "booking_date"=>array(),
+            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
+        );
+        $this->offer_columns = array(
+
+
+            "offer_name"=>array(),
+            "status"=>array("orderable"=>false),
+            "offer_date"=>array(),
             "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
         );
 
@@ -117,7 +126,82 @@ class BookingManagementController extends Controller
                     "client_name" => $one_row->name,
                     "status" => trans("global.status_" . $one_row->status),
                     "booking_date" => date('d/m/Y H:i',strtotime($one_row->booking_date)),
-                    "buttons" => self::create_buttons($one_row->id, $detail_type)
+                    "buttons" => self::create_buttons($one_row->id, $detail_type="booking")
+                );
+
+                $return_array["data"][] = $tmp_array;
+            }
+        }
+
+        echo json_encode($return_array);
+    }
+    public function getOffer($detail_type="", $detail_org_id="" ){
+        $return_array = array();
+        $draw  = $_GET["draw"];
+        $start = $_GET["start"];
+        $length = $_GET["length"];
+        $record_total = 0;
+        $recordsFiltered = 0;
+        $search_value = false;
+        $param_array = array();
+        $where_clause = "WHERE BO.status<>0 ";
+
+
+        //get customized filter object
+        $filter_obj = false;
+        if(isset($_GET["filter_obj"])){
+            $filter_obj = $_GET["filter_obj"];
+            $filter_obj = json_decode($filter_obj,true);
+        }
+
+
+        $param_array[] = date('Y-m-d', strtotime(str_replace('/', '-', $filter_obj["start_date"])));
+        $param_array[] = date('Y-m-d', strtotime(str_replace('/', '-', $filter_obj["end_date"])));
+        $where_clause .= "AND DATE(BO.offer_date) BETWEEN ? AND ? ";
+
+
+        if(isset($_GET["search"])){
+            $search_value = $_GET["search"]["value"];
+            if(!(trim($search_value)=="" || $search_value === false)){
+                $where_clause .= " AND (";
+                $param_array[]="%".$search_value."%";
+                $where_clause .= "B.booking_title LIKE ? ";
+                $param_array[]="%".$search_value."%";
+                $where_clause .= " OR C.name LIKE ? ";
+                $param_array[]="%".$search_value."%";
+                $where_clause .= " OR B.status LIKE ? ";
+                $param_array[]="%".strtolower($search_value)."%";
+
+
+                $where_clause .= " ) ";
+            }
+        }
+
+        $total_count = DB::select('SELECT count(*) as total_count FROM booking_offers BO JOIN clients C ON C.id=BO.client_id '.$where_clause,$param_array);
+        $total_count = $total_count[0];
+        $total_count = $total_count->total_count;
+
+        $param_array[] = $length;
+        $param_array[] = $start;
+        $result = DB::select('SELECT BO.*, C.name as name FROM booking_offers BO JOIN clients C ON C.id=BO.client_id '.$where_clause ,$param_array);
+
+        $return_array["draw"]=$draw;
+        $return_array["recordsTotal"]= 0;
+        $return_array["recordsFiltered"]= 0;
+        $return_array["data"] = array();
+
+        if(COUNT($result)>0){
+            $return_array["recordsTotal"]=$total_count;
+            $return_array["recordsFiltered"]=$total_count;
+
+            foreach($result as $one_row){
+
+                $tmp_array = array(
+                    "DT_RowId" => $one_row->id,
+                    "offer_name" => $one_row->name,
+                    "status" => trans("global.status_" . $one_row->status),
+                    "offer_date" => date('d/m/Y H:i',strtotime($one_row->offer_date)),
+                    "buttons" => self::create_buttons($one_row->id, $detail_type="offer")
                 );
 
                 $return_array["data"][] = $tmp_array;
@@ -129,18 +213,33 @@ class BookingManagementController extends Controller
 
     public function create_buttons($item_id, $detail_type){
         $return_value = "";
+        if($detail_type == "offer"){
+            if (Helper::has_right(Auth::user()->operations, "view_client_detail")) {
+                $return_value .= '<a href="/booking_management/offer/' . $item_id . '" title="' . trans('booking_management.detail') . '" class="btn btn-info btn-sm"><i class="fa fa-info-circle fa-lg"></i></a> ';
+            }
 
-        if(Helper::has_right(Auth::user()->operations, "view_client_detail")){
-            $return_value .= '<a href="/booking_management/detail/'.$item_id.'" title="'.trans('booking_management.detail').'" class="btn btn-info btn-sm"><i class="fa fa-info-circle fa-lg"></i></a> ';
+
+            if ($return_value == "") {
+                $return_value = '<i title="' . trans('global.no_authorize') . '" style="color:red;" class="fa fa-minus-circle fa-lg"></i>';
+            }
+
+            return $return_value;
+
+
         }
+        else {
+
+            if (Helper::has_right(Auth::user()->operations, "view_client_detail")) {
+                $return_value .= '<a href="/booking_management/detail/' . $item_id . '" title="' . trans('booking_management.detail') . '" class="btn btn-info btn-sm"><i class="fa fa-info-circle fa-lg"></i></a> ';
+            }
 
 
+            if ($return_value == "") {
+                $return_value = '<i title="' . trans('global.no_authorize') . '" style="color:red;" class="fa fa-minus-circle fa-lg"></i>';
+            }
 
-        if($return_value==""){
-            $return_value = '<i title="'.trans('global.no_authorize').'" style="color:red;" class="fa fa-minus-circle fa-lg"></i>';
+            return $return_value;
         }
-
-        return $return_value;
 
     }
 
@@ -166,6 +265,42 @@ class BookingManagementController extends Controller
     }
     public function bookingChange(Request $request, $id){
 
+            if(!(Helper::has_right(Auth::user()->operations,'change_user_status'))){
+                return "ERROR";
+            }
+
+            if( !($id == $request->input('id') && ($request->input('status') == 1 || $request->input('status') == 2)) ){
+                return "ERROR";
+            }
+
+            DB::table('booking')
+                ->where('id', $request->input("id"))
+                ->where('status', '<>', 0)
+                ->update(
+                    [
+                        'status' => $request->input("status")
+                    ]
+                );
+
+            //return update operation result via global session object
+            if($request->input('status') == 1) {
+
+                //fire event
+               // Helper::fire_event("user_status_activated",Auth::user(),"bookings",$request->input("id"));
+
+                session(['booking_status_activated' => true]);
+            }
+            else {
+
+                //fire event
+               // Helper::fire_event("user_status_deactivated",Auth::user(),"users",$request->input("id"));
+
+                session(['booking_status_deactivated' => true]);
+            }
+
+            return "SUCCESS";
+
+
 
     }
 
@@ -174,9 +309,11 @@ class BookingManagementController extends Controller
         $the_booking = DB::table("booking as B")
             ->select(
                 "B.*",
-                'C.name as name'
+                'C.*',
+                'S.*'
             )
-            ->join('client as C', 'C.id', 'B.client_id')
+            ->join('clients as C', 'C.id', 'B.client_id')
+            ->join('services as S', 'S.id', 'B.service_id')
             ->where("B.id",$id)
             ->where('B.status','<>',0)
             ->first();
@@ -185,20 +322,27 @@ class BookingManagementController extends Controller
 
 
         // prepare booking table obj which belongs to this client
-        $prefix = "bdb";
-        $url = "bm_get_data/".$id;
+        $prefix = "bd";
+        $url = "bd_get_data/".$id;
         $default_order = '[6,"desc"]';
-        $booking_data_table = new DataTable($prefix,$url, $this->columns, $default_order,$request);
+        $booking_data_table = new DataTable($prefix,$url, $this->booking_columns, $default_order,$request);
         $booking_data_table->set_add_right(false);
 
+        $prefix = "bo";
+        $url = "bo_get_data/".$id;
+        $default_order = '[3,"desc"]';
+        $offer_data_table = new DataTable($prefix,$url, $this->offer_columns, $default_order,$request);
+        $offer_data_table->set_add_right(false);
 
 
 
 
 
-        return view('pages.client_detail', [
+        return view('pages.booking_detail', [
                 'the_booking' => json_encode($the_booking),
-                'BookingDataTableObj' => $booking_data_table
+                'BookingDataTableObj' => $booking_data_table,
+                'OfferDataTableObj' => $offer_data_table
+
 
             ]
         );

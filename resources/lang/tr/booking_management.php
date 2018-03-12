@@ -4,7 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Client Management page language lines
+    | Booking Management page language lines
     |--------------------------------------------------------------------------
     |
     */
@@ -17,7 +17,9 @@ return [
     'booking_date' => 'Oluşturulma Tarihi',
     'operations' => 'İşlemler',
     'detail' => 'İlan detayı',
-    'client_name' => 'Müşteri adı'
+    'client_name' => 'Müşteri adı',
+    'offer_name' => 'Başvuran kişi',
+    'offer_date' => 'Başvuru tarihi'
 
 
 ];
