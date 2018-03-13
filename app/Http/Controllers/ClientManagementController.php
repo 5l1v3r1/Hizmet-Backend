@@ -44,12 +44,10 @@ class ClientManagementController extends Controller
         );
         $this->booking_columns = array(
 
-            "name"=>array("name"=>"username"),
-            "user_type"=>array("visible"=>false),
-            "org_name"=>array("visible"=>false),
-            "email"=>array(),
+            "booking_title"=>array(),
+            "client_name"=>array(),
             "status"=>array("orderable"=>false),
-            "created_at"=>array(),
+            "booking_date"=>array(),
             "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
         );
         $this->order_columns = array(
@@ -411,8 +409,8 @@ class ClientManagementController extends Controller
 
         // prepare booking table obj which belongs to this client
         $prefix = "cdb";
-        $url = "cdb_get_data/".$id;
-        $default_order = '[6,"desc"]';
+        $url = "cdb_get_data/client/".$id;
+        $default_order = '[3,"desc"]';
         $booking_data_table = new DataTable($prefix,$url, $this->booking_columns, $default_order,$request);
         $booking_data_table->set_add_right(false);
 

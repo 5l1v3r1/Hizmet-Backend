@@ -37,13 +37,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/asset_map/get_city_data', 'DashboardController@assetCityData')->middleware('custom_authorization:view_asset_map');
 
-    Route::post('/system_summary/get_reactives', 'DashboardController@getLastReactives')->middleware('custom_authorization:view_system_summary');
+    Route::post('/system_summary/get_booking', 'DashboardController@getLastBooking')->middleware('custom_authorization:view_system_summary');
 
-    Route::post('/system_summary/get_alerts', 'DashboardController@getLastAlerts')->middleware('custom_authorization:view_system_summary');
+    Route::post('/system_summary/get_order', 'DashboardController@getLastOrder')->middleware('custom_authorization:view_system_summary');
 
-    Route::post('/system_summary/get_devices', 'DashboardController@getLastDevices')->middleware('custom_authorization:view_system_summary');
+    Route::post('/system_summary/get_client', 'DashboardController@getLastClient')->middleware('custom_authorization:view_system_summary');
 
-    Route::post('/system_summary/get_ucds', 'DashboardController@getLastUcds')->middleware('custom_authorization:view_system_summary');
+    Route::post('/system_summary/get_seller', 'DashboardController@getLastSeller')->middleware('custom_authorization:view_system_summary');
 
     /*
     Route::get('/consumption_map', function () {
@@ -82,7 +82,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/cdu_get_data/{type}/{id}', 'UserManagementController@getData')->middleware('custom_authorization:view_client_detail')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
 
-    Route::get('/cdb_get_data/{id}', 'BookingManagementController@getData')->middleware('custom_authorization:view_client_detail');
+    Route::get('/cdb_get_data/{type}/{id}', 'BookingManagementController@getData')->middleware('custom_authorization:view_client_detail')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
 
     Route::get('/cdo_get_data/{type}/{id}', 'OrderController@getData')->middleware('custom_authorization:view_client_detail');
 

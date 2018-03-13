@@ -556,7 +556,7 @@ class Helper
         return $return_value;
     }
 
-    public static function get_modem_type($id){
+    /*public static function get_modem_type($id){
         $return_value = '<div class="form-group"><label class="col-sm-3 control-label">'.trans('modem_management.modem_type').' <span style="color:red;">*</span></label><div class="col-sm-6"><select name="'.$id.'" id="'.$id.'" class="form-control" style="width:100%;">';
 
         $result = DB::table("modem_type")->get();
@@ -568,7 +568,7 @@ class Helper
         $return_value .= '</select></div></div>';
 
         return $return_value;
-    }
+    } */
 
     public static function fire_event($event_type,$the_user,$table_name="",$affected_id=0){
 

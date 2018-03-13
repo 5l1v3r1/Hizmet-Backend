@@ -335,11 +335,11 @@
 
     function load_tab_content(selectedTab){
     if(selectedTab == "#tab-1" && tab_1 == false){
-
+    {!! $BookingDataTableObj->ready() !!}
     tab_1 = true;
     }
     else if(selectedTab == "#tab-2" && tab_2 == false){
-
+    {!! $OrderDataTableObj->ready() !!}
     tab_2 = true;
     }
     else if(selectedTab == "#tab-3" && tab_3 == false){

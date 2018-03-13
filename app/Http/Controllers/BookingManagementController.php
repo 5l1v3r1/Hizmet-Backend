@@ -71,6 +71,14 @@ class BookingManagementController extends Controller
         $where_clause = "WHERE B.status<>0 ";
 
 
+        if($detail_type == "client"){
+            if( !is_numeric($detail_org_id) ){
+                abort(404);
+            }
+
+            $param_array[] = $detail_org_id;
+            $where_clause .= " AND C.id=? ";
+        }
         //get customized filter object
         $filter_obj = false;
         if(isset($_GET["filter_obj"])){
