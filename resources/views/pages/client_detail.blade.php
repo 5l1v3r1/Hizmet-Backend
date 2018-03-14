@@ -11,6 +11,7 @@
 @section('content')
     <?php
     $the_client = json_decode($the_client);
+    $country_list = DB::table('cities')->get();
     ?>
 
     <div class="wrapper wrapper-content animated fadeInRight">
@@ -181,10 +182,18 @@
                                         </div>
 
 
+
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label"> {{ trans('client_detail.province') }} </label>
+                                            <label class="col-sm-3 control-label"> {{ trans('booking_detail.province') }}
+                                                <span style="color:red;">*</span></label>
                                             <div class="col-sm-6">
-                                                <input type="number" value="{{$the_client->province}}" class="form-control" id="new_client_province" name="new_client_province" required>
+                                                <select id="new_client_province" name="new_client_province" class="form-control" style="width: 100%;">
+
+                                                    <option></option>
+                                                    @foreach($country_list as $one_country)
+                                                        <option value="{{ $one_country->id}}">{{ $one_country->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
 
@@ -197,9 +206,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label"> {{ trans('client_detail.location') }} <span style="color:red;">*</span></label>
                                             <div class="col-sm-6">
-                                                 <textarea class="form-control" id="new_client_location" name="new_client_location">
-                                                     {{$the_client->location}}
-                                                </textarea>
+                                                 <textarea class="form-control" id="new_client_location" name="new_client_location">{{$the_client->location}}</textarea>
                                             </div>
                                         </div>
                                         <input type="hidden" value="edit" id="client_op_type" name="client_op_type">
@@ -379,7 +386,8 @@
     load_tab_content(active_tab);
     else
     $("#client_detail_tabs a:first").trigger('click');
-
+    province = {{$the_client->province}}
+    $( "#new_client_province" ).val(province);
 
 
 @endsection

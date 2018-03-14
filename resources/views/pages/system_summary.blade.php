@@ -5,35 +5,35 @@
 @endsection
 
 @section('page_level_css')
-    <link rel="stylesheet" type="text/css" href="/js/plugins/select2/dist/css/new.min.css" />
-    <link rel="stylesheet" type="text/css" href="/js/plugins/select2/dist/css/select2-bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/js/plugins/select2/dist/css/new.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/js/plugins/select2/dist/css/select2-bootstrap.min.css"/>
 @endsection
 
 @section('content')
     <?php
 
     $total_client_count = DB::table('clients as C')
-        ->where("C.type","=",1)
+        ->where("C.type", "=", 1)
         ->count();
 
     $total_seller_count = DB::table('clients as C')
-        ->where("C.type","=",2)
+        ->where("C.type", "=", 2)
         ->count();
 
     $total_wait_booking = DB::table('booking as B')
-        ->where("B.status","=",0)
+        ->where("B.status", "=", 0)
         ->count();
 
     $total_published_booking = DB::table('booking as B')
-        ->where("B.status","=",1)
+        ->where("B.status", "=", 1)
         ->count();
     $total_waiting_order = DB::table('booking as B')
-        ->where("B.status","=",1)
-        ->where("B.assigned_id","=",0)
+        ->where("B.status", "=", 1)
+        ->where("B.assigned_id", "=", 0)
         ->count();
     $total_finish_order = DB::table('booking as B')
-        ->where("B.status","=",3)
-        ->where("B.assigned_id","<>",0)
+        ->where("B.status", "=", 3)
+        ->where("B.assigned_id", "<>", 0)
         ->count();
 
 
@@ -237,55 +237,55 @@
     <script type="text/javascript" language="javascript" src="/js/plugins/select2/dist/js/new.min.js"></script>
 
     <script>
-        function get_last_booking(){
+        function get_last_booking() {
 
-                $.ajax({
-                    method: "POST",
-                    url: "/system_summary/get_booking",
-                    data: "type=a",
-                    success:function(return_text){
-                        $('#booking_table').html(return_text);
-                    }
-                });
-
-        }
-
-        function get_last_order(){
-
-                $.ajax({
-                    method: "POST",
-                    url: "/system_summary/get_order",
-                    data: "type=a",
-                    success: function (return_text) {
-                        $('#order_table').html(return_text);
-                    }
-                });
+            $.ajax({
+                method: "POST",
+                url: "/system_summary/get_booking",
+                data: "type=a",
+                success: function (return_text) {
+                    $('#booking_table').html(return_text);
+                }
+            });
 
         }
 
-        function get_last_client(){
+        function get_last_order() {
 
-                $.ajax({
-                    method: "POST",
-                    url: "/system_summary/get_client",
-                    data: "type=a",
-                    success: function (return_text) {
-                        $('#client_table').html(return_text);
-                    }
-                });
+            $.ajax({
+                method: "POST",
+                url: "/system_summary/get_order",
+                data: "type=a",
+                success: function (return_text) {
+                    $('#order_table').html(return_text);
+                }
+            });
 
         }
 
-        function get_last_seller(){
+        function get_last_client() {
 
-                $.ajax({
-                    method: "POST",
-                    url: "/system_summary/get_seller",
-                    data: "type= a",
-                    success: function (return_text) {
-                        $('#seller_table').html(return_text);
-                    }
-                });
+            $.ajax({
+                method: "POST",
+                url: "/system_summary/get_client",
+                data: "type=a",
+                success: function (return_text) {
+                    $('#client_table').html(return_text);
+                }
+            });
+
+        }
+
+        function get_last_seller() {
+
+            $.ajax({
+                method: "POST",
+                url: "/system_summary/get_seller",
+                data: "type= a",
+                success: function (return_text) {
+                    $('#seller_table').html(return_text);
+                }
+            });
 
         }
 

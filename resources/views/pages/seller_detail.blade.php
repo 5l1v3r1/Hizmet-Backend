@@ -5,12 +5,13 @@
 @endsection
 
 @section('page_level_css')
-    {!! $UserDataTableObj->css() !!}
+    {!! $OfferDataTableObj->css() !!}
 @endsection
 
 @section('content')
     <?php
     $the_seller = json_decode($the_seller);
+    $country_list = DB::table('cities')->get();
     ?>
 
     <div class="wrapper wrapper-content animated fadeInRight">
@@ -181,12 +182,23 @@
                                         </div>
 
 
+
+
+
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label"> {{ trans('seller_detail.province') }} </label>
+                                            <label class="col-sm-3 control-label"> {{ trans('booking_detail.province') }}
+                                                <span style="color:red;">*</span></label>
                                             <div class="col-sm-6">
-                                                <input type="number" value="{{$the_seller->province}}" class="form-control" id="new_seller_province" name="new_seller_province" required>
+                                                <select id="new_seller_province" name="new_seller_province" class="form-control" style="width: 100%;">
+
+                                                    <option></option>
+                                                    @foreach($country_list as $one_country)
+                                                        <option value="{{ $one_country->id}}">{{ $one_country->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
+
 
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label"> {{ trans('seller_detail.district') }} </label>
@@ -197,9 +209,7 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label"> {{ trans('seller_detail.location') }} <span style="color:red;">*</span></label>
                                             <div class="col-sm-6">
-                                                 <textarea class="form-control" id="new_seller_location" name="new_seller_location">
-                                                     {{$the_seller->location}}
-                                                </textarea>
+                                                 <textarea class="form-control" id="new_seller_location" name="new_seller_location">{{$the_seller->location}}</textarea>
                                             </div>
                                         </div>
                                         <input type="hidden" value="edit" id="seller_op_type" name="seller_op_type">
@@ -251,7 +261,7 @@
     <script type="text/javascript" language="javascript" src="/js/plugins/select2/dist/js/new.min.js"></script>
     <script type="text/javascript" language="javascript" src="/js/plugins/bootstrap-switch/bootstrap-switch.min.js"></script>
 
-    {!! $UserDataTableObj->js() !!}
+    {!! $OfferDataTableObj->js() !!}
     <script>
 
         function open_edit_password(){
@@ -335,7 +345,7 @@
 
     function load_tab_content(selectedTab){
     if(selectedTab == "#tab-1" && tab_1 == false){
-
+    {!! $OfferDataTableObj->ready() !!}
     tab_1 = true;
     }
     else if(selectedTab == "#tab-2" && tab_2 == false){
@@ -379,6 +389,8 @@
     load_tab_content(active_tab);
     else
     $("#seller_detail_tabs a:first").trigger('click');
+    province= {{$the_seller->province}}
+    $( "#new_seller_province" ).val(province);
 
 
 

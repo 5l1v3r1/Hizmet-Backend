@@ -56,7 +56,8 @@ return [
     'select_one' => 'Seçiniz',
     'type' => 'Tip',
     'add_new_user' => 'Yeni Satıcı Ekle',
-    'password' => 'Parola'
-
+    'password' => 'Parola',
+    'offer_name' => 'Müşteri Adı',
+    'offer_date' => 'Başvuru tarihi'
 
 ];

@@ -44,13 +44,10 @@ class SellerManagementController extends Controller
         );
         $this->offer_columns = array(
 
-            "name"=>array("name"=>"username"),
-            "user_type"=>array("visible"=>false),
-            "org_name"=>array("visible"=>false),
-            "email"=>array(),
-            "status"=>array("orderable"=>false),
-            "created_at"=>array(),
-            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
+            "offer_name" => array(),
+            "status" => array("orderable" => false),
+            "offer_date" => array(),
+            "buttons" => array("orderable" => false, "name" => "operations", "nowrap" => true),
         );
         $this->order_columns = array(
 
@@ -172,8 +169,93 @@ class SellerManagementController extends Controller
         echo json_encode($return_array);
     }
 
+    public function getOffer(Request $request, $id)
+    {
+        $return_array = array();
+        $draw = $_GET["draw"];
+        $start = $_GET["start"];
+        $length = $_GET["length"];
+        $record_total = 0;
+        $recordsFiltered = 0;
+        $search_value = false;
+        $param_array = array();
+        $where_clause = "WHERE BO.assigned_id= ".$id." ";
+
+
+        //get customized filter object
+        $filter_obj = false;
+        if (isset($_GET["filter_obj"])) {
+            $filter_obj = $_GET["filter_obj"];
+            $filter_obj = json_decode($filter_obj, true);
+        }
+
+
+        $param_array[] = date('Y-m-d', strtotime(str_replace('/', '-', $filter_obj["start_date"])));
+        $param_array[] = date('Y-m-d', strtotime(str_replace('/', '-', $filter_obj["end_date"])));
+        $where_clause .= "AND DATE(BO.offer_date) BETWEEN ? AND ? ";
+
+
+        if (isset($_GET["search"])) {
+            $search_value = $_GET["search"]["value"];
+            if (!(trim($search_value) == "" || $search_value === false)) {
+                $where_clause .= " AND (";
+                $param_array[] = "%" . $search_value . "%";
+                $where_clause .= "C.name LIKE ? ";
+                $param_array[] = "%" . strtolower($search_value) . "%";
+
+
+                $where_clause .= " ) ";
+            }
+        }
+
+        $total_count = DB::select('SELECT count(*) as total_count FROM booking_offers BO JOIN clients C ON C.id=BO.client_id ' . $where_clause, $param_array);
+        $total_count = $total_count[0];
+        $total_count = $total_count->total_count;
+
+        $param_array[] = $length;
+        $param_array[] = $start;
+        $result = DB::select('SELECT BO.*, C.name as name FROM booking_offers BO JOIN clients C ON C.id=BO.client_id ' . $where_clause, $param_array);
+
+        $return_array["draw"] = $draw;
+        $return_array["recordsTotal"] = 0;
+        $return_array["recordsFiltered"] = 0;
+        $return_array["data"] = array();
+
+        if (COUNT($result) > 0) {
+            $return_array["recordsTotal"] = $total_count;
+            $return_array["recordsFiltered"] = $total_count;
+
+            foreach ($result as $one_row) {
+
+                $tmp_array = array(
+                    "DT_RowId" => $one_row->id,
+                    "offer_name" => $one_row->name,
+                    "status" => trans("global.status_" . $one_row->status),
+                    "offer_date" => date('d/m/Y H:i', strtotime($one_row->offer_date)),
+                    "buttons" => self::create_buttons($one_row->id, $detail_type = "offer")
+                );
+
+                $return_array["data"][] = $tmp_array;
+            }
+        }
+
+        echo json_encode($return_array);
+    }
+
     public function create_buttons($item_id, $detail_type){
         $return_value = "";
+        if ($detail_type == "offer") {
+            if (Helper::has_right(Auth::user()->operations, "view_client_detail")) {
+                $return_value .= '<a href="/booking_management/offer/' . $item_id . '" title="' . trans('booking_management.detail') . '" class="btn btn-info btn-sm"><i class="fa fa-info-circle fa-lg"></i></a> ';
+            }
+
+
+            if ($return_value == "") {
+                $return_value = '<i title="' . trans('global.no_authorize') . '" style="color:red;" class="fa fa-minus-circle fa-lg"></i>';
+            }
+
+            return $return_value;
+        }
 
         if(Helper::has_right(Auth::user()->operations, "view_seller_detail")){
             $return_value .= '<a href="/seller_management/detail/'.$item_id.'" title="'.trans('seller_management.detail').'" class="btn btn-info btn-sm"><i class="fa fa-info-circle fa-lg"></i></a> ';
@@ -186,8 +268,20 @@ class SellerManagementController extends Controller
 
 
         }
+        if ($detail_type == "offer") {
+            if (Helper::has_right(Auth::user()->operations, "view_client_detail")) {
+                $return_value .= '<a href="/booking_management/offer/' . $item_id . '" title="' . trans('booking_management.detail') . '" class="btn btn-info btn-sm"><i class="fa fa-info-circle fa-lg"></i></a> ';
+            }
 
-        if($return_value==""){
+
+            if ($return_value == "") {
+                $return_value = '<i title="' . trans('global.no_authorize') . '" style="color:red;" class="fa fa-minus-circle fa-lg"></i>';
+            }
+
+            return $return_value;
+        }
+
+            if($return_value==""){
             $return_value = '<i title="'.trans('global.no_authorize').'" style="color:red;" class="fa fa-minus-circle fa-lg"></i>';
         }
 
@@ -345,6 +439,7 @@ class SellerManagementController extends Controller
 
 
     }
+
     public function clientChange(Request $request, $id){
         if( $op == "changeStatus" ){
             if(!(Helper::has_right(Auth::user()->operations,'change_user_status'))){
@@ -410,9 +505,9 @@ class SellerManagementController extends Controller
 
 
         // prepare booking table obj which belongs to this client
-        $prefix = "cdb";
+        $prefix = "sob";
         $url = "sob_get_data/".$id;
-        $default_order = '[6,"desc"]';
+        $default_order = '[3,"desc"]';
         $offer_data_table = new DataTable($prefix,$url, $this->offer_columns, $default_order,$request);
         $offer_data_table->set_add_right(false);
 

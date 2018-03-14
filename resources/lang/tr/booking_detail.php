@@ -38,7 +38,14 @@ return [
     'update' => 'güncelle',
     'deactive_booking_warning' => 'İlanı pasif etmek istediğinize emin misiniz?',
     'same_status' => 'Durum değişmedi',
-    'deactivate_to_user' => 'Hesap pasif yapılsın mı?'
+    'deactivate_to_user' => 'Hesap pasif yapılsın mı?',
+    'assigned_name' => 'Atanan adı',
+    'offer_date' => 'Teklif tarihi',
+    'offer_status' => 'Teklif Durumu',
+    'note' => 'Teklif notu',
+    'prices' => 'Fiyat',
+    'status' => 'Durum',
+    'show_offer' => 'Teklifi göster'
 
 
 ];
