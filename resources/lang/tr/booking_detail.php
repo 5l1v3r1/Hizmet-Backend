@@ -45,7 +45,8 @@ return [
     'note' => 'Teklif notu',
     'prices' => 'Fiyat',
     'status' => 'Durum',
-    'show_offer' => 'Teklifi göster'
+    'show_offer' => 'Teklifi göster',
+    'demo' => 'demo'
 
 
 ];
