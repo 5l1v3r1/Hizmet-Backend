@@ -84,7 +84,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/cdb_get_data/{type}/{id}', 'BookingManagementController@getData')->middleware('custom_authorization:view_client_detail')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
 
-    Route::get('/cdo_get_data/{type}/{id}', 'OrderController@getData')->middleware('custom_authorization:view_client_detail');
+    Route::get('/cdo_get_data/{type}/{id}', 'OrderManagementController@getData')->middleware('custom_authorization:view_client_detail');
 
     Route::get('/client_management/detail/{id}', 'ClientManagementController@clientDetail')->middleware('custom_authorization:view_client_detail')->where('id', '[0-9]{1,5}');
 
@@ -110,9 +110,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/sob_get_data/{id}', 'SellerManagementController@getOffer')->middleware('custom_authorization:view_seller_management');
 
-    Route::get('/soo_get_data/{type}/{id}', 'OrderController@getData')->middleware('custom_authorization:view_seller_management');
+    Route::get('/soo_get_data/{type}/{id}', 'OrderManagementController@getData')->middleware('custom_authorization:view_seller_management');
 
-    Route::get('/seller_management/detail/{id}', 'SellerManagementController@clientDetail')->middleware('custom_authorization:view_seller_management')->where('id', '[0-9]{1,5}');
+    Route::get('/seller_management/detail/{id}', 'SellerManagementController@sellerDetail')->middleware('custom_authorization:view_seller_management')->where('id', '[0-9]{1,5}');
 
     Route::post('/seller_management/edit_image', 'SellerManagementController@uploadImage')->middleware('custom_authorization:edit_profile_info');
 
@@ -127,6 +127,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 });
+
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/booking_management', 'BookingManagementController@showTable')->middleware('custom_authorization:view_booking_management');
@@ -153,6 +154,28 @@ Route::group(['middleware' => 'auth'], function () {
 
 });
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/order_management', 'OrderManagementController@showTable')->middleware('custom_authorization:view_booking_management');
+
+    Route::get('/om_get_data', 'OrderManagementController@getData')->middleware('custom_authorization:view_user_management');
+
+    Route::get('/od_get_data/{id}', 'OrderManagementController@getData')->middleware('custom_authorization:view_user_management');
+
+    Route::get('/oo_get_data/{id}', 'OrderManagementController@getOffer')->middleware('custom_authorization:view_user_management');
+
+    Route::get('/order_management/detail/{id}', 'OrderManagementController@orderDetail')->middleware('custom_authorization:view_user_detail')->where('id', '[0-9]{1,5}');
+
+    Route::get('/order_management/offer/{id}', 'OrderManagementController@offerDetail')->middleware('custom_authorization:view_user_detail')->where('id', '[0-9]{1,5}');
+
+    Route::post('/order_management/add', 'OrderManagementController@create')->middleware('custom_authorization:add_new_user');
+
+    Route::post('/order_management/get_info', 'OrderManagementController@getInfo')->middleware('custom_authorization:add_new_user');
+
+    Route::post('/order_management/detail/{id}/{op}', 'OrderManagementController@bookingChange')->middleware(['custom_authorization:view_user_detail']);
+
+    Route::post('/offer_management/change', 'OrderManagementController@create')->middleware(['custom_authorization:view_user_detail']);
+
+});
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/event_logs', 'EventlogsController@showTable')->middleware('custom_authorization:view_event_logs');

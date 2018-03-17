@@ -51,13 +51,11 @@ class SellerManagementController extends Controller
         );
         $this->order_columns = array(
 
-            "name"=>array("name"=>"username"),
-            "user_type"=>array("visible"=>false),
-            "org_name"=>array("visible"=>false),
-            "email"=>array(),
-            "status"=>array("orderable"=>false),
-            "created_at"=>array(),
-            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
+            "order_title" => array(),
+            "client_name" => array(),
+            "status" => array("orderable" => false),
+            "order_date" => array(),
+            "buttons" => array("orderable" => false, "name" => "operations", "nowrap" => true),
         );
         $this->event_columns = array(
 
@@ -440,48 +438,9 @@ class SellerManagementController extends Controller
 
     }
 
-    public function clientChange(Request $request, $id){
-        if( $op == "changeStatus" ){
-            if(!(Helper::has_right(Auth::user()->operations,'change_user_status'))){
-                return "ERROR";
-            }
-
-            if( !($id == $request->input('id') && ($request->input('status') == 1 || $request->input('status') == 2)) ){
-                return "ERROR";
-            }
-
-            DB::table('clients')
-                ->where('id', $request->input("id"))
-                ->where('status', '<>', 0)
-                ->update(
-                    [
-                        'status' => $request->input("status")
-                    ]
-                );
-
-            //return update operation result via global session object
-            if($request->input('status') == 1) {
-
-                //fire event
-                Helper::fire_event("user_status_activated",Auth::user(),"users",$request->input("id"));
-
-                session(['user_status_activated' => true]);
-            }
-            else {
-
-                //fire event
-                Helper::fire_event("user_status_deactivated",Auth::user(),"users",$request->input("id"));
-
-                session(['user_status_deactivated' => true]);
-            }
-
-            return "SUCCESS";
-        }
 
 
-    }
-
-    public function clientDetail(Request $request, $id){
+    public function sellerDetail(Request $request, $id){
 
         $the_seller = DB::table("clients as C")
             ->select(
@@ -497,7 +456,7 @@ class SellerManagementController extends Controller
             ->first();
 
         //prepare user table obj which belongs to this client
-        $prefix = "cdu";
+        $prefix = "sdu";
         $url = "sdu_get_data/seller/".$id;
         $default_order = '[5,"desc"]';
         $user_data_table = new DataTable($prefix,$url, $this->user_columns, $default_order,$request);
@@ -512,9 +471,9 @@ class SellerManagementController extends Controller
         $offer_data_table->set_add_right(false);
 
         // prepare order table obj which belongs to this client
-        $prefix = "cdo";
-        $url = "soo_get_data/".$id;
-        $default_order = '[6,"desc"]';
+        $prefix = "soo";
+        $url = "soo_get_data/seller/".$id;
+        $default_order = '[3,"desc"]';
         $order_data_table = new DataTable($prefix,$url, $this->order_columns, $default_order,$request);
         $order_data_table->set_add_right(false);
 

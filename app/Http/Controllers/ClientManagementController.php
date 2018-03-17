@@ -52,13 +52,11 @@ class ClientManagementController extends Controller
         );
         $this->order_columns = array(
 
-            "name"=>array("name"=>"username"),
-            "user_type"=>array("visible"=>false),
-            "org_name"=>array("visible"=>false),
-            "email"=>array(),
-            "status"=>array("orderable"=>false),
-            "created_at"=>array(),
-            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
+            "order_title" => array(),
+            "assigned_name" => array(),
+            "status" => array("orderable" => false),
+            "order_date" => array(),
+            "buttons" => array("orderable" => false, "name" => "operations", "nowrap" => true),
         );
         $this->event_columns = array(
 
@@ -88,7 +86,7 @@ class ClientManagementController extends Controller
         $url = "cm_get_data";
         $default_order = '[4,"desc"]';
         $data_table = new DataTable($prefix,$url,$this->columns,$default_order,$request);
-
+        $data_table->set_add_right(false);
         return view('pages.client_management')->with("UserDataTableObj",$data_table);
     }
 
@@ -416,9 +414,9 @@ class ClientManagementController extends Controller
 
         // prepare order table obj which belongs to this client
         $prefix = "cdo";
-        $url = "cdo_get_data/".$id;
-        $default_order = '[6,"desc"]';
-        $order_data_table = new DataTable($prefix,$url, $this->booking_columns, $default_order,$request);
+        $url = "cdo_get_data/client/".$id;
+        $default_order = '[3,"desc"]';
+        $order_data_table = new DataTable($prefix,$url, $this->order_columns, $default_order,$request);
         $order_data_table->set_add_right(false);
 
 

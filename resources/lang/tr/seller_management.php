@@ -58,6 +58,10 @@ return [
     'add_new_user' => 'Yeni Satıcı Ekle',
     'password' => 'Parola',
     'offer_name' => 'Müşteri Adı',
-    'offer_date' => 'Başvuru tarihi'
+    'offer_date' => 'Başvuru tarihi',
+    'order_title' => 'Sipariş başlığı',
+    'client_name' => 'müşteri adı',
+    'order_date' => 'Sipariş zamanı'
+
 
 ];

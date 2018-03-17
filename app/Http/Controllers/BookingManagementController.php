@@ -54,7 +54,7 @@ class BookingManagementController extends Controller
         $url = "bm_get_data";
         $default_order = '[4,"desc"]';
         $data_table = new DataTable($prefix, $url, $this->columns, $default_order, $request);
-
+        $data_table->set_add_right(false);
         return view('pages.booking_management')->with("BookingDataTableObj", $data_table);
     }
 
@@ -68,7 +68,7 @@ class BookingManagementController extends Controller
         $recordsFiltered = 0;
         $search_value = false;
         $param_array = array();
-        $where_clause = "WHERE B.status<>0 ";
+        $where_clause = "WHERE B.status<>0 and assigned_id=0 ";
 
 
         if ($detail_type == "client") {

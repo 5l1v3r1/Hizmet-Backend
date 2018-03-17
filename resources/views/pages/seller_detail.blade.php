@@ -349,7 +349,7 @@
     tab_1 = true;
     }
     else if(selectedTab == "#tab-2" && tab_2 == false){
-
+    {!! $OrderDataTableObj->ready() !!}
     tab_2 = true;
     }
     else if(selectedTab == "#tab-3" && tab_3 == false){

@@ -58,6 +58,12 @@ return [
     'date' => 'Tarih',
     'additional_info' => 'Ek Bilgiler',
     'select_one' => 'Seçiniz',
-    'type' => 'Tip'
+    'type' => 'Tip',
+    'order_title' => 'Sipariş Başlığı',
+    'assigned_name' => 'Atanan',
+    'order_date' => 'Sipariş tarihi',
+    'booking_title' => 'İlan başlığı',
+    'client_name' => 'Müşteri adı',
+    'booking_date' => 'İlan tarihi'
 
 ];
