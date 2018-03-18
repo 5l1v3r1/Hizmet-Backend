@@ -343,7 +343,7 @@ class Helper
         $return_value .= '
                     </select>
                 </div> <!-- .col-sm-6 -->
-            </div> <!-- .form-group -->';
+            </div> Form';
 
         return $return_value;
     }

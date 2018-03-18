@@ -375,6 +375,22 @@ class OrderManagementController extends Controller
 
     }
 
+    public function payment(Request $request ){
+
+
+        DB::table('payment')->insert(
+            [
+                'client_id' => $request->input("client_id"),
+                'net_amount' => $request->input("price"),
+                'booking_id' => $request->input("order_id")
+
+            ]
+        );
+
+
+        return "SUCCESS";
+    }
+
     public function orderDetail(Request $request, $id)
     {
 
@@ -392,11 +408,14 @@ class OrderManagementController extends Controller
                 'BO.booking_id as offer_booking_id',
                 'BO.prices as offer_prices',
                 'BO.client_id as offer_client_id',
-                'BO.assigned_id as offer_assigned_id'
+                'BO.assigned_id as offer_assigned_id',
+                'P.id as invoice_id',
+                'P.booking_id as pbid'
             )
             ->join('clients as C', 'C.id', 'B.client_id')
-            ->join('services as S', 'S.id', 'B.service_id')
-            ->join('booking_offers as BO', 'BO.booking_id', 'B.id')
+            ->Leftjoin('services as S', 'S.id', 'B.service_id')
+            ->Leftjoin('booking_offers as BO', 'BO.booking_id', 'B.id')
+            ->Leftjoin('payment as P', 'P.booking_id', 'B.id')
             ->where("B.id", $id)
             ->where('B.status', '<>', 0)
             ->first();

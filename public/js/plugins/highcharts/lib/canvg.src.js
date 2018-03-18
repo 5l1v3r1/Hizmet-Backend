@@ -2126,7 +2126,7 @@
 
 			this.horizAdvX = this.attribute('horiz-adv-x').numValue();
 			this.unicode = this.attribute('unicode').value;
-			this.arabicForm = this.attribute('arabic-form').value;
+			this.arabicForm = this.attribute('arabic-Form').value;
 		}
 		svg.Element.glyph.prototype = new svg.Element.path;
 

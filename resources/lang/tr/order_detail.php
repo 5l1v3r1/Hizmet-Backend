@@ -48,7 +48,9 @@ return [
     'demo' => 'demo',
     'order_name' => 'Sipariş Adı',
     "edit_offer" => 'Teklifi düzenle',
-    "order_state" => 'Sipariş durumu'
+    "order_state" => 'Sipariş durumu',
+    "order_billing" => 'Sipariş Faturası ve ödeme',
+
 
 
 ];

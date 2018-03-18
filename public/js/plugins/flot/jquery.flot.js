@@ -33,7 +33,7 @@
 // the actual Flot code
 (function($) {
     function Plot(placeholder, data_, options_, plugins) {
-        // data is on the form:
+        // data is on the Form:
         //   [ series1, series2 ... ]
         // where series is either just the data as [ [x1, y1], [x2, y2], ... ]
         // or { data: [ [x1, y1], [x2, y2], ... ], label: "some label", ... }
@@ -1943,7 +1943,7 @@
 
             var lw = series.lines.lineWidth,
                 sw = series.shadowSize;
-            // FIXME: consider another form of shadow when filling is turned on
+            // FIXME: consider another Form of shadow when filling is turned on
             if (lw > 0 && sw > 0) {
                 // draw shadow as a thick and thin line with transparency
                 ctx.lineWidth = sw;

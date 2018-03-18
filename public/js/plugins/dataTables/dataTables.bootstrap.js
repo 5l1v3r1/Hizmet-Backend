@@ -9,9 +9,9 @@ $.extend(true, $.fn.dataTable.defaults, {
 
 /* Default class modification */
 $.extend($.fn.dataTableExt.oStdClasses, {
-    "sWrapper": "dataTables_wrapper form-inline",
-    "sFilterInput": "form-control input-sm",
-    "sLengthSelect": "form-control input-sm"
+    "sWrapper": "dataTables_wrapper Form-inline",
+    "sFilterInput": "Form-control input-sm",
+    "sLengthSelect": "Form-control input-sm"
 });
 
 // In 1.10 we use the pagination renderers to draw the Bootstrap paging,

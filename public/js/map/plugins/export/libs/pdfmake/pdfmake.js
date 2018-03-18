@@ -23946,7 +23946,7 @@
 
 
 	/* ===========================================================================
-	 * Send a literal or distance tree in compressed form, using the codes in
+	 * Send a literal or distance tree in compressed Form, using the codes in
 	 * bl_tree.
 	 */
 	function send_tree(s, tree, max_code)
@@ -24091,7 +24091,7 @@
 	 *    b) There is at least one printable character belonging to the
 	 *       "white list" (9 {TAB}, 10 {LF}, 13 {CR}, 32..255).
 	 * - BINARY otherwise.
-	 * - The following partially-portable control characters form a
+	 * - The following partially-portable control characters Form a
 	 *   "gray list" that is ignored in this detection algorithm:
 	 *   (7 {BEL}, 8 {BS}, 11 {VT}, 12 {FF}, 26 {SUB}, 27 {ESC}).
 	 * IN assertion: the fields Freq of dyn_ltree are set.

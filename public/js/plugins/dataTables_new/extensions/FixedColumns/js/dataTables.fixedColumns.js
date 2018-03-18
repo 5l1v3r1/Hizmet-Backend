@@ -101,7 +101,7 @@ var FixedColumns = function ( dt, init ) {
 		camelToHungarian( FixedColumns.defaults, init );
 	}
 
-	// v1.10 allows the settings object to be got form a number of sources
+	// v1.10 allows the settings object to be got Form a number of sources
 	var dtSettings = new $.fn.dataTable.Api( dt ).settings()[0];
 
 	/**
@@ -1199,7 +1199,7 @@ $.extend( FixedColumns.prototype , {
 				nInnerThead.appendChild( nClone );
 			}
 
-			/* Add in the tbody elements, cloning form the master table */
+			/* Add in the tbody elements, cloning Form the master table */
 			$('>tbody>tr', that.dom.body).each( function (z) {
 				var i = that.s.dt.oFeatures.bServerSide===false ?
 					that.s.dt.aiDisplay[ that.s.dt._iDisplayStart+z ] : z;

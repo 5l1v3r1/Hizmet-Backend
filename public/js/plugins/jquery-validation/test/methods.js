@@ -1,7 +1,7 @@
 (function($) {
 
 function methodTest( methodName ) {
-	var v = jQuery("#form").validate(),
+	var v = jQuery("#Form").validate(),
 		method = $.validator.methods[methodName],
 		element = $("#firstname")[0];
 
@@ -186,7 +186,7 @@ test("dateDE", function() {
 */
 
 test("required", function() {
-	var v = jQuery("#form").validate(),
+	var v = jQuery("#Form").validate(),
 		method = $.validator.methods.required,
 		e = $("#text1, #text1b, #hidden2, #select1, #select2");
 	ok( method.call( v, e[0].value, e[0]), "Valid text input" );
@@ -219,7 +219,7 @@ test("required", function() {
 });
 
 test("required with dependencies", function() {
-	var v = jQuery("#form").validate(),
+	var v = jQuery("#Form").validate(),
 		method = $.validator.methods.required,
 		e = $("#hidden2, #select1, #area2, #radio1, #check2");
 	ok( method.call( v, e[0].value, e[0], "asffsaa" ), "Valid text input due to dependency not met" );
@@ -237,7 +237,7 @@ test("required with dependencies", function() {
 });
 
 test("minlength", function() {
-	var v = jQuery("#form").validate(),
+	var v = jQuery("#Form").validate(),
 		method = $.validator.methods.minlength,
 		param = 2,
 		e = $("#text1, #text1c, #text2, #text3");
@@ -260,7 +260,7 @@ test("minlength", function() {
 });
 
 test("maxlength", function() {
-	var v = jQuery("#form").validate(),
+	var v = jQuery("#Form").validate(),
 		method = $.validator.methods.maxlength,
 		param = 4,
 		e = $("#text1, #text2, #text3");
@@ -282,7 +282,7 @@ test("maxlength", function() {
 });
 
 test("rangelength", function() {
-	var v = jQuery("#form").validate(),
+	var v = jQuery("#Form").validate(),
 		method = $.validator.methods.rangelength,
 		param = [ 2, 4 ],
 		e = $("#text1, #text2, #text3");
@@ -293,7 +293,7 @@ test("rangelength", function() {
 });
 
 test("min", function() {
-	var v = jQuery("#form").validate(),
+	var v = jQuery("#Form").validate(),
 		method = $.validator.methods.min,
 		param = 8,
 		e = $("#value1, #value2, #value3");
@@ -304,7 +304,7 @@ test("min", function() {
 });
 
 test("max", function() {
-	var v = jQuery("#form").validate(),
+	var v = jQuery("#Form").validate(),
 		method = $.validator.methods.max,
 		param = 12,
 		e = $("#value1, #value2, #value3");
@@ -315,7 +315,7 @@ test("max", function() {
 });
 
 test("range", function() {
-	var v = jQuery("#form").validate(),
+	var v = jQuery("#Form").validate(),
 		method = $.validator.methods.range,
 		param = [ 4, 12 ],
 		e = $("#value1, #value2, #value3");
@@ -326,7 +326,7 @@ test("range", function() {
 });
 
 test("equalTo", function() {
-	var v = jQuery("#form").validate(),
+	var v = jQuery("#Form").validate(),
 		method = $.validator.methods.equalTo,
 		e = $("#text1, #text2");
 
@@ -351,7 +351,7 @@ test("extension", function() {
 	ok( method( "picture.png" ), "Valid default accept type" );
 	ok(!method( "picture.pgn" ), "Invalid default accept type" );
 
-	v = jQuery("#form").validate();
+	v = jQuery("#Form").validate();
 	method = function(value, param) {
 		return $.validator.methods.extension.call(v, value, $("#text1")[0], param);
 	};
@@ -479,8 +479,8 @@ test("phone (us)", function() {
 	ok( method( "212-999-0983" ), "Valid US phone number" );
 	ok(!method( "111-123-5434" ), "Invalid US phone number. Area Code cannot start with 1" );
 	ok(!method( "212 123 4567" ), "Invalid US phone number. NXX cannot start with 1" );
-	ok(!method( "234-911-5678" ), "Invalid US phone number, because the exchange code cannot be in the form N11" );
-	ok(!method( "911-333-5678" ), "Invalid US phone number, because the area code cannot be in the form N11" );
+	ok(!method( "234-911-5678" ), "Invalid US phone number, because the exchange code cannot be in the Form N11" );
+	ok(!method( "911-333-5678" ), "Invalid US phone number, because the area code cannot be in the Form N11" );
 	ok(method( "234-912-5678" ), "Valid US phone number" );
 });
 
@@ -938,7 +938,7 @@ function fillFormWithValuesAndExpect(formSelector, inputValues, expected) {
 		$(formSelector + " input:eq(" + i + ")").val(inputValues[i]);
 	}
 	actual = $(formSelector).valid();
-	equal(actual, expected, $.validator.format("Filled inputs of form '{0}' with {1} values ({2})", formSelector, inputValues.length, inputValues.toString()));
+	equal(actual, expected, $.validator.format("Filled inputs of Form '{0}' with {1} values ({2})", formSelector, inputValues.length, inputValues.toString()));
 
 }
 

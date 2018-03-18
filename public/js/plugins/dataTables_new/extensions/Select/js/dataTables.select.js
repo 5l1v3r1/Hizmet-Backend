@@ -395,7 +395,7 @@ function enableMouseSelection ( dt )
 				return;
 			}
 
-			// Don't blur in Editor form
+			// Don't blur in Editor Form
 			if ( $(e.target).parents('div.DTE').length ) {
 				return;
 			}

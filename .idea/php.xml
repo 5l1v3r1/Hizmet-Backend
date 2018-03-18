@@ -73,6 +73,8 @@
       <path value="$PROJECT_DIR$/vendor/zendframework/zend-escaper" />
       <path value="$PROJECT_DIR$/vendor/zendframework/zend-stdlib" />
       <path value="$PROJECT_DIR$/vendor/zendframework/zend-validator" />
+      <path value="$PROJECT_DIR$/vendor/knplabs/knp-snappy" />
+      <path value="$PROJECT_DIR$/vendor/barryvdh/laravel-snappy" />
     </include_path>
   </component>
   <component name="PhpUnit">

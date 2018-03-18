@@ -99,6 +99,12 @@
                                 {{ trans('order_detail.manage_offer') }}
                             </a>
                         </li>
+                        <li class="" tab="#tab-5">
+                            <a data-toggle="tab" href="#tab-5" aria-expanded="false">
+                                <i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i>
+                                {{ trans('order_detail.order_billing') }}
+                            </a>
+                        </li>
 
                     </ul> <!-- .nav -->
 
@@ -115,11 +121,11 @@
                             <div class="panel-body">
                                 <form class="m-t form-horizontal" role="form" method="POST"
                                       action="{{ url('/order_management/add') }}" id="add_new_order_form">
-                                    {{ csrf_field() }}
+                                {{ csrf_field() }}
 
 
 
-                                    <!-- get selectable clients according to user type -->
+                                <!-- get selectable clients according to user type -->
                                     {!!  Helper::get_clients_select("new_user_clients", false) !!}
 
 
@@ -143,12 +149,11 @@
                                                    required>
                                         </div>
                                     </div>
-                                        <!-- get selectable assigned  -->
-                                        {!!  Helper::get_assigned_select("new_assigned_id", false) !!}
+                                    <!-- get selectable assigned  -->
+                                    {!!  Helper::get_assigned_select("new_assigned_id", false) !!}
 
 
-
-                                        <div class="form-group">
+                                    <div class="form-group">
                                         <label class="col-sm-3 control-label"> {{ trans('order_detail.service_name') }}
                                             <span style="color:red;">*</span></label>
                                         <div class="col-sm-6">
@@ -157,7 +162,7 @@
                                         </div>
                                     </div>
 
-                                        {!!  Helper::get_status("new_order_status", false) !!}
+                                    {!!  Helper::get_status("new_order_status", false) !!}
 
                                     <input type="hidden" value="edit_order" id="order_op_type" name="order_op_type">
                                     <input type="hidden" value="{{$the_order->order_id}}" id="order_edit_id"
@@ -179,13 +184,13 @@
                             <div class="panel-body">
                                 <form class="m-t form-horizontal" role="form" method="POST"
                                       action="{{ url('/order_management/add') }}" id="add_new_offer_form">
-                                    {{ csrf_field() }}
+                                {{ csrf_field() }}
 
 
 
 
-                                    <!-- get selectable assigned  -->
-                                    {!!  Helper::get_booking_select("new_offfer_booking_id", false) !!}
+                                <!-- get selectable assigned  -->
+                                {!!  Helper::get_booking_select("new_offfer_booking_id", false) !!}
 
 
                                 <!-- get selectable assigned  -->
@@ -224,6 +229,59 @@
                                 {!!  $OfferDataTableObj->html() !!}
                             </div>
                         </div> <!-- .tab-4  -->
+                        <div id="tab-5" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="row" id="div_user_summary">
+                                    <div class="col-md-6">
+
+                                        <table class="table small m-b-xs">
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                    <strong>Ödeme Durumu</strong>
+                                                </td>
+                                                <td>
+                                                    @if(isset($the_order->pbid))
+                                                        Ödeme Yapıldı
+                                                    @else
+                                                        Ödeme Yapılmadı
+                                                    @endif
+                                                </td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <table class="table small m-b-xs">
+                                            <tbody>
+                                            @if(isset($the_order->pbid) )
+                                                <tr>
+                                                    <td><a href="/order_billing/{{$the_order->invoice_id}}"
+                                                           title="Faturayı Göster"
+                                                           class="btn btn-success btn-sm"><i
+                                                                    class="fa fa-eye fa-lg"></i></a></td>
+                                                    <td><a href="/order_billing/{{$the_order->invoice_id}}?download=pdf"
+                                                           title="Faturayı indir"
+                                                           class="btn btn-danger btn-sm"><i
+                                                                    class="fa fa-download fa-lg"></i></a></td>
+                                                </tr>
+                                            @else
+                                                <button type="submit" class="btn btn-primary" id="order_paymet_button"
+                                                        name="order_paymet_button" onclick="order_payment()">
+                                                    <i class="fa fa-refresh"></i> Ödeme Yap
+                                                </button>
+                                            @endif
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div> <!-- #div_order_summary -->
+
+
+                            </div>
+                        </div> <!-- .tab-4  -->
 
                     </div> <!-- .tab-content -->
                 </div>
@@ -249,11 +307,27 @@
             $("#add_new_order_form").parsley().reset();
             $("#add_new_order_form").parsley();
         }
+
         function validate_save_op2() {
             $("#add_new_offer_form").parsley().reset();
             $("#add_new_offer_form").parsley();
         }
+        function order_payment() {
+            $.ajax({
+                method:"GET",
+                url:"/order_payment",
+                data:"client_id="+{{$the_order->order_client_id}}+"&order_id="+{{$the_order->order_id}}+"&price="+{{$the_order->offer_prices}},
+                success:function(return_text){
+                    if($.trim(return_text)=="SUCCESS"){
+                        window.location ='/order_management';
+                    }
+                    else{
+                        alertBox("Oops...", "{{trans('global.unexpected_error')}}", "error");
+                    }
+                }
+            });
 
+        }
 
 
         @endif

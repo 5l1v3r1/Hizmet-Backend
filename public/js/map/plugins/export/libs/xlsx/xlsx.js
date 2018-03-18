@@ -8557,7 +8557,7 @@ function process_style_xlml(styles, stag, opts) {
     styles[stag.ID] = stag;
 }
 
-/* TODO: there must exist some form of OSP-blessed spec */
+/* TODO: there must exist some Form of OSP-blessed spec */
 function parse_xlml_data(xml, ss, data, cell, base, styles, csty, row, o) {
     var nf = "General", sid = cell.StyleID, S = {}; o = o || {};
     var interiors = [];

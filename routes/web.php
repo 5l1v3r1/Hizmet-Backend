@@ -23,10 +23,15 @@ Route::group(['middleware' => 'auth'], function () {
     });
 });
 
+
+
+
+
 // Dashboard operations' routing
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/system_summary', function () {
         return view('pages.system_summary');
+
     })->middleware('custom_authorization:view_system_summary');
 
     Route::get('/asset_map', function () {
@@ -174,6 +179,10 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/offer_management/change', 'OrderManagementController@create')->middleware(['custom_authorization:view_user_detail']);
 
+    Route::get('/order_billing/{id}', 'PdfBillingController@pdfview')->middleware('custom_authorization:view_user_management');
+
+    Route::get('/order_payment', 'OrderManagementController@payment');
+
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -198,4 +207,3 @@ Route::group(['middleware' => 'auth'], function () {
     })->middleware('custom_authorization:view_contact_us');
 
 });
-

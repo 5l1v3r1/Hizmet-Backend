@@ -650,7 +650,7 @@
  * @see http://getbootstrap.com/components/#input-groups
  */
 /**
- * Mimick Bootstraps .input-group .form-control styles.
+ * Mimick Bootstraps .input-group .Form-control styles.
  *
  * @see https://github.com/twbs/bootstrap/blob/master/less/input-groups.less
  */
@@ -664,7 +664,7 @@
   margin-bottom: 0;
   /**
    * Adjust z-index like Bootstrap does to show the focus-box-shadow
-   * above appended buttons in .input-group and .form-group.
+   * above appended buttons in .input-group and .Form-group.
    */
 }
 

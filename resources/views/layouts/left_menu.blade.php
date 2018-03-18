@@ -24,7 +24,7 @@
 
                         <li><a href="{{ url('/logout') }}"
 								   onclick="event.preventDefault();
-																 document.getElementById('logout-form').submit();">
+																 document.getElementById('logout-Form').submit();">
 									<i class="fa fa-sign-out"></i> {{ trans('global.logout') }}
 								</a>
 						</li>

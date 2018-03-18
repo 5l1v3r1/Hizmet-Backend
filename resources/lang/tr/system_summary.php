@@ -32,6 +32,7 @@ return [
     'client_email' => 'Eposta',
     'seller_name' => 'Satıcı Adı',
     'seller_email' => 'Eposta',
+    'last_clients' => 'Son Müşteriler',
 
 
 ];

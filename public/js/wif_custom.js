@@ -172,14 +172,14 @@ function download_file(url, data, method){
     if( url && data ){
         //data can be string of parameters or array/object
         data = typeof data == 'string' ? data : jQuery.param(data);
-        //split params into form inputs
+        //split params into Form inputs
         var inputs = '';
         jQuery.each(data.split('&'), function(){
             var pair = this.split('=');
             inputs+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
         });
         //send request
-        jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
+        jQuery('<Form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</Form>')
         .appendTo('body').submit().remove();
     }
 }
@@ -438,15 +438,15 @@ function createJsTree(
 		]
 	})
     .on('select_node.jstree', function (e, data) {
-        $("#"+div).next().find(".form-control").val("");
+        $("#"+div).next().find(".Form-control").val("");
 
         if(data.node.id.indexOf("client")>=0){
-			$("#"+div).next().find(".form-control").attr("disabled","disabled");
+			$("#"+div).next().find(".Form-control").attr("disabled","disabled");
             $("#"+div).next().find("button").attr("disabled","disabled");
 			return;
 		}
 		else{
-            $("#"+div).next().find(".form-control").removeAttr("disabled");
+            $("#"+div).next().find(".Form-control").removeAttr("disabled");
             $("#"+div).next().find("button").removeAttr("disabled");
 		}
 

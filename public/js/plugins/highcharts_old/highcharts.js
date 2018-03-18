@@ -1193,7 +1193,7 @@ pathAnim = {
 				el.style = {}; // #1881
 			}
 			if (params.d) {
-				el.toD = params.d; // keep the array form for paths, used in $.fx.step.d
+				el.toD = params.d; // keep the array Form for paths, used in $.fx.step.d
 				params.d = 1; // because in jQuery, animating to an array has a different meaning
 			}
 	
@@ -3559,7 +3559,7 @@ SVGRenderer.prototype = {
 
 	/**
 	 * Draw a path
-	 * @param {Array} path An SVG path in array form
+	 * @param {Array} path An SVG path in array Form
 	 */
 	path: function (path) {
 		var attr = {

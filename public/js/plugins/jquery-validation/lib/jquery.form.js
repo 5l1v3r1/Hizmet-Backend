@@ -16,9 +16,9 @@
 /*
     Usage Note:
     -----------
-    Do not use both ajaxSubmit and ajaxForm on the same form.  These
+    Do not use both ajaxSubmit and ajaxForm on the same Form.  These
     functions are mutually exclusive.  Use ajaxSubmit if you want
-    to bind your own submit handler to the form.  For example,
+    to bind your own submit handler to the Form.  For example,
 
     $(document).ready(function() {
         $('#myForm').on('submit', function(e) {
@@ -39,7 +39,7 @@
     });
 
     You can also use ajaxForm with delegation (requires jQuery v1.7+), so the
-    form does not have to exist when you invoke ajaxForm:
+    Form does not have to exist when you invoke ajaxForm:
 
     $('#myForm').ajaxForm({
         delegation: true,
@@ -59,7 +59,7 @@ feature.formdata = window.FormData !== undefined;
 
 /**
  * ajaxSubmit() provides a mechanism for immediately submitting
- * an HTML form using AJAX.
+ * an HTML Form using AJAX.
  */
 $.fn.ajaxSubmit = function(options) {
     /*jshint scripturl:true */
@@ -92,16 +92,16 @@ $.fn.ajaxSubmit = function(options) {
         iframeSrc: /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank'
     }, options);
 
-    // hook for manipulating the form data before it is extracted;
+    // hook for manipulating the Form data before it is extracted;
     // convenient for use with rich editors like tinyMCE or FCKEditor
     var veto = {};
-    this.trigger('form-pre-serialize', [this, options, veto]);
+    this.trigger('Form-pre-serialize', [this, options, veto]);
     if (veto.veto) {
-        log('ajaxSubmit: submit vetoed via form-pre-serialize trigger');
+        log('ajaxSubmit: submit vetoed via Form-pre-serialize trigger');
         return this;
     }
 
-    // provide opportunity to alter form data before it is serialized
+    // provide opportunity to alter Form data before it is serialized
     if (options.beforeSerialize && options.beforeSerialize(this, options) === false) {
         log('ajaxSubmit: submit aborted via beforeSerialize callback');
         return this;
@@ -126,9 +126,9 @@ $.fn.ajaxSubmit = function(options) {
     }
 
     // fire vetoable 'validate' event
-    this.trigger('form-submit-validate', [a, this, options, veto]);
+    this.trigger('Form-submit-validate', [a, this, options, veto]);
     if (veto.veto) {
-        log('ajaxSubmit: submit vetoed via form-submit-validate trigger');
+        log('ajaxSubmit: submit vetoed via Form-submit-validate trigger');
         return this;
     }
 
@@ -178,7 +178,7 @@ $.fn.ajaxSubmit = function(options) {
     var fileInputs = $('input[type=file]:enabled[value!=""]', this);
 
     var hasFileInputs = fileInputs.length > 0;
-    var mp = 'multipart/form-data';
+    var mp = 'multipart/Form-data';
     var multipart = ($form.attr('enctype') == mp || $form.attr('encoding') == mp);
 
     var fileAPI = feature.fileapi && feature.formdata;
@@ -215,7 +215,7 @@ $.fn.ajaxSubmit = function(options) {
         elements[k] = null;
 
     // fire 'notify' event
-    this.trigger('form-submit-notify', [this, options]);
+    this.trigger('Form-submit-notify', [this, options]);
     return this;
 
     // utility fn for deep serialization
@@ -292,7 +292,7 @@ $.fn.ajaxSubmit = function(options) {
 
         if ($('[name=submit],[id=submit]', form).length) {
             // if there is an input with a name or id of 'submit' then we won't be
-            // able to invoke the submit fn on the form (at least not x-browser)
+            // able to invoke the submit fn on the Form (at least not x-browser)
             alert('Error: Form elements must not have name or id of "submit".');
             deferred.reject();
             return deferred;
@@ -410,10 +410,10 @@ $.fn.ajaxSubmit = function(options) {
 
         // take a breath so that pending repaints get some cpu time before the upload starts
         function doSubmit() {
-            // make sure form attrs are set
+            // make sure Form attrs are set
             var t = $form.attr('target'), a = $form.attr('action');
 
-            // update form attrs in IE friendly way
+            // update Form attrs in IE friendly way
             form.setAttribute('target',id);
             if (!method) {
                 form.setAttribute('method', 'POST');
@@ -425,8 +425,8 @@ $.fn.ajaxSubmit = function(options) {
             // ie borks in some cases when setting encoding
             if (! s.skipEncodingOverride && (!method || /post/i.test(method))) {
                 $form.attr({
-                    encoding: 'multipart/form-data',
-                    enctype:  'multipart/form-data'
+                    encoding: 'multipart/Form-data',
+                    enctype:  'multipart/Form-data'
                 });
             }
 
@@ -452,7 +452,7 @@ $.fn.ajaxSubmit = function(options) {
                 }
             }
 
-            // add "extra" data to form if provided in options
+            // add "extra" data to Form if provided in options
             var extraInputs = [];
             try {
                 if (s.extraData) {
@@ -473,7 +473,7 @@ $.fn.ajaxSubmit = function(options) {
                 }
 
                 if (!s.iframeTarget) {
-                    // add iframe to doc and submit the form
+                    // add iframe to doc and submit the Form
                     $io.appendTo('body');
                     if (io.attachEvent)
                         io.attachEvent('onload', cb);
@@ -707,19 +707,19 @@ $.fn.ajaxSubmit = function(options) {
 };
 
 /**
- * ajaxForm() provides a mechanism for fully automating form submission.
+ * ajaxForm() provides a mechanism for fully automating Form submission.
  *
  * The advantages of using this method instead of ajaxSubmit() are:
  *
  * 1: This method will include coordinates for <input type="image" /> elements (if the element
- *    is used to submit the form).
+ *    is used to submit the Form).
  * 2. This method will include the submit element's name/value data (for the element that was
- *    used to submit the form).
- * 3. This method binds the submit() method to the form for you.
+ *    used to submit the Form).
+ * 3. This method binds the submit() method to the Form for you.
  *
  * The options argument for ajaxForm works exactly as it does for ajaxSubmit.  ajaxForm merely
  * passes the options argument along after properly binding events for submit elements and
- * the form itself.
+ * the Form itself.
  */
 $.fn.ajaxForm = function(options) {
     options = options || {};
@@ -742,16 +742,16 @@ $.fn.ajaxForm = function(options) {
 
     if ( options.delegation ) {
         $(document)
-            .off('submit.form-plugin', this.selector, doAjaxSubmit)
-            .off('click.form-plugin', this.selector, captureSubmittingElement)
-            .on('submit.form-plugin', this.selector, options, doAjaxSubmit)
-            .on('click.form-plugin', this.selector, options, captureSubmittingElement);
+            .off('submit.Form-plugin', this.selector, doAjaxSubmit)
+            .off('click.Form-plugin', this.selector, captureSubmittingElement)
+            .on('submit.Form-plugin', this.selector, options, doAjaxSubmit)
+            .on('click.Form-plugin', this.selector, options, captureSubmittingElement);
         return this;
     }
 
     return this.ajaxFormUnbind()
-        .bind('submit.form-plugin', options, doAjaxSubmit)
-        .bind('click.form-plugin', options, captureSubmittingElement);
+        .bind('submit.Form-plugin', options, doAjaxSubmit)
+        .bind('click.Form-plugin', options, captureSubmittingElement);
 };
 
 // private event handlers
@@ -791,21 +791,21 @@ function captureSubmittingElement(e) {
             form.clk_y = e.pageY - target.offsetTop;
         }
     }
-    // clear form vars
+    // clear Form vars
     setTimeout(function() { form.clk = form.clk_x = form.clk_y = null; }, 100);
 }
 
 
 // ajaxFormUnbind unbinds the event handlers that were bound by ajaxForm
 $.fn.ajaxFormUnbind = function() {
-    return this.unbind('submit.form-plugin click.form-plugin');
+    return this.unbind('submit.Form-plugin click.Form-plugin');
 };
 
 /**
- * formToArray() gathers form element data into an array of objects that can
+ * formToArray() gathers Form element data into an array of objects that can
  * be passed to any of the following ajax functions: $.get, $.post, or load.
  * Each object in the array has both a 'name' and 'value' property.  An example of
- * an array for a simple login form might be:
+ * an array for a simple login Form might be:
  *
  * [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
  *
@@ -883,7 +883,7 @@ $.fn.formToArray = function(semantic, elements) {
 };
 
 /**
- * Serializes form data into a 'submittable' string. This method will return a string
+ * Serializes Form data into a 'submittable' string. This method will return a string
  * in the format: name1=value1&amp;name2=value2
  */
 $.fn.formSerialize = function(semantic) {
@@ -917,16 +917,16 @@ $.fn.fieldSerialize = function(successful) {
 };
 
 /**
- * Returns the value(s) of the element in the matched set.  For example, consider the following form:
+ * Returns the value(s) of the element in the matched set.  For example, consider the following Form:
  *
- *  <form><fieldset>
+ *  <Form><fieldset>
  *      <input name="A" type="text" />
  *      <input name="A" type="text" />
  *      <input name="B" type="checkbox" value="B1" />
  *      <input name="B" type="checkbox" value="B2"/>
  *      <input name="C" type="radio" value="C1" />
  *      <input name="C" type="radio" value="C2" />
- *  </fieldset></form>
+ *  </fieldset></Form>
  *
  *  var v = $('input[type=text]').fieldValue();
  *  // if no values are entered into the text inputs
@@ -1012,7 +1012,7 @@ $.fieldValue = function(el, successful) {
 };
 
 /**
- * Clears the form data.  Takes the following actions on the form's input fields:
+ * Clears the Form data.  Takes the following actions on the Form's input fields:
  *  - input text fields will have their 'value' property set to the empty string
  *  - select elements will have their 'selectedIndex' property set to -1
  *  - checkbox and radio inputs will have their 'checked' property set to false
@@ -1026,7 +1026,7 @@ $.fn.clearForm = function(includeHidden) {
 };
 
 /**
- * Clears the selected form elements.
+ * Clears the selected Form elements.
  */
 $.fn.clearFields = $.fn.clearInputs = function(includeHidden) {
     var re = /^(?:color|date|datetime|email|month|number|password|range|search|tel|text|time|url|week)$/i; // 'hidden' is not in this list
@@ -1054,7 +1054,7 @@ $.fn.clearFields = $.fn.clearInputs = function(includeHidden) {
 };
 
 /**
- * Resets the form data.  Causes all form elements to be reset to their original value.
+ * Resets the Form data.  Causes all Form elements to be reset to their original value.
  */
 $.fn.resetForm = function() {
     return this.each(function() {
@@ -1109,7 +1109,7 @@ $.fn.ajaxSubmit.debug = false;
 function log() {
     if (!$.fn.ajaxSubmit.debug)
         return;
-    var msg = '[jquery.form] ' + Array.prototype.join.call(arguments,'');
+    var msg = '[jquery.Form] ' + Array.prototype.join.call(arguments,'');
     if (window.console && window.console.log) {
         window.console.log(msg);
     }

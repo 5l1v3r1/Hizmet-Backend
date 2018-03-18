@@ -665,7 +665,7 @@ var getRawData = function(file) {
 };
 
 /**
- * Returns the data of a ZipObject in a binary form. If the content is an unicode string, encode it.
+ * Returns the data of a ZipObject in a binary Form. If the content is an unicode string, encode it.
  * @param {ZipObject} file the file to use.
  * @return {String|ArrayBuffer|Uint8Array|Buffer} the data.
  */
@@ -8733,7 +8733,7 @@ function scan_tree(s, tree, max_code)
 
 
 /* ===========================================================================
- * Send a literal or distance tree in compressed form, using the codes in
+ * Send a literal or distance tree in compressed Form, using the codes in
  * bl_tree.
  */
 function send_tree(s, tree, max_code)
@@ -8878,7 +8878,7 @@ function send_all_trees(s, lcodes, dcodes, blcodes)
  *    b) There is at least one printable character belonging to the
  *       "white list" (9 {TAB}, 10 {LF}, 13 {CR}, 32..255).
  * - BINARY otherwise.
- * - The following partially-portable control characters form a
+ * - The following partially-portable control characters Form a
  *   "gray list" that is ignored in this detection algorithm:
  *   (7 {BEL}, 8 {BS}, 11 {VT}, 12 {FF}, 26 {SUB}, 27 {ESC}).
  * IN assertion: the fields Freq of dyn_ltree are set.

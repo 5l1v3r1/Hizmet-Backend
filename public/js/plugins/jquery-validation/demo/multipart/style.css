@@ -118,7 +118,7 @@ blockquote {
 	font-weight: bold;
 }
 
-/* form elements */
+/* Form elements */
 fieldset {
 	margin: 12px 12px 18px;
 	padding-left: 6px;
@@ -563,7 +563,7 @@ body .mainText {
 	font-size: 14px;
 }
 
-/* ------------- form specific styles are here  -------------- */
+/* ------------- Form specific styles are here  -------------- */
 fieldset {
 	margin: 0;
 	border: 1px solid #C3DE00;

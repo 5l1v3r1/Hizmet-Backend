@@ -165,7 +165,7 @@
         }
 
         function cancel_add_new_form(){
-            $("#add_new_client_form .form-control").val("");
+            $("#add_new_client_form .Form-control").val("");
             $(".parsley-errors-list").remove();
 
             $("#new_client_logo").fileinput('refresh');

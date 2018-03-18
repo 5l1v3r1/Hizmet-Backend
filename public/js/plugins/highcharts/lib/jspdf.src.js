@@ -762,7 +762,7 @@ var jsPDF = (function(global) {
 
     var unitMatrix = new Matrix(1, 0, 0, 1, 0, 0),
 
-    // Used (1) to save the current stream state to the XObjects stack and (2) to save completed form
+    // Used (1) to save the current stream state to the XObjects stack and (2) to save completed Form
     // objects in the xObjects map.
     RenderTarget = function () {
       this.page = page;
@@ -1705,35 +1705,35 @@ var jsPDF = (function(global) {
     };
 
     /**
-     * Starts a new pdf form object, which means that all conseequent draw calls target a new independent object
+     * Starts a new pdf Form object, which means that all conseequent draw calls target a new independent object
      * until {@link endFormObject} is called. The created object can be referenced and drawn later using
-     * {@link doFormObject}. Nested form objects are possible.
+     * {@link doFormObject}. Nested Form objects are possible.
      * x, y, width, height set the bounding box that is used to clip the content.
      * @param {number} x
      * @param {number} y
      * @param {number} width
      * @param {number} height
-     * @param {Matrix} matrix The matrix that will be applied to convert the form objects coordinate system to
+     * @param {Matrix} matrix The matrix that will be applied to convert the Form objects coordinate system to
      * the parent's.
      * @function
      * @returns {jsPDF}
      * @methodOf jsPDF#
      */
     API.beginFormObject = function (x, y, width, height, matrix) {
-      // The user can set the output target to a new form object. Nested form objects are possible.
+      // The user can set the output target to a new Form object. Nested Form objects are possible.
       // Currently, they use the resource dictionary of the surrounding stream. This should be changed, as
       // the PDF-Spec states:
-      // "In PDF 1.2 and later versions, form XObjects may be independent of the content streams in which
+      // "In PDF 1.2 and later versions, Form XObjects may be independent of the content streams in which
       // they appear, and this is strongly recommended although not requiredIn PDF 1.2 and later versions,
-      // form XObjects may be independent of the content streams in which they appear, and this is strongly
+      // Form XObjects may be independent of the content streams in which they appear, and this is strongly
       // recommended although not required"
       beginNewRenderTarget(x, y, width, height, matrix);
       return this;
     };
 
     /**
-     * Completes and saves the form object.
-     * @param {String} key The key by which this form object can be referenced.
+     * Completes and saves the Form object.
+     * @param {String} key The key by which this Form object can be referenced.
      * @function
      * @returns {jsPDF}
      * @methodOf jsPDF#
@@ -1745,11 +1745,11 @@ var jsPDF = (function(global) {
     };
 
     /**
-     * Draws the specified form object by referencing to the respective pdf XObject created with
+     * Draws the specified Form object by referencing to the respective pdf XObject created with
      * {@link API.beginFormObject} and {@link endFormObject}.
      * The location is determined by matrix.
-     * @param {String} key The key to the form object.
-     * @param {Matrix} matrix The matrix applied before drawing the form object.
+     * @param {String} key The key to the Form object.
+     * @param {Matrix} matrix The matrix applied before drawing the Form object.
      * @function
      * @returns {jsPDF}
      * @methodOf jsPDF#
@@ -1765,7 +1765,7 @@ var jsPDF = (function(global) {
     };
 
     /**
-     * Returns the form object specified by key.
+     * Returns the Form object specified by key.
      * @param key {String}
      * @returns {{x: number, y: number, width: number, height: number, matrix: Matrix}}
      * @function
