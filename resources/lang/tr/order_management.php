@@ -19,7 +19,10 @@ return [
     'detail' => 'İlan detayı',
     'client_name' => 'Müşteri adı',
     'offer_name' => 'Başvuran kişi',
-    'offer_date' => 'Başvuru tarihi'
+    'offer_date' => 'Başvuru tarihi',
+    'order_date' => 'Sipariş tarihi',
+    'offer_update_success' => 'Güncelleme başarılı',
+    'update_success' => 'Güncelleme başarılı',
 
 
 ];

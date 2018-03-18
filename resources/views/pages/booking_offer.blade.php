@@ -56,7 +56,7 @@
                             <strong>{{ trans('booking_detail.offer_status') }}</strong>
                         </td>
                         <td>
-                            {!! trans('global.status_'.$the_booking->offer_status) !!}
+                            {!! trans('global.booking_status_'.$the_booking->offer_status) !!}
                         </td>
                     </tr>
 
@@ -87,7 +87,8 @@
                             <div class="panel-body tooltip-demo" data-html="true">
                                 <div class="panel-body">
                                     <form class="m-t form-horizontal" role="form" method="POST"
-                                          action="{{ url('/offer_management/change') }}" id="add_new_client_client_form">
+                                          action="{{ url('booking_management/add') }}"
+                                          id="add_new_client_client_form">
                                     {{ csrf_field() }}
 
                                     <!-- get selectable client_type according to user type -->
@@ -107,29 +108,22 @@
                                             <label class="col-sm-3 control-label"> {{ trans('booking_detail.note') }}
                                                 <span style="color:red;">*</span></label>
                                             <div class="col-sm-6">
-                                                 <textarea class="form-control" id="new_note" name="new_note" required minlength="2">{{$the_booking->note}}</textarea>
+                                                <textarea class="form-control" id="new_note" name="new_note" required
+                                                          minlength="2">{{$the_booking->note}}</textarea>
                                             </div>
                                         </div>
 
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label"> {{ trans('booking_detail.status') }}
-                                                <span style="color:red;">*</span></label>
-                                            <div class="col-sm-6">
-                                                <select id="new_status" name="new_status" class="form-control" style="width: 100%;">
-
-                                                    <option></option>
-                                                    @foreach($country_list as $one_country)
-                                                        <option value="{{ $one_country->id}}">{{ $one_country->name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
+                                        {!!  Helper::get_status("new_offer_status", false) !!}
 
 
 
-                                        <input type="hidden" value="edit" id="offer_op_type" name="client_op_type">
+                                        <input type="hidden" value="edit_offer" id="booking_op_type" name="booking_op_type">
                                         <input type="hidden" value="{{$the_booking->id}}" id="offer_edit_id"
                                                name="offer_edit_id">
+                                        <input type="hidden" value="{{$the_booking->booking_id}}" id="offer_booking_id"
+                                               name="offer_booking_id">
+                                        <input type="hidden" value="{{$the_booking->offer_assigned_id}}" id="offer_assigned_id"
+                                               name="offer_assigned_id">
 
                                         <div class="form-group">
                                             <div class="col-lg-4 col-lg-offset-3">
@@ -171,9 +165,7 @@
         }
 
 
-
-
-        @endif
+                @endif
 
 
 
@@ -325,6 +317,11 @@
     load_tab_content(active_tab);
     else
     $("#booking_detail_tabs a:first").trigger('click');
+
+    $("#new_offer_status").select2({
+    minimumResultsForSearch: 5
+    }).val({{$the_booking->offer_status}}).trigger("change");
+
 
 
 @endsection

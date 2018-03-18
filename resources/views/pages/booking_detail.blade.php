@@ -5,9 +5,9 @@
 @endsection
 
 @section('page_level_css')
-    <link rel="stylesheet" type="text/css" href="/css/fileinput.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="/js/plugins/select2/dist/css/new.min.css" />
-    <link rel="stylesheet" type="text/css" href="/js/plugins/bootstrap-switch/bootstrap-switch.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/fileinput.min.css" media="all"/>
+    <link rel="stylesheet" type="text/css" href="/js/plugins/select2/dist/css/new.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/js/plugins/bootstrap-switch/bootstrap-switch.min.css"/>
 
     {!! $OfferDataTableObj->css() !!}
 @endsection
@@ -15,6 +15,7 @@
 @section('content')
     <?php
     $the_booking = json_decode($the_booking);
+    $the_booking_offer = json_decode($the_booking_offer);
     $user_logo_hdn_value = "not_changed";
     ?>
 
@@ -28,7 +29,8 @@
                             {{ $the_booking->name }}
                         </h2>
                         <p style="margin: 10px 0 0;">
-                            {{ trans('booking_detail.booking_title') }}:  <strong> {{ $the_booking->booking_title}} </strong>
+                            {{ trans('booking_detail.booking_title') }}:
+                            <strong> {{ $the_booking->booking_title}} </strong>
 
                         </p>
                         <p style="margin: 5px 0 0;">
@@ -81,22 +83,17 @@
                                 {{ trans('booking_detail.show_booking') }}
                             </a>
                         </li>
-                        @if (Helper::has_right(Auth::user()->operations, "add_new_user"))
-                            <li class="" tab="#tab-2">
-                                <a data-toggle="tab" href="#tab-2" aria-expanded="true">
-                                    <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
-                                    {{ trans('booking_detail.edit_booking') }}
-                                </a>
-                            </li>
-                        @endif
-                        <li class="" tab="#tab-3">
-                            <a data-toggle="tab" href="#tab-3" aria-expanded="false">
-                                <i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i>
-                                {{ trans('booking_detail.manage_booking') }}
+
+                        <li class="" tab="#tab-2">
+                            <a data-toggle="tab" href="#tab-2" aria-expanded="true">
+                                <i class="fa fa-pencil-square-o fa-lg" aria-hidden="true"></i>
+                                {{ trans('booking_detail.edit_booking') }}
                             </a>
                         </li>
-                        <li class="" tab="#tab-4">
-                            <a data-toggle="tab" href="#tab-4" aria-expanded="false">
+
+
+                        <li class="" tab="#tab-3">
+                            <a data-toggle="tab" href="#tab-3" aria-expanded="false">
                                 <i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i>
                                 {{ trans('booking_detail.manage_offer') }}
                             </a>
@@ -106,75 +103,77 @@
 
                     <div class="tab-content">
 
-                            <div id="tab-1" class="tab-pane">
-                                <div class="panel-body">
-                                    İlan burda gösterilecek
-                                </div>
-                            </div> <!-- .tab-1 -->
+                        <div id="tab-1" class="tab-pane">
+                            <div class="panel-body">
+                                İlan burda gösterilecek
+                            </div>
+                        </div> <!-- .tab-1 -->
 
-                        @if (Helper::has_right(Auth::user()->operations, "add_new_user"))
+
                         <div id="tab-2" class="tab-pane">
                             <div class="panel-body">
-                                <form class="m-t form-horizontal" role="form" method="POST" action="{{ url('/booking_management/add') }}" id="add_new_booking_form">
-                                    {{ csrf_field() }}
+                                <form class="m-t form-horizontal" role="form" method="POST"
+                                      action="{{ url('/booking_management/add') }}" id="add_new_booking_form">
+                                {{ csrf_field() }}
 
-
-
-
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('booking_detail.name') }} <span style="color:red;">*</span></label>
-                                        <div class="col-sm-6">
-                                            <input type="text" value="{{ $the_booking->name }}" class="form-control" id="new_booking_name" name="new_booking_name" required minlength="3" maxlength="255" />
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('booking_detail.booking_name') }} <span style="color:red;">*</span></label>
-                                        <div class="col-sm-6">
-                                            <input type="text" value="{{$the_booking->booking_title}}" class="form-control" id="new_booking_email" name="new_booking_email" required>
-                                        </div>
-                                    </div>
+                                    {!!  Helper::get_status("new_booking_status", false) !!}
+                                <!-- get selectable clients according to user type -->
+                                    {!!  Helper::get_clients_select("new_user_clients", false) !!}
 
 
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('booking_detail.date') }} <span style="color:red;">*</span></label>
+                                        <label class="col-sm-3 control-label"> {{ trans('booking_detail.booking_name') }}
+                                            <span style="color:red;">*</span></label>
                                         <div class="col-sm-6">
-                                            <input type="text" value="{{$the_booking->booking_date}}" class="form-control" id="new_booking_email" name="new_booking_email" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('booking_detail.assigned_id') }} <span style="color:red;">*</span></label>
-                                        <div class="col-sm-6">
-                                            <input type="text" value="{{$the_booking->assigned_id}}" class="form-control" id="new_booking_email" name="new_booking_email" required>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('booking_detail.service_name') }} <span style="color:red;">*</span></label>
-                                        <div class="col-sm-6">
-                                            <input type="text" value="{{$the_booking->s_name}}" class="form-control" id="new_booking_email" name="new_booking_email" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('booking_detail.booking_detail') }} <span style="color:red;">*</span></label>
-                                        <div class="col-sm-6">
-                                            <textarea rows="4" cols="50" class="form-control" id="new_booking_email" name="new_booking_email">
-                                            At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
-                                            </textarea>
+                                            <input type="text" value="{{$the_booking->booking_title}}"
+                                                   class="form-control" id="new_booking_title"
+                                                   name="new_booking_title" required>
                                         </div>
                                     </div>
 
 
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label"> {{ trans('booking_detail.date') }}
+                                            <span style="color:red;">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="{{$the_booking->booking_date}}"
+                                                   class="form-control" id="new_booking_date"
+                                                   name="new_booking_date" required>
+                                        </div>
+                                    </div>
 
 
+                                    <!-- get selectable assigned  -->
+                                    {!!  Helper::get_assigned_select("new_assigned_id", false) !!}
 
-                                    <input type="hidden" value="edit" id="booking_op_type" name="booking_op_type">
-                                    <input type="hidden" value="{{$the_booking->id}}" id="booking_edit_id" name="booking_edit_id">
+
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label"> {{ trans('booking_detail.service_name') }}
+                                            <span style="color:red;">*</span></label>
+                                        <div class="col-sm-6">
+                                            <input type="text" value="{{$the_booking->s_name}}" class="form-control"
+                                                   id="new_service_name" name="new_service_name" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label"> {{ trans('booking_detail.booking_detail') }}
+                                            <span style="color:red;">*</span></label>
+                                        <div class="col-sm-6">
+                                            <textarea rows="4" cols="50" class="form-control" id="new_booking_detail"
+                                                      name="new_booking_detail">asd</textarea>
+                                        </div>
+                                    </div>
+
+
+                                    <input type="hidden" value="edit_booking" id="booking_op_type"
+                                           name="booking_op_type">
+                                    <input type="hidden" value="{{$the_booking->booking_id}}" id="booking_edit_id"
+                                           name="booking_edit_id">
 
                                     <div class="form-group">
                                         <div class="col-lg-4 col-lg-offset-3">
-                                            <button type="submit" class="btn btn-primary" id="save_booking_button" name="save_booking_button" onclick="return validate_save_op();">
+                                            <button type="submit" class="btn btn-primary" id="save_booking_button"
+                                                    name="save_booking_button" onclick="return validate_save_op();">
                                                 <i class="fa fa-refresh"></i> {{ trans('booking_detail.update') }}
                                             </button>
                                         </div>
@@ -182,53 +181,9 @@
                                 </form>
                             </div>
                         </div> <!-- .tab-2 -->
-                        @endif <!-- Check Auth user has 'add_new_user' authorization -->
-                            <div id="tab-3" class="tab-pane">
-                                <div class="panel-body">
-                                    <div class="form-horizontal">
-                                        <div class="form-group">
-                                            <label class="col-md-3 col-xs-7 control-label"> {{ trans('booking_detail.current_status') }}: </label>
-                                            <label class="col-md-8 col-xs-5 control-label" style="text-align: left;">{!! trans('global.status_'.$the_booking->status) !!}</label>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-md-3 col-xs-7 control-label">{{ trans('booking_detail.change_status') }}:</label>
-                                            <div class="col-md-8 col-xs-5" style="padding-top: 7px;">
-                                                <input
-                                                        class="form-control"
-                                                        id="change_booking_status"
-                                                        type="checkbox"
-                                                        data-on-text="{{trans('booking_detail.active')}}"
-                                                        data-off-text="{{trans('booking_detail.inactive')}}"
-                                                        data-on-color="success"
-                                                        data-off-color="danger"
-                                                        data-size="mini"
-                                                        {{ $the_booking->status == 1?"checked":"" }}
-                                                >
-                                                <span id="change_booking_status_helper" class="help-block" style="display:none;color:darkred;">{{ trans('booking_detail.deactive_booking_warning') }}</span>
-                                            </div>
-                                        </div>
 
 
-                                        <div class="form-group">
-
-                                            <div class="col-md-3 col-xs-7 control-label">
-
-                                            </div>
-                                            <div class="col-md-8 col-xs-5" style="padding-top: 7px;">
-                                                @if (Helper::has_right(Auth::user()->operations, "add_new_user"))
-                                                    <button type="button" class="btn btn-sm btn-info" id="change_booking_status_button" name="change_booking_status_button">
-                                                        <i class="fa fa-retweet"></i> {{ trans('booking_detail.change') }}
-                                                    </button>
-                                                @endif
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> <!-- .tab-3 -->
-
-                        <div id="tab-4" class="tab-pane">
+                        <div id="tab-3" class="tab-pane">
                             <div class="panel-body">
                                 {!!  $OfferDataTableObj->html() !!}
                             </div>
@@ -247,18 +202,19 @@
     <script type="text/javascript" language="javascript" src="/js/fileinput/fileinput.min.js"></script>
     <script type="text/javascript" language="javascript" src="/js/fileinput/fileinput_locale_tr.js"></script>
     <script type="text/javascript" language="javascript" src="/js/plugins/select2/dist/js/new.min.js"></script>
-    <script type="text/javascript" language="javascript" src="/js/plugins/bootstrap-switch/bootstrap-switch.min.js"></script>
+    <script type="text/javascript" language="javascript"
+            src="/js/plugins/bootstrap-switch/bootstrap-switch.min.js"></script>
 
     {!! $OfferDataTableObj->js() !!}
 
     <script>
         @if (Helper::has_right(Auth::user()->operations, "add_new_user"))
-        function validate_save_op(){
+        function validate_save_op() {
             $("#add_new_booking_form").parsley().reset();
             $("#add_new_booking_form").parsley();
         }
 
-        function open_edit_password(){
+        function open_edit_password() {
             $('#new_booking_password').removeAttr('disabled');
             $('#new_booking_password').attr('required', '');
             $('#change_pass_icon').hide();
@@ -266,11 +222,9 @@
         }
 
 
-
-
         @endif
 
-        function collapse_item(element){
+        function collapse_item(element) {
 
             the_li = element.closest("li");
             the_li.children('[data-action="collapse"]').hide();
@@ -278,7 +232,8 @@
             the_li.children('.dd-list').hide();
 
         }
-        function expand_item(element){
+
+        function expand_item(element) {
 
             the_li = element.closest("li");
             the_li.children('[data-action="expand"]').hide();
@@ -399,8 +354,7 @@
 
     var tab_1 = false,
     tab_2 = false,
-    tab_3 = false,
-    tab_4 = false;
+    tab_3 = false;
 
     function load_tab_content(selectedTab){
     if(selectedTab == "#tab-1" && tab_1 == false){
@@ -411,13 +365,10 @@
     tab_2 = true;
     }
     else if(selectedTab == "#tab-3" && tab_3 == false){
-    // booking_login_history();
+    {!! $OfferDataTableObj->ready() !!}
     tab_3 = true;
     }
-    else if(selectedTab == "#tab-4" && tab_4 == false){
-    tab_4 = true;
-    {!! $OfferDataTableObj->ready() !!}
-    }
+
     else{
     return;
     }
@@ -435,6 +386,28 @@
     load_tab_content(active_tab);
     else
     $("#booking_detail_tabs a:first").trigger('click');
+
+
+
+    $("#new_user_clients").select2({
+    minimumResultsForSearch: 5
+    }).val({{$the_booking->client_id}}).trigger("change");
+    $("#new_assigned_id").select2({
+    minimumResultsForSearch: 5
+    }).val({{$the_booking->assigned_id}}).trigger("change");
+    $("#new_booking_status").select2({
+    minimumResultsForSearch: 5
+    }).val({{$the_booking->booking_status}}).trigger("change");
+
+
+
+
+
+
+
+
+
+
 
 
 @endsection

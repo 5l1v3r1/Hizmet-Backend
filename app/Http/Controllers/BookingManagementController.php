@@ -132,7 +132,7 @@ class BookingManagementController extends Controller
                     "DT_RowId" => $one_row->id,
                     "booking_title" => $one_row->booking_title,
                     "client_name" => $one_row->name,
-                    "status" => trans("global.status_" . $one_row->status),
+                    "status" => trans("global.booking_status_" . $one_row->status),
                     "booking_date" => date('d/m/Y H:i', strtotime($one_row->booking_date)),
                     "buttons" => self::create_buttons($one_row->id, $detail_type = "booking")
                 );
@@ -154,7 +154,7 @@ class BookingManagementController extends Controller
         $recordsFiltered = 0;
         $search_value = false;
         $param_array = array();
-        $where_clause = "WHERE BO.booking_id= ".$id." ";
+        $where_clause = "WHERE BO.booking_id= " . $id . " ";
 
 
         //get customized filter object
@@ -205,7 +205,7 @@ class BookingManagementController extends Controller
                 $tmp_array = array(
                     "DT_RowId" => $one_row->id,
                     "offer_name" => $one_row->name,
-                    "status" => trans("global.status_" . $one_row->status),
+                    "status" => trans("global.booking_status_" . $one_row->status),
                     "offer_date" => date('d/m/Y H:i', strtotime($one_row->offer_date)),
                     "buttons" => self::create_buttons($one_row->id, $detail_type = "offer")
                 );
@@ -249,67 +249,92 @@ class BookingManagementController extends Controller
 
     }
 
-    public function getInfo(Request $request)
-    {
-
-
-    }
-
-    public function uploadImage(Request $request)
-    {
-
-
-    }
 
     public function create(Request $request)
     {
-        $op_type = "edit";
-
-
-        if( $request->has('offer_op_type') && $request->input('offer_op_type') == "edit") {
-            $op_type = "edit";
-
-            if( $request->has('client_edit_id') && is_numeric($request->input("client_edit_id")) ){
-                $result = DB::table("clients")
-                    ->where("id", $request->input("client_edit_id"))
-                    ->where('status', '<>', 0)
-                    ->first();
+        $op_type = $request->input("booking_op_type");
+        $status = $request->input("new_offer_status");
 
 
 
 
+
+        if ($op_type == "edit_booking") {
+            if ($request->input("new_assigned_id")) {
+                $assigned_id = $request->input("new_assigned_id");
+
+            }else{
+                $assigned_id = 0;
             }
 
 
 
-
-
-        }
-
-
-
-        if( $op_type == "new" ){
-
-
-        }
-        else if( $op_type == "edit" ){
-
-            // update client's info
-            DB::table('booking_offers')->where('id', $request->input("offer_edit_id"))
+            // update booking detail
+            DB::table('booking')->where('id', $request->input("booking_edit_id"))
                 ->update(
                     [
-                        'prices' => $request->input("new_prices"),
-                        'note' => $request->input("new_note"),
-                        'status' => $request->input("new_status"),
+                        'client_id' => $request->input("new_user_clients"),
+                        'booking_date' => $request->input("new_booking_date"),
+                        'assigned_id' => $assigned_id,
+                        'booking_title' => $request->input("new_booking_title"),
+                        'status' => $request->input("new_booking_status"),
 
                     ]
                 );
 
+
             //fire event
-           // Helper::fire_event("update",Auth::user(),"clients",$request->input("client_edit_id"));
+            // Helper::fire_event("update",Auth::user(),"clients",$request->input("client_edit_id"));
+
+
+
+            session(['booking_update_success' => true]);
+
+
+        } elseif ($op_type == "edit_offer") {
+
+
+            // update offer info
+            $update=DB::table('booking_offers')->where('id', $request->input("offer_edit_id"))
+                ->update(
+                    [
+                        'prices' => $request->input("new_prices"),
+                        'note' => $request->input("new_note"),
+                        'status' => $request->input("new_offer_status"),
+
+                    ]
+                );
+            if ($update && $status == 2){
+                DB::table('booking')->where('id', $request->input("offer_booking_id"))
+                    ->update(
+                        [
+                            'assigned_id' => $request->input("offer_assigned_id"),
+                            'status' => $status
+
+                        ]
+                    );
+
+
+            }
+            if ($update && $status <> 2){
+                DB::table('booking')->where('id', $request->input("offer_booking_id"))
+                    ->update(
+                        [
+                            'assigned_id' => 0,
+                            'status' => $status
+
+                        ]
+                    );
+
+
+            }
+
+            //fire event
+            // Helper::fire_event("update",Auth::user(),"clients",$request->input("client_edit_id"));
 
             //return update operation result via global session object
-            session(['client_update_success' => true]);
+
+            session(['booking_update_success' => true]);
 
         }
 
@@ -371,12 +396,29 @@ class BookingManagementController extends Controller
             ->select(
                 "B.*",
                 'C.*',
-                'S.*'
+                'S.*',
+                'C.id as client_id',
+                'B.assigned_id as assigned_id',
+                'B.id as booking_id',
+                'B.status as booking_status'
             )
             ->join('clients as C', 'C.id', 'B.client_id')
             ->join('services as S', 'S.id', 'B.service_id')
             ->where("B.id", $id)
             ->where('B.status', '<>', 0)
+            ->first();
+
+        $the_booking_offer = DB::table("booking_offers as BO")
+            ->select(
+                "BO.*",
+                'C.*',
+                'S.*'
+            )
+            ->join('clients as C', 'C.id', 'BO.assigned_id')
+            ->join('booking as B', 'B.id', 'BO.booking_id')
+            ->join('services as S', 'S.id', 'B.service_id')
+            ->where("BO.id", $id)
+            ->where('BO.status', '<>', 0)
             ->first();
 
 
@@ -396,6 +438,7 @@ class BookingManagementController extends Controller
 
         return view('pages.booking_detail', [
                 'the_booking' => json_encode($the_booking),
+                'the_booking_offer' => json_encode($the_booking_offer),
                 'BookingDataTableObj' => $booking_data_table,
                 'OfferDataTableObj' => $offer_data_table
 
@@ -412,7 +455,8 @@ class BookingManagementController extends Controller
                 'O.*',
                 'C.name as client_name',
                 'CA.name as assigned_name',
-                'O.status as offer_status'
+                'O.status as offer_status',
+                'O.assigned_id as offer_assigned_id'
 
             )
             ->join('booking as B', 'B.id', 'O.booking_id')

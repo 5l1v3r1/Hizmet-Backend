@@ -46,7 +46,7 @@
                             <strong>{{ trans('user_detail.email') }}</strong>
                         </td>
                         <td>
-                            {{ $the_order->name }}
+                            {{ $the_order->email }}
                         </td>
                     </tr>
                     <tr>
@@ -54,7 +54,7 @@
                             <strong>{{ trans('order_detail.created_by') }}</strong>
                         </td>
                         <td>
-                            {{ $the_order->name }}
+                            {{ $the_order->created_by }}
                         </td>
                     </tr>
                     <tr>
@@ -62,7 +62,7 @@
                             <strong>{{ trans('order_detail.created_at') }}</strong>
                         </td>
                         <td>
-                            {{ $the_order->name }}
+                            {{ $the_order->created_at }}
                         </td>
                     </tr>
                     </tbody>
@@ -90,7 +90,7 @@
                         <li class="" tab="#tab-3">
                             <a data-toggle="tab" href="#tab-3" aria-expanded="false">
                                 <i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i>
-                                {{ trans('order_detail.edit_offer') }}
+                                {{ trans('order_detail.order_state') }}
                             </a>
                         </li>
                         <li class="" tab="#tab-4">
@@ -118,15 +118,10 @@
                                     {{ csrf_field() }}
 
 
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('order_detail.name') }}
-                                            <span style="color:red;">*</span></label>
-                                        <div class="col-sm-6">
-                                            <input type="text" value="{{ $the_order->name }}" class="form-control"
-                                                   id="new_client_name" name="new_client_name" required minlength="3"
-                                                   maxlength="255" disabled/>
-                                        </div>
-                                    </div>
+
+                                    <!-- get selectable clients according to user type -->
+                                    {!!  Helper::get_clients_select("new_user_clients", false) !!}
+
 
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label"> {{ trans('order_detail.order_name') }}
@@ -148,19 +143,12 @@
                                                    required>
                                         </div>
                                     </div>
+                                        <!-- get selectable assigned  -->
+                                        {!!  Helper::get_assigned_select("new_assigned_id", false) !!}
 
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('order_detail.assigned_id') }}
-                                            <span style="color:red;">*</span></label>
-                                        <div class="col-sm-6">
-                                            <input type="text" value="{{$the_order->order_assigned_id}}"
-                                                   class="form-control" id="new_order_assigned_id"
-                                                   name="new_order_assigned_id"
-                                                   required>
-                                        </div>
-                                    </div>
 
-                                    <div class="form-group">
+
+                                        <div class="form-group">
                                         <label class="col-sm-3 control-label"> {{ trans('order_detail.service_name') }}
                                             <span style="color:red;">*</span></label>
                                         <div class="col-sm-6">
@@ -168,14 +156,8 @@
                                                    id="new_order_s_name" name="new_order_s_name" disabled>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('order_detail.status') }}
-                                            <span style="color:red;">*</span></label>
-                                        <div class="col-sm-6">
-                                            <input type="text" value="{{$the_order->order_status}}" class="form-control"
-                                                   id="new_order_status" name="new_order_status" required>
-                                        </div>
-                                    </div>
+
+                                        {!!  Helper::get_status("new_order_status", false) !!}
 
                                     <input type="hidden" value="edit_order" id="order_op_type" name="order_op_type">
                                     <input type="hidden" value="{{$the_order->order_id}}" id="order_edit_id"
@@ -196,37 +178,20 @@
                         <div id="tab-3" class="tab-pane">
                             <div class="panel-body">
                                 <form class="m-t form-horizontal" role="form" method="POST"
-                                      action="{{ url('/order_management/add') }}" id="add_new_order_form">
+                                      action="{{ url('/order_management/add') }}" id="add_new_offer_form">
                                     {{ csrf_field() }}
 
 
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('order_detail.order_id') }}
-                                            <span style="color:red;">*</span></label>
-                                        <div class="col-sm-6">
-                                            <input type="number" value="{{ $the_order->offer_booking_id }}"
-                                                   class="form-control"
-                                                   id="new_offer_order_id" name="new_offer_order_id" required/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('order_detail.client_id') }}
-                                            <span style="color:red;">*</span></label>
-                                        <div class="col-sm-6">
-                                            <input type="number" value="{{ $the_order->offer_client_id }}"
-                                                   class="form-control"
-                                                   id="new_offer_client_id" name="new_offer_client_id" required/>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label"> {{ trans('order_detail.assigned_id') }}
-                                            <span style="color:red;">*</span></label>
-                                        <div class="col-sm-6">
-                                            <input type="number" value="{{ $the_order->offer_assigned_id }}"
-                                                   class="form-control"
-                                                   id="new_offer_assigned_id" name="new_offer_assigned_id" required/>
-                                        </div>
-                                    </div>
+
+
+                                    <!-- get selectable assigned  -->
+                                    {!!  Helper::get_booking_select("new_offfer_booking_id", false) !!}
+
+
+                                <!-- get selectable assigned  -->
+                                    {!!  Helper::get_assigned_select("new_offer_assigned_id", false) !!}
+
+
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label"> {{ trans('order_detail.prices') }}
                                             <span style="color:red;">*</span></label>
@@ -245,7 +210,7 @@
                                     <div class="form-group">
                                         <div class="col-lg-4 col-lg-offset-3">
                                             <button type="submit" class="btn btn-primary" id="save_order_button"
-                                                    name="save_order_button" onclick="return validate_save_op();">
+                                                    name="save_order_button" onclick="return validate_save_op2();">
                                                 <i class="fa fa-refresh"></i> {{ trans('order_detail.update') }}
                                             </button>
                                         </div>
@@ -284,13 +249,11 @@
             $("#add_new_order_form").parsley().reset();
             $("#add_new_order_form").parsley();
         }
-
-        function open_edit_password() {
-            $('#new_order_password').removeAttr('disabled');
-            $('#new_order_password').attr('required', '');
-            $('#change_pass_icon').hide();
-            $('#cancel_pass_icon').show();
+        function validate_save_op2() {
+            $("#add_new_offer_form").parsley().reset();
+            $("#add_new_offer_form").parsley();
         }
+
 
 
         @endif
@@ -319,6 +282,9 @@
 @endsection
 
 @section('page_document_ready')
+
+
+
     @if (count($errors) > 0)
         @foreach ($errors->all() as $error)
             custom_toastr('{{ $error }}', 'error');
@@ -449,6 +415,7 @@
     else if(selectedTab == "#tab-4" && tab_4 == false){
     tab_4 = true;
     {!! $OfferDataTableObj->ready() !!}
+
     }
     else{
     return;
@@ -467,6 +434,29 @@
     load_tab_content(active_tab);
     else
     $("#order_detail_tabs a:first").trigger('click');
+
+    $("#new_offer_assigned_id").select2({
+    minimumResultsForSearch: 1
+    }).val({{$the_order->offer_assigned_id}}).trigger("change");
+
+    $("#new_user_clients").select2({
+    minimumResultsForSearch: 5
+    }).val({{$the_order->order_client_id}}).trigger("change");
+
+    $("#new_assigned_id").select2({
+    minimumResultsForSearch: 5
+    }).val({{$the_order->assigned_id}}).trigger("change");
+
+    $("#new_offfer_booking_id").select2({
+    minimumResultsForSearch: 5
+    }).val({{$the_order->booking_id}}).trigger("change");
+
+    $("#new_order_status").select2({
+    minimumResultsForSearch: 5
+    }).val({{$the_order->order_status}}).trigger("change");
+
+
+
 
 
 @endsection

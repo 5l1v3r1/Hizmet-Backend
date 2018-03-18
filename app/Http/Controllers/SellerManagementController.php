@@ -228,7 +228,7 @@ class SellerManagementController extends Controller
                 $tmp_array = array(
                     "DT_RowId" => $one_row->id,
                     "offer_name" => $one_row->name,
-                    "status" => trans("global.status_" . $one_row->status),
+                    "status" => trans("global.booking_status_" . $one_row->status),
                     "offer_date" => date('d/m/Y H:i', strtotime($one_row->offer_date)),
                     "buttons" => self::create_buttons($one_row->id, $detail_type = "offer")
                 );

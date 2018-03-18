@@ -327,21 +327,12 @@ class Helper
         $user_type = Auth::user()->user_type;
         $result = array();
 
-        if( $user_type == 1 || $user_type == 2 ){
+
             $result = DB::table('clients')
                     ->where("status",'<>', 0)
+                    ->where("type",'=', 1)
                     ->orderBy('name')->get();
-        }
-        else if( $user_type == 3 ){
-            $result = DB::table('clients')
-                        ->where("status",'<>', 0)
-                        ->where('distributor_id', Auth::user()->org_id)
-                        ->orderBy('name')
-                        ->get();
-        }
-        else{
-            abort(404);
-        }
+
 
         if( count($result) > 0){
             foreach ($result as $one_dist){
@@ -356,6 +347,120 @@ class Helper
 
         return $return_value;
     }
+    public static function get_assigned_select($id, $is_hidden=false){
+        $return_value = '
+            <div class="form-group" style="'.($is_hidden==true?"display:none;":"").'">
+                <label class="col-sm-3 control-label">'.trans('global.assigned').' <span style="color:red;">*</span></label>
+                <div class="col-sm-6">';
+
+        $return_value .= '<select class="form-control" name="'.$id.'" id="'.$id.'" style="width:100%;">';
+
+
+
+        $result = DB::table('clients')
+            ->where("status",'<>', 0)
+            ->where("type",'=', 2)
+            ->orderBy('name')->get();
+
+
+        if( count($result) > 0){
+            foreach ($result as $one_dist){
+                $return_value .= '<option value="'.$one_dist->id.'">'.$one_dist->name.'</option>';
+            }
+        }
+
+        $return_value .= '
+                    </select>
+                </div> <!-- .col-sm-6 -->
+            </div> <!-- .form-group -->';
+
+        return $return_value;
+    }
+
+
+    public static function get_booking_select($id, $is_hidden=false){
+        $return_value = '
+            <div class="form-group" style="'.($is_hidden==true?"display:none;":"").'">
+                <label class="col-sm-3 control-label">'.trans('global.booking').' <span style="color:red;">*</span></label>
+                <div class="col-sm-6">';
+
+        $return_value .= '<select class="form-control" name="'.$id.'" id="'.$id.'" style="width:100%;">';
+
+
+        $result = DB::table('booking')
+            ->where("status",'<>', 0)
+            ->orderBy('booking_title')->get();
+
+
+        if( count($result) > 0){
+            foreach ($result as $one_dist){
+                $return_value .= '<option value="'.$one_dist->id.'">'.$one_dist->booking_title.'</option>';
+            }
+        }
+
+        $return_value .= '
+                    </select>
+                </div> <!-- .col-sm-6 -->
+            </div> <!-- .form-group -->';
+
+        return $return_value;
+    }
+    public static function get_service_select($id, $is_hidden=false){
+        $return_value = '
+            <div class="form-group" style="'.($is_hidden==true?"display:none;":"").'">
+                <label class="col-sm-3 control-label">'.trans('global.service').' <span style="color:red;">*</span></label>
+                <div class="col-sm-6">';
+
+        $return_value .= '<select class="form-control" name="'.$id.'" id="'.$id.'" style="width:100%;">';
+
+
+
+        $result = DB::table('services')
+            ->orderBy('s_name')->get();
+
+
+        if( count($result) > 0){
+            foreach ($result as $one_dist){
+                $return_value .= '<option value="'.$one_dist->id.'">'.$one_dist->s_name.'</option>';
+            }
+        }
+
+        $return_value .= '
+                    </select>
+                </div> <!-- .col-sm-6 -->
+            </div> <!-- .form-group -->';
+
+        return $return_value;
+    }
+
+    public static function get_status($id, $is_hidden=false){
+        $return_value = '
+            <div class="form-group" style="'.($is_hidden==true?"display:none;":"").'">
+                <label class="col-sm-3 control-label">'.trans('global.status').' <span style="color:red;">*</span></label>
+                <div class="col-sm-6">';
+
+        $return_value .= '<select class="form-control" name="'.$id.'" id="'.$id.'" style="width:100%;">';
+
+
+
+        $result = DB::table('status')
+            ->orderBy('name')->get();
+
+
+        if( count($result) > 0){
+            foreach ($result as $one_dist){
+                $return_value .= '<option value="'.$one_dist->id.'">'.$one_dist->name.'</option>';
+            }
+        }
+
+        $return_value .= '
+                    </select>
+                </div> <!-- .col-sm-6 -->
+            </div> <!-- .form-group -->';
+
+        return $return_value;
+    }
+
 
     public static function get_user_type_select($id){
         $return_value = '<div class="form-group"><label class="col-sm-3 control-label">'.trans('user_management.type').' <span style="color:red;">*</span></label><div class="col-sm-6"><select name="'.$id.'" id="'.$id.'" class="form-control" style="width:100%;"><option value="4">'.trans('global.client').'</option>';

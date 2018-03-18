@@ -13,7 +13,7 @@ return [
     'name' => 'Müşteri Adı',
     'booking_title' => 'Sipariş başlığı',
     'client_id' => 'Müşteri id',
-    'status' => 'durum',
+    'status' => 'Durum',
     'booking_date' => 'Oluşturulma Tarihi',
     'operations' => 'İşlemler',
     'detail' => 'Sipariş detayı',
@@ -27,8 +27,8 @@ return [
     'service_name ' => 'Hizmet Adı',
     'booking_detail' => 'Sipariş detayı',
     'booking_name' => 'Sipariş adı',
-    'date' => 'tarih',
-    'service_name' => 'servis',
+    'date' => 'Tarih',
+    'service_name' => 'Hizmet adı',
     'current_status' => 'Sipariş durumu',
     'change_status' => 'durumu değiştir',
     'change' => 'Değiştir',
@@ -46,7 +46,9 @@ return [
     'prices' => 'Fiyat',
     'show_offer' => 'Teklifi göster',
     'demo' => 'demo',
-    "edit_offer" => 'Teklifi düzenle'
+    'order_name' => 'Sipariş Adı',
+    "edit_offer" => 'Teklifi düzenle',
+    "order_state" => 'Sipariş durumu'
 
 
 ];

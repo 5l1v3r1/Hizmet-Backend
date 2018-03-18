@@ -27,8 +27,8 @@ return [
     'service_name ' => 'Hizmet Adı',
     'booking_detail' => 'İlan detayı',
     'booking_name' => 'ilan adı',
-    'date' => 'tarih',
-    'service_name' => 'servis',
+    'date' => 'Tarih',
+    'service_name' => 'Hizmet Adı',
     'current_status' => 'ilan durumu',
     'change_status' => 'durumu değiştir',
     'change' => 'Değiştir',
@@ -46,7 +46,8 @@ return [
     'prices' => 'Fiyat',
     'status' => 'Durum',
     'show_offer' => 'Teklifi göster',
-    'demo' => 'demo'
+    'demo' => 'demo',
+    'province' => 'Şehir'
 
 
 ];

@@ -72,6 +72,7 @@ class OrderManagementController extends Controller
 
         }
 
+
         $return_array = array();
         $draw = $_GET["draw"];
         $start = $_GET["start"];
@@ -138,7 +139,7 @@ class OrderManagementController extends Controller
                     "order_title" => $one_row->booking_title,
                     "client_name" => $one_row->name,
                     "assigned_name" => $one_row->assigned_name,
-                    "status" => trans("global.status_" . $one_row->status),
+                    "status" => trans("global.booking_status_" . $one_row->status),
                     "order_date" => date('d/m/Y H:i', strtotime($one_row->order_date)),
                     "buttons" => self::create_buttons($one_row->id, $detail_type = "booking")
                 );
@@ -212,7 +213,7 @@ class OrderManagementController extends Controller
                 $tmp_array = array(
                     "DT_RowId" => $one_row->id,
                     "offer_name" => $one_row->name,
-                    "status" => trans("global.status_" . $one_row->status),
+                    "status" => trans("global.booking_status_" . $one_row->status),
                     "offer_date" => date('d/m/Y H:i', strtotime($one_row->offer_date)),
                     "buttons" => self::create_buttons($one_row->id, $detail_type = "offer")
                 );
@@ -273,10 +274,6 @@ class OrderManagementController extends Controller
         $op_type = $request->input("order_op_type");
 
 
-
-
-
-
         if( $op_type == "new" ){
 
 
@@ -288,9 +285,11 @@ class OrderManagementController extends Controller
                 ->update(
                     [
                         'booking_title' => $request->input("new_order_name"),
+                        'client_id' => $request->input("new_user_clients"),
                         'order_date' =>  $request->input("new_order_date"),
-                        'assigned_id' => $request->input("new_order_assigned_id"),
+                        'assigned_id' => $request->input("new_assigned_id"),
                         'status' => $request->input("new_order_status"),
+
 
 
                     ]
@@ -311,8 +310,7 @@ class OrderManagementController extends Controller
                     [
                         'prices' => $request->input("new_prices"),
                         'assigned_id' => $request->input("new_offer_assigned_id"),
-                        'client_id' => $request->input("new_offer_client_id"),
-                        'booking_id' => $request->input("new_offer_order_id"),
+                        'booking_id' => $request->input("new_offfer_booking_id"),
 
 
                     ]
@@ -387,6 +385,7 @@ class OrderManagementController extends Controller
                 'S.*',
                 'BO.*',
                 'B.id as order_id',
+                'B.client_id as order_client_id',
                 'B.assigned_id as order_assigned_id',
                 'B.status as order_status',
                 'BO.id as offer_id',
@@ -403,12 +402,6 @@ class OrderManagementController extends Controller
             ->first();
 
 
-        // prepare booking table obj which belongs to this client
-        $prefix = "od";
-        $url = "od_get_data/" . $id;
-        $default_order = '[6,"desc"]';
-        $order_data_table = new DataTable($prefix, $url, $this->order_columns, $default_order, $request);
-        $order_data_table->set_add_right(false);
 
         $prefix = "oo";
         $url = "oo_get_data/" . $id;
@@ -419,7 +412,6 @@ class OrderManagementController extends Controller
 
         return view('pages.order_detail', [
                 'the_order' => json_encode($the_order),
-                'OrderDataTableObj' => $order_data_table,
                 'OfferDataTableObj' => $offer_data_table
 
 

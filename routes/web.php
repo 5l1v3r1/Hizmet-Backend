@@ -148,7 +148,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/booking_management/detail/{id}/{op}', 'BookingManagementController@bookingChange')->middleware(['custom_authorization:view_user_detail']);
 
-    Route::post('/offer_management/change', 'BookingManagementController@create')->middleware(['custom_authorization:view_user_detail']);
 
 
 
