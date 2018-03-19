@@ -45,36 +45,17 @@ class EventlogsController extends Controller
                         <select id=\"el_select_table\" style=\"width:100%;\"> \
                             <option value=\"all\">'.trans("event_logs.all_events").'</option> \
                             '.(Auth::user()->user_type != 4?' \
-                                <option value=\"modems\">'.trans("event_logs.modem_events").'</option> \
-                                <option value=\"meters\">'.trans("event_logs.meter_events").'</option> \
-                                <option value=\"relays\">'.trans("event_logs.relay_events").'</option> \
-                                <option value=\"analyzers\">'.trans("event_logs.analyzer_events").'</option> \
+                                <option value=\"bookings\">'.trans("event_logs.bookings").'</option> \
+                                <option value=\"orders\">'.trans("event_logs.orders").'</option> \
+                                <option value=\"offers\">'.trans("event_logs.offers").'</option> \
+                                \
                             ':"").' \
                             <option value=\"users\">'.trans("event_logs.user_events").'</option> \
                             <option value=\"clients\">'.trans("event_logs.client_events").'</option> \
-                            '.((Auth::user()->user_type != 4)?' \
-                                <option value=\"distributors\">'.trans("event_logs.distributor_events").'</option> \
-                                <option value=\"fee_scales\">'.trans("event_logs.fee_scale_events").'</option> \
-                                <option value=\"alert_definitions\">'.trans("event_logs.alert_definition_events").'</option> \
-                                <option value=\"reports\">'.trans("event_logs.report_events").'</option> \
-                                <option value=\"organization_schema\">'.trans("event_logs.org_schema_events").'</option> \
-                                <option value=\"additional_infos\">'.trans("event_logs.ainfo_events").'</option> \
-                            ':"").' \
+                            \
                         </select> \
                     </div> \
-                    <div class=\"col-lg-6\" style=\"padding:0 8px 10px;\"> \
-                        <select id=\"el_select_type\" style=\"width:100%;\"> \
-                            '.((Auth::user()->user_type != 4)?' \
-                                <option value=\"all\">'.trans("event_logs.all_records").'</option> \
-                                <option value=\"create\">'.trans("event_logs.add_new").'</option> \
-                                <option value=\"delete\">'.trans("event_logs.delete_device").'</option> \
-                                <option value=\"update\">'.trans("event_logs.update_device").'</option> \
-                            ':' \
-                                <option value=\"all\">'.trans("event_logs.all_records").'</option> \
-                                <option value=\"sessions\">'.trans("event_logs.session_events").'</option> \
-                                <option value=\"update\">'.trans("event_logs.update_device").'</option> \ ').' \
-                        </select> \
-                    </div> \
+                    \
                 </div> \
             ");
             
@@ -90,81 +71,6 @@ class EventlogsController extends Controller
                 the_val = $(this).val();        
                 $("#el_select_type").empty();
         
-               if(the_val == "modems"){
-                      $("#el_select_type").append($(\'<option>\', {value: \'all\', text: \''.trans('event_logs.all_records').'\'}));
-                      $("#el_select_type").append($(\'<option>\', {value: \'create\', text: \''.trans('event_logs.new_modem').'\'}));
-                      $("#el_select_type").append($(\'<option>\', {value: \'delete\', text: \''.trans('event_logs.delete_device').'\'}));
-                      $("#el_select_type").append($(\'<option>\', {value: \'update\', text: \''.trans('event_logs.update_device').'\'}));
-                }
-                else if(the_val == "meters"){
-                    $("#el_select_type").append($(\'<option>\', {value: \'all\', text: \''.trans('event_logs.all_records').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'create\', text: \''.trans('event_logs.new_meter').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'delete\', text: \''.trans('event_logs.delete_device').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'update\', text: \''.trans('event_logs.update_device').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'corrupted_data\', text: \''.trans('event_logs.incorrect_data').'\'}));
-                }
-                else if(the_val == "relays"){
-                    $("#el_select_type").append($(\'<option>\', {value: \'all\', text: \''.trans('event_logs.all_records').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'create\', text: \''.trans('event_logs.new_relay').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'delete\', text: \''.trans('event_logs.delete_device').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'update\', text: \''.trans('event_logs.update_device').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'corrupted_data\', text: \''.trans('event_logs.incorrect_data').'\'}));
-                }
-                else if(the_val == "analyzers"){
-                    $("#el_select_type").append($(\'<option>\', {value: \'all\', text: \''.trans('event_logs.all_records').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'create\', text: \''.trans('event_logs.new_analyzer').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'delete\', text: \''.trans('event_logs.delete_device').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'update\', text: \''.trans('event_logs.update_device').'\'}));
-                    $("#el_select_type").append($(\'<option>\', {value: \'corrupted_data\', text: \''.trans('event_logs.incorrect_data').'\'}));
-                }
-                else if( the_val == "users" ){
-                    '.(Auth::user()->user_type!=4 ?'' .
-                        '$("#el_select_type").append($("<option>", {value: "all", text: "'.trans('event_logs.all_records').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "sessions", text: "'.trans('event_logs.session_events').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "activation", text: "'.trans('event_logs.account_activation').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "user_change_authorization", text: "'.trans('event_logs.users_user_change_authorization').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "create", text: "'.trans('event_logs.new_user').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "delete", text: "'.trans('event_logs.delete_user').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "update", text: "'.trans('event_logs.update_user').'"}));' .
-                    '':'' .
-                        '$("#el_select_type").append($("<option>", {value: "all", text: "'.trans('event_logs.all_records').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "sessions", text: "'.trans('event_logs.session_events').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "update", text: "'.trans('event_logs.update_device').'"}));').'' .
-                '}
-                else if( the_val == "clients" ){
-                    '.(Auth::user()->user_type!=4 ? '
-                    $("#el_select_type").append($("<option>", {value: "all", text: "'.trans('event_logs.all_records').'"}));
-                    $("#el_select_type").append($("<option>", {value: "create", text: "'.trans('event_logs.new_client').'"}));
-                    $("#el_select_type").append($("<option>", {value: "delete", text: "'.trans('event_logs.delete_client').'"}));
-                    $("#el_select_type").append($("<option>", {value: "update", text: "'.trans('event_logs.update_client').'"}));
-                    ':'
-                        $("#el_select_type").append($("<option>", {value: "update", text: "'.trans('event_logs.update_client').'"}));').'
-                }
-                else if( the_val == "distributors" ){
-                    '.(Auth::user()->user_type!=3 ? '
-                    $("#el_select_type").append($("<option>", {value: "all", text: "'.trans('event_logs.all_records').'"}));
-                    $("#el_select_type").append($("<option>", {value: "create", text: "'.trans('event_logs.new_distributor').'"}));
-                    $("#el_select_type").append($("<option>", {value: "delete", text: "'.trans('event_logs.delete_distributor').'"}));
-                    $("#el_select_type").append($("<option>", {value: "update", text: "'.trans('event_logs.update_distributor').'"}));
-                    ':'$("#el_select_type").append($("<option>", {value: "update", text: "'.trans('event_logs.update_distributor').'"}));').'
-                }
-                else if( the_val == "fee_scales" ){
-                    $("#el_select_type").append($("<option>", {value: "all", text: "'.trans('event_logs.all_records').'"}));
-                    $("#el_select_type").append($("<option>", {value: "create", text: "'.trans('event_logs.new_fee_scale').'"}));
-                    $("#el_select_type").append($("<option>", {value: "delete", text: "'.trans('event_logs.delete_fee_scale').'"}));
-                    $("#el_select_type").append($("<option>", {value: "update", text: "'.trans('event_logs.update_fee_scale').'"}));
-                }
-                else{
-                    '.(Auth::user()->user_type!=4?'' .
-                        '$("#el_select_type").append($("<option>", {value: "all", text: "'.trans('event_logs.all_records').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "create", text: "'.trans('event_logs.add_new').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "delete", text: "'.trans('event_logs.delete_device').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "update", text: "'.trans('event_logs.update_device').'"}));'
-                    :'' .
-                        '$("#el_select_type").append($("<option>", {value: "all", text: "'.trans('event_logs.all_records').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "sessions", text: "'.trans('event_logs.session_events').'"}));' .
-                        '$("#el_select_type").append($("<option>", {value: "update", text: "'.trans('event_logs.update_device').'"}));').'' .
-                '}
                 
                 el_filter_obj.category = the_val;
                 el_filter_obj.type = "all";                
@@ -429,43 +335,6 @@ class EventlogsController extends Controller
             }
             $icon.='<i class="fa fa-user-o fa-2x" style="color:'.$icon_color.';"></i>';
         }
-        else if($table_name == "modems"){
-            $result = DB::select("SELECT serial_no as name FROM modems WHERE id=".$affected_id);
-            if( isset($result[0]->name) ) {
-                if ($event_type == "delete")
-                    $affected_value = $result[0]->name;
-                else
-                    $affected_value = "<a href='/modem_management/detail/" . $affected_id . "' target='_blank'>" . $result[0]->name . "</a>";
-            }
-            $icon.='<i class="fa fa-podcast fa-2x" style="color:'.$icon_color.';"></i>';
-        }
-        else if($table_name == "meters" || $table_name == "relays" || $table_name == "analyzers"){
-            $result = DB::select("SELECT D.device_no as name, DT.type as device_type FROM devices D, device_type DT WHERE DT.id=D.device_type_id AND D.id=".$affected_id);
-            if( isset($result[0]->name) ){
-                if($event_type == "delete")
-                    $affected_value = $result[0]->name;
-                else
-                    $affected_value = "<a href='/".$result[0]->device_type."/detail/".$affected_id."' target='_blank'>".$result[0]->name."</a>";
-
-                $event_value = trans("event_logs.".$table_name."_".$event_type,["device_type"=>trans("global.".$result[0]->device_type)]);
-
-                if( $result[0]->device_type == "meter" ){
-                    $icon .= '<i class="fa fa-tachometer fa-2x" style="color:' . $icon_color . ';"></i>';
-                }
-                else if( $result[0]->device_type == "relay" ){
-                    $icon .= '<i class="fa fa-sliders fa-2x" style="color:' . $icon_color . ';"></i>';
-                }
-                else if( $result[0]->device_type == "analyzer" ){
-                    $icon .= '<i class="fa fa-desktop fa-2x" style="color:' . $icon_color . ';"></i>';
-                }
-                else {
-                    $icon .= '<i class="fa fa-cog fa-2x" style="color:' . $icon_color . ';"></i>';
-                }
-            }
-            else {
-                $icon .= '<i class="fa fa-cog fa-2x" style="color:' . $icon_color . ';"></i>';
-            }
-        }
         else if($table_name == "clients"){
             $result = DB::select("SELECT name FROM clients WHERE id=".$affected_id);
             if( isset($result[0]->name) ) {
@@ -486,62 +355,7 @@ class EventlogsController extends Controller
             }
                 $icon.='<i class="fa fa-sitemap fa-2x" style="color:'.$icon_color.';"></i>';
         }
-        else if($table_name == "fee_scales"){
-            $result = DB::select("SELECT name FROM fee_scales WHERE id=".$affected_id);
-            if( isset($result[0]->name) ) {
-                $affected_value = "<a href='/fee_scale' target='_blank'>" . $result[0]->name . "</a>";
-            }
 
-            $icon .= '<i class="fa fa-file-text-o fa-2x" style="color:' . $icon_color . ';"></i>';
-        }
-        else if( $table_name == "alert_definitions" ){
-            $result = DB::select("SELECT name FROM alert_definitions WHERE id=".$affected_id);
-            if( isset($result[0]->name) ) {
-                $affected_value = "<a href='/alerts' target='_blank'>" . $result[0]->name . "</a>";
-            }
-
-            $icon .= '<i class="fa fa-bell-o fa-2x" style="color:' . $icon_color . ';"></i>';
-        }
-        else if( $table_name == "reports" ){
-            $result = DB::select("SELECT (CASE WHEN is_report=0 THEN template_name ELSE report_name END) as name FROM reports WHERE id=".$affected_id);
-            if( isset($result[0]->name) ) {
-                $affected_value = "<a href='/reporting' target='_blank'>" . $result[0]->name . "</a>";
-            }
-
-            $icon .= '<i class="fa fa-book fa-2x" style="color:' . $icon_color . ';"></i>';
-        }
-        else if( $table_name == "additional_infos" ){
-            $result = DB::select("SELECT name, distributor_id FROM additional_infos WHERE id=".$affected_id);
-            if( isset($result[0]->name) != "" ) {
-                if( is_numeric($result[0]->distributor_id) ){
-                    $affected_value = "<a href='/distributor_management/detail/".$result[0]->distributor_id."/#tab-9' target='_blank'>" . $result[0]->name . "</a>";
-                }
-                else{
-                    $affected_value = $result[0]->name;
-                }
-            }
-            else{
-                $affected_value = trans('event_logs.not_found');
-            }
-
-            $icon .= '<i class="fa fa-puzzle-piece fa-2x" style="color:' . $icon_color . ';"></i>';
-        }
-        else if( $table_name == "organization_schema" ){
-            $result = DB::select("SELECT name, distributor_id FROM organization_schema WHERE id=".$affected_id);
-            if( isset($result[0]->name) != "" ) {
-                if( is_numeric($result[0]->distributor_id) ){
-                    $affected_value = "<a href='/distributor_management/detail/".$result[0]->distributor_id."/#tab-8' target='_blank'>" . $result[0]->name . "</a>";
-                }
-                else{
-                    $affected_value = $result[0]->name;
-                }
-            }
-            else{
-                $affected_value = trans('event_logs.not_found');
-            }
-
-            $icon .= '<i class="fa fa-sitemap fa-2x" style="color:' . $icon_color . ';"></i>';
-        }
 
         $icon .= '&nbsp;' .
                  //'<span style="position:relative;">' .

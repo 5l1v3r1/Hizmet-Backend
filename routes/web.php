@@ -191,6 +191,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/el_get_data/{type}/{id}', 'EventlogsController@getData')->middleware('custom_authorization:view_event_logs');
 });
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/my_profile', 'UserManagementController@getProfile')->middleware('custom_authorization:view_my_profile');
+
+    Route::post('/my_profile/edit/account', 'UserManagementController@editProfileInfo')->middleware(['custom_authorization:view_my_profile','custom_authorization:edit_profile_info']);
+});
 
 Route::group(['middleware'=>'auth'],function (){
 	Route::get('/simulate_alert', function () {
