@@ -64,6 +64,7 @@ return [
     'order_date' => 'Sipariş tarihi',
     'booking_title' => 'İlan başlığı',
     'client_name' => 'Müşteri adı',
-    'booking_date' => 'İlan tarihi'
+    'booking_date' => 'İlan tarihi',
+    'password' => 'Parola'
 
 ];

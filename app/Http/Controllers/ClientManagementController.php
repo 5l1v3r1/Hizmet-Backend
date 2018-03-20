@@ -86,7 +86,7 @@ class ClientManagementController extends Controller
         $url = "cm_get_data";
         $default_order = '[4,"desc"]';
         $data_table = new DataTable($prefix,$url,$this->columns,$default_order,$request);
-        $data_table->set_add_right(false);
+       // $data_table->set_add_right(false);
         return view('pages.client_management')->with("UserDataTableObj",$data_table);
     }
 
@@ -245,11 +245,26 @@ class ClientManagementController extends Controller
 
 
             $password = $result->password;
+            if (!$request->exists('new_client_password') || ($request->exists('new_client_password') && trim($request->input('new_client_password')) == "")) {
+                $password_validator = 'bail|min:6|max:20';
+            } else if ($request->has('new_client_password')) {
+                $password = bcrypt($request->input("new_client_password"));
+            }
+            $email_validator = 'bail|required|email|max:255|unique:users,email,' . $request->input("client_edit_id") . ',id';
 
 
 
-           }
+        }
+        else if ( $request->has('client_op_type') && $request->input('client_op_type') == "new") {
+            $op_type = "new";
+            $password = bcrypt($request->input("new_client_password"));
+        }
+        $this->validate($request, [
+            'new_client_name' => 'bail|required|min:3|max:255',
+            'new_client_email' => $email_validator,
+            'new_client_password' => $password_validator,
 
+        ]);
 
 
         if( $op_type == "new" ){

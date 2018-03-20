@@ -28,7 +28,8 @@ return [
     'statistics' => 'İstatistikler',
     'reporting' => 'Raporlar',
     'graphs' => 'Grafikler',
-    'seller_management' => 'Satıcı Yönetimi'
+    'seller_management' => 'Satıcı Yönetimi',
+    'event_logs' => 'Olay Kayıtları'
 
 
 ];

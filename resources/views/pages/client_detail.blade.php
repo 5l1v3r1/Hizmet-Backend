@@ -26,15 +26,16 @@
                         </h2>
 
                         <p style="margin: 10px 0 0;">
-                            {{ trans('client_management.gsm_phone') }}:  <strong> {{ $the_client->gsm_phone}} </strong>
+                            {{ trans('client_management.gsm_phone') }}: <strong> {{ $the_client->gsm_phone}} </strong>
 
                         </p>
                         <p style="margin: 10px 0 0;">
-                            {{ trans('client_management.phone') }}:  <strong> {{ $the_client->phone}} </strong>
+                            {{ trans('client_management.phone') }}: <strong> {{ $the_client->phone}} </strong>
 
                         </p>
                         <p style="margin: 10px 0 0;">
-                            {{ trans('client_management.address') }}:  <strong> {{ $the_client->location_text }} </strong>
+                            {{ trans('client_management.address') }}:
+                            <strong> {{ $the_client->location_text }} </strong>
 
                         </p>
                     </div>
@@ -132,62 +133,76 @@
                         <div id="tab-3" class="tab-pane">
                             <div class="panel-body tooltip-demo" data-html="true">
                                 <div class="panel-body">
-                                    <form class="m-t form-horizontal" role="form" method="POST" action="{{ url('/client_management/add') }}" id="add_new_client_client_form">
+                                    <form class="m-t form-horizontal" role="form" method="POST"
+                                          action="{{ url('/client_management/add') }}" id="add_new_client_client_form">
                                     {{ csrf_field() }}
 
                                     <!-- get selectable client_type according to user type -->
 
 
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label"> {{ trans('client_management.name') }} <span style="color:red;">*</span></label>
+                                            <label class="col-sm-3 control-label"> {{ trans('client_management.name') }}
+                                                <span style="color:red;">*</span></label>
                                             <div class="col-sm-6">
-                                                <input type="text" value="{{ $the_client->name }}" class="form-control" id="new_client_name" name="new_client_name" required minlength="3" maxlength="255" />
+                                                <input type="text" value="{{ $the_client->name }}" class="form-control"
+                                                       id="new_client_name" name="new_client_name" required
+                                                       minlength="3" maxlength="255"/>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label"> {{ trans('client_management.email') }} <span style="color:red;">*</span></label>
+                                            <label class="col-sm-3 control-label"> {{ trans('client_management.email') }}
+                                                <span style="color:red;">*</span></label>
                                             <div class="col-sm-6">
-                                                <input type="email" value="{{$the_client->email}}" class="form-control" id="new_client_email" name="new_client_email" required>
+                                                <input type="email" value="{{$the_client->email}}" class="form-control"
+                                                       id="new_client_email" name="new_client_email" required>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label" id="password_label_for_edit">
                                                 {{ trans('client_management.password') }}
-                                                <a id="change_pass_icon" onclick="open_edit_password();" href="javascript:void(1);">
+                                                <a id="change_pass_icon" onclick="open_edit_password();"
+                                                   href="javascript:void(1);">
                                                     <i class="fa fa-lock fa-lg" aria-hidden="true"></i>
                                                 </a>
-                                                <a id="cancel_pass_icon" style="display:none;" onclick="cancel_edit_password()" href="javascript:void(1);">
+                                                <a id="cancel_pass_icon" style="display:none;"
+                                                   onclick="cancel_edit_password()" href="javascript:void(1);">
                                                     <i class="fa fa-unlock fa-lg" aria-hidden="true"></i>
                                                 </a>
                                             </label>
 
                                             <div class="col-sm-6">
-                                                <input type="text" class="form-control" value="" id="new_client_password" name="new_client_password" minlength="6" maxlength="20" disabled />
+                                                <input type="text" class="form-control" value=""
+                                                       id="new_client_password" name="new_client_password" minlength="6"
+                                                       maxlength="20" disabled/>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label"> {{ trans('client_detail.gsm_number') }} <span style="color:red;">*</span></label>
+                                            <label class="col-sm-3 control-label"> {{ trans('client_detail.gsm_number') }}
+                                                <span style="color:red;">*</span></label>
                                             <div class="col-sm-6">
-                                                <input type="number" value="{{$the_client->gsm_phone}}" class="form-control" id="new_client_gsm_phone" name="new_client_gsm_phone" required>
+                                                <input type="number" value="{{$the_client->gsm_phone}}"
+                                                       class="form-control" id="new_client_gsm_phone"
+                                                       name="new_client_gsm_phone" required>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label"> {{ trans('client_detail.phone') }} </label>
                                             <div class="col-sm-6">
-                                                <input type="number" value="{{$the_client->phone}}" class="form-control" id="new_client_phone" name="new_client_phone">
+                                                <input type="number" value="{{$the_client->phone}}" class="form-control"
+                                                       id="new_client_phone" name="new_client_phone">
                                             </div>
                                         </div>
-
 
 
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label"> {{ trans('booking_detail.province') }}
                                                 <span style="color:red;">*</span></label>
                                             <div class="col-sm-6">
-                                                <select id="new_client_province" name="new_client_province" class="form-control" style="width: 100%;">
+                                                <select id="new_client_province" name="new_client_province"
+                                                        class="form-control" style="width: 100%;">
 
                                                     <option></option>
                                                     @foreach($country_list as $one_country)
@@ -200,21 +215,27 @@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label"> {{ trans('client_detail.district') }} </label>
                                             <div class="col-sm-6">
-                                                <input type="number" value="{{$the_client->district}}" class="form-control" id="new_client_district" name="new_client_district" required>
+                                                <input type="number" value="{{$the_client->district}}"
+                                                       class="form-control" id="new_client_district"
+                                                       name="new_client_district" required>
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label"> {{ trans('client_detail.location') }} <span style="color:red;">*</span></label>
+                                            <label class="col-sm-3 control-label"> {{ trans('client_detail.location') }}
+                                                <span style="color:red;">*</span></label>
                                             <div class="col-sm-6">
-                                                 <textarea class="form-control" id="new_client_location" name="new_client_location">{{$the_client->location}}</textarea>
+                                                <textarea class="form-control" id="new_client_location"
+                                                          name="new_client_location">{{$the_client->location}}</textarea>
                                             </div>
                                         </div>
                                         <input type="hidden" value="edit" id="client_op_type" name="client_op_type">
-                                        <input type="hidden" value="{{$the_client->id}}" id="client_edit_id" name="client_edit_id">
+                                        <input type="hidden" value="{{$the_client->id}}" id="client_edit_id"
+                                               name="client_edit_id">
 
                                         <div class="form-group">
                                             <div class="col-lg-4 col-lg-offset-3">
-                                                <button type="submit" class="btn btn-primary" id="save_client_button" name="save_client_button" >
+                                                <button type="submit" class="btn btn-primary" id="save_client_button"
+                                                        name="save_client_button">
                                                     <i class="fa fa-refresh"></i> {{ trans('client_management.update') }}
                                                 </button>
                                             </div>
@@ -256,19 +277,20 @@
     <script type="text/javascript" language="javascript" src="/js/fileinput/fileinput.min.js"></script>
     <script type="text/javascript" language="javascript" src="/js/fileinput/fileinput_locale_tr.js"></script>
     <script type="text/javascript" language="javascript" src="/js/plugins/select2/dist/js/new.min.js"></script>
-    <script type="text/javascript" language="javascript" src="/js/plugins/bootstrap-switch/bootstrap-switch.min.js"></script>
+    <script type="text/javascript" language="javascript"
+            src="/js/plugins/bootstrap-switch/bootstrap-switch.min.js"></script>
 
     {!! $UserDataTableObj->js() !!}
     <script>
 
-        function open_edit_password(){
+        function open_edit_password() {
             $('#new_client_password').removeAttr('disabled');
             $('#new_client_password').attr('required', '');
             $('#change_pass_icon').hide();
             $('#cancel_pass_icon').show();
         }
 
-        function cancel_edit_password(){
+        function cancel_edit_password() {
             $('#new_client_password').attr('disabled', '');
             $('#new_client_password').removeAttr('required');
             $('#cancel_pass_icon').hide();

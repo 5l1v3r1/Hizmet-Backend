@@ -341,12 +341,26 @@ class SellerManagementController extends Controller
 
 
             $password = $result->password;
-
+            if (!$request->exists('new_seller_password') || ($request->exists('new_seller_password') && trim($request->input('new_seller_password')) == "")) {
+                $password_validator = 'bail|min:6|max:20';
+            } else if ($request->has('new_seller_password')) {
+                $password = bcrypt($request->input("new_seller_password"));
+            }
+            $email_validator = 'bail|required|email|max:255|unique:users,email,' . $request->input("seller_edit_id") . ',id';
 
 
         }
 
+        else if ( $request->has('seller_op_type') && $request->input('seller_op_type') == "new") {
+            $op_type = "new";
+            $password = bcrypt($request->input("new_seller_password"));
+        }
+        $this->validate($request, [
+            'new_seller_name' => 'bail|required|min:3|max:255',
+            'new_seller_email' => $email_validator,
+            'new_seller_password' => $password_validator,
 
+        ]);
 
         if( $op_type == "new" ){
             $last_insert_id = DB::table('clients')->insertGetId(
@@ -367,7 +381,7 @@ class SellerManagementController extends Controller
             );
 
             //fire event
-            Helper::fire_event("create",Auth::user(),"clients",$last_insert_id);
+            Helper::fire_event("create",Auth::user(),"sellers",$last_insert_id);
             //return insert operation result via global session object
             session(['new_seller_insert_success' => true]);
 
@@ -392,7 +406,7 @@ class SellerManagementController extends Controller
                 );
 
             //fire event
-            Helper::fire_event("update",Auth::user(),"clients",$request->input("seller_edit_id"));
+            Helper::fire_event("update",Auth::user(),"sellers",$request->input("seller_edit_id"));
 
             //return update operation result via global session object
             session(['seller_update_success' => true]);
@@ -422,7 +436,7 @@ class SellerManagementController extends Controller
                     );
 
                 //fire event
-                Helper::fire_event("delete",Auth::user(),"clients",$request->input("id"));
+                Helper::fire_event("delete",Auth::user(),"sellers",$request->input("id"));
 
                 session(['seller_delete_success' => true]);
                 return "SUCCESS";

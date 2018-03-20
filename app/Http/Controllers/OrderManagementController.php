@@ -296,7 +296,7 @@ class OrderManagementController extends Controller
                 );
 
             //fire event
-            // Helper::fire_event("update",Auth::user(),"clients",$request->input("client_edit_id"));
+            Helper::fire_event("update",Auth::user(),"order",$request->input("order_edit_id"));
 
             //return update operation result via global session object
             session(['order_update_success' => true]);
@@ -317,7 +317,7 @@ class OrderManagementController extends Controller
                 );
 
             //fire event
-            // Helper::fire_event("update",Auth::user(),"clients",$request->input("client_edit_id"));
+             Helper::fire_event("update",Auth::user(),"offers",$request->input("offer_edit_id"));
 
             //return update operation result via global session object
             session(['offer_update_success' => true]);
@@ -359,13 +359,13 @@ class OrderManagementController extends Controller
         if ($request->input('status') == 1) {
 
             //fire event
-            // Helper::fire_event("user_status_activated",Auth::user(),"bookings",$request->input("id"));
+             Helper::fire_event("order_status_activated",Auth::user(),"order",$request->input("id"));
 
             session(['order_status_activated' => true]);
         } else {
 
             //fire event
-            // Helper::fire_event("user_status_deactivated",Auth::user(),"users",$request->input("id"));
+             Helper::fire_event("order_status_deactivated",Auth::user(),"order",$request->input("id"));
 
             session(['order_status_deactivated' => true]);
         }

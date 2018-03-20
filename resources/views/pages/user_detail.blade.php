@@ -33,10 +33,7 @@
                             {{ trans('user_detail.user_type') }}:  <strong> {{ trans("global.".$the_user->type) }} </strong>
 
                         </p>
-                        <p style="margin: 5px 0 0;">
-                            {{ trans('user_detail.organization') }}:
-                            <strong>{{ $the_user->org_name }}</strong>
-                        </p>
+
                     </div>
                 </div>
             </div>
