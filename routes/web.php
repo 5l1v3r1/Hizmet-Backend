@@ -85,6 +85,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/cm_get_data', 'ClientManagementController@getData')->middleware('custom_authorization:view_client_management');
 
+    Route::get('/cpp_get_data/{type}/{id}', 'FinanceController@getData')->middleware('custom_authorization:view_client_management');
+    Route::get('/spp_get_data/{type}/{id}', 'FinanceController@getData')->middleware('custom_authorization:view_client_management');
+
     Route::get('/cdu_get_data/{type}/{id}', 'UserManagementController@getData')->middleware('custom_authorization:view_client_detail')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
 
     Route::get('/cdb_get_data/{type}/{id}', 'BookingManagementController@getData')->middleware('custom_authorization:view_client_detail')->where(['id' => '[0-9]{1,6}', 'type' => '^client$']);
@@ -191,6 +194,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/cp_get_data/{op}', 'FinanceController@getData')->middleware('custom_authorization:view_user_management');
     Route::get('/sp_get_data/{op}', 'FinanceController@getData')->middleware('custom_authorization:view_user_management');
     Route::get('/finance/getFinanceInfo', 'FinanceController@getFinanceInfo')->middleware('custom_authorization:view_user_management');
+    Route::get('/finance/getSelectUser/{type}', 'FinanceController@getSelectUser')->middleware('custom_authorization:view_user_management');
     Route::post('/finance/addFinance', 'FinanceController@create')->middleware('custom_authorization:view_user_management');
     Route::get('/send_billing/{id}', 'PdfBillingController@pdfview2')->middleware('custom_authorization:view_user_management');
 

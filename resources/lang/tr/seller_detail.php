@@ -27,7 +27,8 @@ return [
     'province' => 'İl',
     'district' => 'ilçe',
     'location' => 'Adres',
-    'offers' => 'Teklifler'
+    'offers' => 'Teklifler',
+    'payments' => 'Ödemeler',
 
 
 

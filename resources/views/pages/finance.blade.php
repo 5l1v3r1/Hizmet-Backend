@@ -231,35 +231,17 @@
         @endforeach
     @endif
 
-    @if (session()->has('order_update_success') && session('order_update_success'))
-        {{ session()->forget('order_update_success') }}
+    @if (session()->has('payment_update_success') && session('payment_update_success'))
+        {{ session()->forget('payment_update_success') }}
 
-        custom_toastr('{{ trans('order_management.update_success') }}');
+        custom_toastr('{{ trans('payment.update_success') }}');
+    @endif
+    @if (session()->has('new_payment_insert_success') && session('new_payment_insert_success'))
+        {{ session()->forget('new_payment_insert_success') }}
+
+        custom_toastr('{{ trans('payment.insert_success') }}');
     @endif
 
-    @if (session()->has('offer_update_success') && session('offer_update_success'))
-        {{ session()->forget('offer_update_success') }}
-
-        custom_toastr('{{ trans('order_management.offer_update_success') }}');
-    @endif
-
-    @if (session()->has('order_status_activated') && session('order_status_activated'))
-        {{ session()->forget('order_status_activated') }}
-
-        custom_toastr('{{ trans('order_detail.order_status_activated') }}');
-    @endif
-
-    @if (session()->has('order_status_deactivated') && session('order_status_deactivated'))
-        {{ session()->forget('order_status_deactivated') }}
-
-        custom_toastr('{{ trans('order_detail.order_status_deactivated') }}','warning');
-    @endif
-
-    @if (session()->has('order_change_authorization') && session('order_change_authorization'))
-        {{ session()->forget('order_change_authorization') }}
-
-        custom_toastr('{{ trans('order_detail.change_authorization_success') }}');
-    @endif
 
 
 
@@ -286,10 +268,12 @@
     }
     else if(selectedTab == "#tab-2" && tab_2 == false){
     {!! $ComingDataTableObj->ready() !!}
+    $('#user_type').val("client");
     tab_2 = true;
     }
     else if(selectedTab == "#tab-3" && tab_3 == false){
     {!! $SendingDataTableObj->ready() !!}
+    $('#user_type').val("seller");
     tab_3 = true;
     }
     else if(selectedTab == "#tab-4" && tab_4 == false){
@@ -314,7 +298,6 @@
     load_tab_content(active_tab);
     else
     $("#order_detail_tabs a:first").trigger('click');
-
 
 
 

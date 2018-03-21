@@ -65,6 +65,8 @@ return [
     'booking_title' => 'İlan başlığı',
     'client_name' => 'Müşteri adı',
     'booking_date' => 'İlan tarihi',
-    'password' => 'Parola'
+    'password' => 'Parola',
+    'net_amount' => 'Miktar',
+    'payment_date' => 'Ödeme tarihi',
 
 ];

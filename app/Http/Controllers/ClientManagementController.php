@@ -17,8 +17,8 @@ class ClientManagementController extends Controller
     private $user_columns;
     private $booking_columns;
     private $order_columns;
-    private $event_columns;
-    private $message_columns;
+    private $payment_colums;
+
 
 
     public function __construct()
@@ -58,27 +58,15 @@ class ClientManagementController extends Controller
             "order_date" => array(),
             "buttons" => array("orderable" => false, "name" => "operations", "nowrap" => true),
         );
-        $this->event_columns = array(
 
-            "name"=>array("name"=>"username"),
-            "user_type"=>array("visible"=>false),
-            "org_name"=>array("visible"=>false),
-            "email"=>array(),
-            "status"=>array("orderable"=>false),
-            "created_at"=>array(),
-            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
+        $this->payment_colums = array(
+
+            "client_name" => array(),
+            "payment_date" => array(),
+            "net_amount" => array(),
+            "status" => array("orderable" => false),
+            "buttons" => array("orderable" => false, "name" => "operations", "nowrap" => true)
         );
-        $this->message_columns = array(
-
-            "name"=>array("name"=>"username"),
-            "user_type"=>array("visible"=>false),
-            "org_name"=>array("visible"=>false),
-            "email"=>array(),
-            "status"=>array("orderable"=>false),
-            "created_at"=>array(),
-            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
-        );
-
     }
 
     public function showTable(Request $request){
@@ -434,7 +422,11 @@ class ClientManagementController extends Controller
         $order_data_table = new DataTable($prefix,$url, $this->order_columns, $default_order,$request);
         $order_data_table->set_add_right(false);
 
-
+        $prefix = "cpp";
+        $url = "cpp_get_data/coming/".$id;
+        $default_order = '[3,"desc"]';
+        $coming_data_table = new DataTable($prefix, $url, $this->payment_colums, $default_order, $request);
+        $coming_data_table->set_add_right(false);
 
         //get event logs table from eventlogController
         $eventsTable = new EventlogsController();
@@ -442,9 +434,11 @@ class ClientManagementController extends Controller
 
         return view('pages.client_detail', [
                 'the_client' => json_encode($the_client),
+                'ComingDataTableObj' => $coming_data_table,
                 'UserDataTableObj' => $user_data_table,
                 'BookingDataTableObj' => $booking_data_table,
                 'OrderDataTableObj' => $order_data_table
+
 
             ]
         );

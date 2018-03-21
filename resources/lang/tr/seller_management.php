@@ -61,7 +61,9 @@ return [
     'offer_date' => 'Başvuru tarihi',
     'order_title' => 'Sipariş başlığı',
     'client_name' => 'müşteri adı',
-    'order_date' => 'Sipariş zamanı'
+    'order_date' => 'Sipariş zamanı',
+    'payment_date' => 'Ödeme tarihi',
+    'net_amount' => 'Miktar',
 
 
 ];

@@ -1,9 +1,20 @@
 <?php
 
-$booking_name = DB::table('booking')
-    ->orderBy('id', 'asc')
+$client_name = DB::table('clients')
+    ->where("status",'<>', 0)
+    ->where("type",'=', 1)
+    ->orderBy('id')
     ->get();
-
+$seller_name = DB::table('clients')
+    ->where("status",'<>', 0)
+    ->where("type",'=', 2)
+    ->orderBy('name')
+    ->get();
+$order_name = DB::table('booking')
+    ->where("status",'<>', 0)
+    ->where("assigned_id",'<>', 0)
+    ->orderBy('id')
+    ->get();
 ?>
 <style>
     .hr-text {
@@ -69,13 +80,28 @@ $booking_name = DB::table('booking')
                     <br><br>
                     <hr class="hr-text" data-content="{{ trans("finance.payment_client_name") }}">
                     <div class="form-group">
-                        {!!  Helper::get_clients_select("payment_client_name", false) !!}
+                        <label class="col-sm-3 control-label">Müşteri Adı <span style="color:red;">*</span></label>
+                        <div class="col-sm-6">
+                        <select id="payment_client_name" name="payment_client_name" class="form-control" style="width: 100%;">
+                            <option value="0"></option>
+
+
+                        </select></div>
+
                         <br>
                     </div><br>
 
                     <hr class="hr-text" data-content="{{ trans("finance.booking_name") }}">
                     <div class="form-group">
-                        {!!  Helper::get_booking_select("booking_name_select", false) !!}
+                        <label class="col-sm-3 control-label">Sipariş Adı <span style="color:red;">*</span></label>
+                        <div class="col-sm-6">
+                        <select id="booking_name_select" name="booking_name_select" class="form-control" style="width: 100%;">
+                            <option value="0"></option>
+                            @foreach($order_name as $one_list)
+                                <option value="{{ $one_list->id }}">{{ $one_list->booking_title }}</option>
+                            @endforeach
+                        </select></div>
+
                         <br>
                     </div>
                     <br>
@@ -130,6 +156,7 @@ $booking_name = DB::table('booking')
 
         <input type="hidden" id="payment_mode" name="payment_mode" value="new"/>
         <input type="hidden" id="payment_id" name="payment_id" value="0"/>
+        <input type="hidden" id="user_type" name="user_type" value="client"/>
 
     </form>
 </div>
@@ -145,6 +172,27 @@ $booking_name = DB::table('booking')
         $("#net_amount").val(" ");
         $("#payment_mode").val("new");
         $("#type_hidden").show();
+        $.ajax({
+
+            method: "GET",
+            url: "/finance/getSelectUser/all",
+            data: "id=0",
+            success: function (return_text) {
+
+                the_obj = JSON.parse(return_text);
+                $('#payment_client_name').empty();
+                //firstly load all data into modal form area
+                var $country = $('#payment_client_name');
+
+
+                for (var i = 0; i < the_obj.length; i++) {
+                    $country.append('<option value=' + the_obj[i].id + '>' + the_obj[i].name + '</option>');
+                }
+
+
+            }
+        });
+
 
 
         $("#financeFormModal").modal('show');
@@ -160,6 +208,7 @@ $booking_name = DB::table('booking')
 
     function edit_payment(id) {
         $("#payment_modal_title").html("{{ trans("finance.edit_payment") }}");
+        var user_type = $('#user_type').val();
         $.ajax({
 
             method: "GET",
@@ -186,23 +235,28 @@ $booking_name = DB::table('booking')
                 $("#financeFormModal").modal('show');
             }
         });
-    }
-
-    function pause_advert(unique_id) {
-
-        $('body').prepend("<div id='bg_block_screen'> <div class='loader'></div>{{ trans("advert.pausing") }}...</div>");
         $.ajax({
 
-            method: "POST",
-            url: "/advert/pauseAdvert",
-            data: "unique_id=" + unique_id,
+            method: "GET",
+            url: "/finance/getSelectUser/"+user_type,
+            data: "id=" + id,
             success: function (return_text) {
 
+                the_obj = JSON.parse(return_text);
+                $('#payment_client_name').empty();
+                //firstly load all data into modal form area
+                var $country = $('#payment_client_name');
 
-                $("#bg_block_screen").remove();
-                location.reload();
+
+                for (var i = 0; i < the_obj.length; i++) {
+                    $country.append('<option value=' + the_obj[i].id + '>' + the_obj[i].name + '</option>');
+                }
+
+
             }
         });
+
     }
+
 </script>
 

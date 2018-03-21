@@ -29,7 +29,9 @@ class FinanceController extends Controller
             "net_amount" => array(),
             "status" => array("orderable" => false),
             "buttons" => array("orderable" => false, "name" => "operations", "nowrap" => true),
-        );  $this->payment_colums2 = array(
+        );
+
+        $this->payment_colums2 = array(
 
             "client_name" => array(),
             "payment_date" => array(),
@@ -43,7 +45,7 @@ class FinanceController extends Controller
     }
 
 
-    public function getData($detail_type = "", $detail_org_id = "")
+    public function getData($detail_type = "", $client_id = "")
     {
         $where_clause = "WHERE P.status<>0  ";
         if ($detail_type == "coming") {
@@ -56,6 +58,9 @@ class FinanceController extends Controller
 
         }
 
+        if(is_numeric($client_id)){
+            $where_clause .= "and P.client_id=".$client_id." ";
+        }
 
         $return_array = array();
         $draw = $_GET["draw"];
@@ -174,7 +179,7 @@ class FinanceController extends Controller
     }
 
 
-    public function create(Request $request)
+    public function create(Request $request, $type="")
     {
 
         $op_type = $request->input("payment_mode");
@@ -223,30 +228,10 @@ class FinanceController extends Controller
             Helper::fire_event("update",Auth::user(),"payment",$request->input("payment_id"));
 
             //return update operation result via global session object
-            session(['order_update_success' => true]);
+            session(['payment_update_success' => true]);
 
         }
-        else if( $op_type == "edit_offer" ){
 
-            // update client's info
-            DB::table('booking_offers')->where('id', $request->input("offer_edit_id"))
-                ->update(
-                    [
-                        'prices' => $request->input("new_prices"),
-                        'assigned_id' => $request->input("new_offer_assigned_id"),
-                        'booking_id' => $request->input("new_offfer_booking_id"),
-
-
-                    ]
-                );
-
-            //fire event
-            Helper::fire_event("update",Auth::user(),"offers",$request->input("offer_edit_id"));
-
-            //return update operation result via global session object
-            session(['offer_update_success' => true]);
-
-        }
 
         return redirect()->back();
 
@@ -260,6 +245,37 @@ class FinanceController extends Controller
             $the_info = DB::table("payment")
                 ->where('id',$request->input("id"))
                 ->first();
+
+            echo json_encode($the_info);
+        }
+        else{
+            abort(404);
+        }
+    }
+
+    public function getSelectUser(Request $request, $user_type){
+
+        if($request->has("id") && is_numeric($request->input("id"))){
+
+            if($user_type=="client"){
+                $the_info = DB::table("clients")
+                    ->where('status','<>', '0')
+                    ->where('type','=', '1')
+                    ->get();
+            }
+            elseif($user_type=="seller")
+            {
+                $the_info = DB::table("clients")
+                    ->where('status','<>', '0')
+                    ->where('type','=', '2')
+                    ->get();
+            }else{
+                $the_info = DB::table("clients")
+                    ->where('status','<>', '0')
+                    ->get();
+            }
+
+
 
             echo json_encode($the_info);
         }

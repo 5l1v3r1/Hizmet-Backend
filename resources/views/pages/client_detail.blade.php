@@ -115,6 +115,12 @@
                                 {{ trans('client_detail.event_logs') }}
                             </a>
                         </li>
+                        <li class="" tab="#tab-7">
+                            <a data-toggle="tab" href="#tab-7" aria-expanded="false">
+                                <i class="fa fa-tasks fa-lg" aria-hidden="true"></i>
+                                {{ trans('client_detail.payments') }}
+                            </a>
+                        </li>
                     </ul> <!-- .nav -->
 
                     <div class="tab-content">
@@ -263,12 +269,18 @@
                                 Geliştirme devam ediyor...
                             </div>
                         </div> <!-- .tab-6 -->
+                        <div id="tab-7" class="tab-pane">
+                            <div class="panel-body">
+                                {!!  $ComingDataTableObj->html() !!}
+                            </div>
+                        </div> <!-- .tab-6 -->
                     </div> <!-- .tab-content -->
                 </div>
             </div>
         </div> <!-- #div_modem_tabs -->
 
     </div>
+    @include('pages.forms.finance_edit')
 @endsection
 
 @section('page_level_js')
@@ -280,7 +292,7 @@
     <script type="text/javascript" language="javascript"
             src="/js/plugins/bootstrap-switch/bootstrap-switch.min.js"></script>
 
-    {!! $UserDataTableObj->js() !!}
+    {!! $OrderDataTableObj->js() !!}
     <script>
 
         function open_edit_password() {
@@ -295,6 +307,57 @@
             $('#new_client_password').removeAttr('required');
             $('#cancel_pass_icon').hide();
             $('#change_pass_icon').show();
+        }
+        function edit_payment(id) {
+            $("#payment_modal_title").html("{{ trans("finance.edit_payment") }}");
+
+            $.ajax({
+
+                method: "GET",
+                url: "/finance/getFinanceInfo",
+                data: "id=" + id,
+                success: function (return_text) {
+
+                    the_obj = JSON.parse(return_text);
+
+                    //firstly load all data into modal form area
+
+                    $("#payment_status").val(the_obj.status).trigger("change");
+                    $("#payment_client_name").val(the_obj.client_id).trigger("change");
+                    $("#booking_name_select").val(the_obj.booking_id).trigger("change");
+                    $("#amount").val(the_obj.amount);
+                    $("#tax_rate").val(the_obj.tax);
+                    $("#net_amount").val(the_obj.net_amount);
+                    $("#payment_mode").val("edit");
+                    $("#payment_id").val(the_obj.id);
+                    $("#type_hidden").hide();
+
+
+                    //open modal box
+                    $("#financeFormModal").modal('show');
+                }
+            });
+            $.ajax({
+
+                method: "GET",
+                url: "/finance/getSelectUser/client",
+                data: "id=" + id,
+                success: function (return_text) {
+
+                    the_obj = JSON.parse(return_text);
+                    $('#payment_client_name').empty();
+                    //firstly load all data into modal form area
+                    var $country = $('#payment_client_name');
+
+
+                    for (var i = 0; i < the_obj.length; i++) {
+                        $country.append('<option value=' + the_obj[i].id + '>' + the_obj[i].name + '</option>');
+                    }
+
+
+                }
+            });
+
         }
     </script>
 @endsection
@@ -361,6 +424,7 @@
     tab_4 = false,
     tab_5 = false,
     tab_6 = false;
+    tab_7 = false;
 
     function load_tab_content(selectedTab){
     if(selectedTab == "#tab-1" && tab_1 == false){
@@ -387,6 +451,11 @@
     tab_6 = true;
 
 
+    }
+    else if(selectedTab == "#tab-7" && tab_7 == false){
+
+    {!! $ComingDataTableObj->ready() !!}
+    tab_7 = true;
     }
     else{
     return;

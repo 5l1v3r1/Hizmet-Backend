@@ -17,8 +17,7 @@ class SellerManagementController extends Controller
     private $user_columns;
     private $offer_columns;
     private $order_columns;
-    private $event_columns;
-    private $message_columns;
+    private $payment_colums;
 
 
     public function __construct()
@@ -57,25 +56,13 @@ class SellerManagementController extends Controller
             "order_date" => array(),
             "buttons" => array("orderable" => false, "name" => "operations", "nowrap" => true),
         );
-        $this->event_columns = array(
+        $this->payment_colums = array(
 
-            "name"=>array("name"=>"username"),
-            "user_type"=>array("visible"=>false),
-            "org_name"=>array("visible"=>false),
-            "email"=>array(),
-            "status"=>array("orderable"=>false),
-            "created_at"=>array(),
-            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
-        );
-        $this->message_columns = array(
-
-            "name"=>array("name"=>"username"),
-            "user_type"=>array("visible"=>false),
-            "org_name"=>array("visible"=>false),
-            "email"=>array(),
-            "status"=>array("orderable"=>false),
-            "created_at"=>array(),
-            "buttons"=>array("orderable"=>false,"name"=>"operations","nowrap"=>true),
+            "client_name" => array(),
+            "payment_date" => array(),
+            "net_amount" => array(),
+            "status" => array("orderable" => false),
+            "buttons" => array("orderable" => false, "name" => "operations", "nowrap" => true)
         );
 
     }
@@ -491,6 +478,11 @@ class SellerManagementController extends Controller
         $order_data_table = new DataTable($prefix,$url, $this->order_columns, $default_order,$request);
         $order_data_table->set_add_right(false);
 
+        $prefix = "cpp";
+        $url = "cpp_get_data/sending/".$id;
+        $default_order = '[3,"desc"]';
+        $sending_data_table = new DataTable($prefix, $url, $this->payment_colums, $default_order, $request);
+        $sending_data_table->set_add_right(false);
 
 
         //get event logs table from eventlogController
@@ -499,6 +491,7 @@ class SellerManagementController extends Controller
 
         return view('pages.seller_detail', [
                 'the_seller' => json_encode($the_seller),
+                'SendingDataTableObj' => $sending_data_table,
                 'UserDataTableObj' => $user_data_table,
                 'OfferDataTableObj' => $offer_data_table,
                 'OrderDataTableObj' => $order_data_table

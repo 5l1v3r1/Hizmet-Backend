@@ -26,7 +26,8 @@ return [
     'phone' => 'Telefon',
     'province' => 'İl',
     'district' => 'ilçe',
-    'location' => 'Adres'
+    'location' => 'Adres',
+    'payments' => 'Ödemeler',
 
 
 
