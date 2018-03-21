@@ -221,6 +221,17 @@ Route::group(['middleware'=>'auth'],function (){
         //abort(404);
     })->middleware('custom_authorization:view_contact_us');
 });
+// contact_us routing
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/contact_us', function () {
+
+        return view('pages.contact_us');
+    })->middleware('custom_authorization:view_contact_us');
+
+
+    Route::post('/contact_us/send_message', 'ContactUsController@sendMail')->middleware('custom_authorization:view_contact_us');
+});
 
 // if not match anything then abort:404
 Route::group(['middleware' => 'auth'], function () {
