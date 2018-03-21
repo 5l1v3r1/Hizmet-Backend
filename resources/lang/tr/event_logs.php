@@ -97,6 +97,9 @@ return [
     'offers_update' => 'Başvuru Güncelleme',
     'booking_update' => 'İlan Güncelleme',
     'order_update' => 'Sipariş Güncelleme',
+    'payment_update' => 'Ödeme güncellendi',
+    'payment_create' => 'Ödeme Oluşturuldu',
+
 
 
 

@@ -1,5 +1,5 @@
 
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <title>User list - PDF</title>
@@ -59,7 +59,7 @@
 
 
 
-<br>
+        <br>
         <table class="table table-bordered">
             <thead>
 

@@ -184,6 +184,20 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/order_payment', 'OrderManagementController@payment');
 
 });
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/finance', 'FinanceController@showFinance')->middleware('custom_authorization:view_booking_management');
+
+    Route::get('/cp_get_data/{op}', 'FinanceController@getData')->middleware('custom_authorization:view_user_management');
+    Route::get('/sp_get_data/{op}', 'FinanceController@getData')->middleware('custom_authorization:view_user_management');
+    Route::get('/finance/getFinanceInfo', 'FinanceController@getFinanceInfo')->middleware('custom_authorization:view_user_management');
+    Route::post('/finance/addFinance', 'FinanceController@create')->middleware('custom_authorization:view_user_management');
+    Route::get('/send_billing/{id}', 'PdfBillingController@pdfview2')->middleware('custom_authorization:view_user_management');
+
+
+
+
+});
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/event_logs', 'EventlogsController@showTable')->middleware('custom_authorization:view_event_logs');

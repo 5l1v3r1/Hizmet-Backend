@@ -117,6 +117,8 @@ return [
     'booking' => 'İlan',
     'order' => 'Sipariş',
     'assigned' => 'Atanan',
+    'close' => 'Kapat',
+    'save' => 'Kaydet',
 
 
 

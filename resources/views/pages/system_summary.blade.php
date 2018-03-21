@@ -21,18 +21,20 @@
         ->count();
 
     $total_wait_booking = DB::table('booking as B')
-        ->where("B.status", "=", 0)
-        ->count();
-
-    $total_published_booking = DB::table('booking as B')
-        ->where("B.status", "=", 1)
-        ->count();
-    $total_waiting_order = DB::table('booking as B')
         ->where("B.status", "=", 1)
         ->where("B.assigned_id", "=", 0)
         ->count();
+
+    $total_published_booking = DB::table('booking as B')
+        ->where("B.status", "=", 2)
+        ->where("B.assigned_id", "=", 0)
+        ->count();
+    $total_waiting_order = DB::table('booking as B')
+        ->where("B.status", "<>", 5)
+        ->where("B.assigned_id", "<>", 0)
+        ->count();
     $total_finish_order = DB::table('booking as B')
-        ->where("B.status", "=", 3)
+        ->where("B.status", "=", 5)
         ->where("B.assigned_id", "<>", 0)
         ->count();
 

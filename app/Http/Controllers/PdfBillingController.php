@@ -38,8 +38,31 @@ class PdfBillingController extends Controller
             // pass view file
             $pdf = PDF::loadView('pdfview');
             // download pdf
-            return $pdf->download('invoice.pdf');
+            return $pdf->download('invoice-'.$id.'.pdf');
         }
         return view('pdfview');
+    }public function pdfview2(Request $request, $id)
+    {
+        $the_users = DB::table("payment as P")
+            ->select(
+                "C.*",
+                "P.*",
+                "C.name as client_name",
+                "P.id as invoice_id"
+
+            )
+            ->join('clients as C', 'C.id', 'P.client_id')
+            ->where('P.id', $id)
+            ->first();
+        view()->share('the_users',$the_users);
+
+
+        if($request->has('download')) {
+            // pass view file
+            $pdf = PDF::loadView('pages.forms.orderbilling');
+            // download pdf
+            return $pdf->download('invoice-'.$id.'.pdf');
+        }
+        return view('pages.forms.orderbilling');
     }
 }
