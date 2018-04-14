@@ -218,7 +218,10 @@ Route::group(['middleware' => 'auth'], function () {
 
 
 });
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/stats', 'StatsController@show');
 
+});
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/my_profile', 'UserManagementController@getProfile')->middleware('custom_authorization:view_my_profile');
