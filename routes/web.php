@@ -208,6 +208,17 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/el_get_data/{type}/{id}', 'EventlogsController@getData')->middleware('custom_authorization:view_event_logs');
 });
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/support', 'SupportController@showTable')->middleware('custom_authorization:view_event_logs');
+    Route::get('/sm_get_data', 'SupportController@getData')->middleware('custom_authorization:view_user_management');
+    Route::post('/support/add', 'SupportController@create')->middleware('custom_authorization:add_new_user');
+    Route::post('/support/message_send', 'SupportController@message_send')->middleware('custom_authorization:add_new_user');
+    Route::post('/support/get_info', 'SupportController@getInfo')->middleware('custom_authorization:add_new_user');
+    Route::get('/support/detail/{id}', 'SupportController@userDetail')->middleware('custom_authorization:view_user_detail')->where('id', '[0-9]{1,5}');
+
+
+});
+
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/my_profile', 'UserManagementController@getProfile')->middleware('custom_authorization:view_my_profile');

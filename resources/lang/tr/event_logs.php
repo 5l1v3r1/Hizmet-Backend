@@ -99,6 +99,7 @@ return [
     'order_update' => 'Sipariş Güncelleme',
     'payment_update' => 'Ödeme güncellendi',
     'payment_create' => 'Ödeme Oluşturuldu',
+    'seller_events' => 'Satıcı İşlemleri',
 
 
 

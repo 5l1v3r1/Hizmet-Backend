@@ -346,6 +346,7 @@ class EventlogsController extends Controller
                     $affected_value = $result[0]->booking_title;
                 else
                     $affected_value = "<a href='/booking_management/detail/" . $affected_id . "' target='_blank'>" . $result[0]->booking_title . "</a>";
+
             }
             $icon .= '<i class="fa fa-sitemap fa-2x" style="color:' . $icon_color . ';"></i>';
         }else if ($table_name == "order") {

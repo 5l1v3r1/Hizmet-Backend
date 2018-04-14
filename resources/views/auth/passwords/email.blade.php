@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>2M | {{ trans('login.forgot_password') }} </title>
+    <title>Hizmet Guru | {{ trans('login.forgot_password') }} </title>
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/font-awesome/css/font-awesome.css">
@@ -64,7 +64,7 @@
         </div>
         <div class="row" style="margin-top:10px;">
             <div class="col-xs-6">
-                <p style="margin-top:5px;"> <small> Copyright 2m Enerji &copy; 2016</small> </p>
+                <p style="margin-top:5px;"> <small> Copyright Hizmet Guru &copy; 2018</small> </p>
             </div>
             <div class="col-xs-6 text-right">
                 <button type="button" class="btn btn-success btn-sm" onclick="window.location.href='/login';">
@@ -75,8 +75,8 @@
 
         <br />
         <div class="text-center" style="padding:5px;">
-            <a href="http://www.2menerji.com/" title="2M Enerji" target="_blank">
-                <img class="img-responsive" alt="2M_Logo" style="max-height: 50px;display:inline;" src="/img/2m_logo.png" />
+            <a href="http://hizmet.site" title="Hizmet guru" target="_blank">
+                <img class="img-responsive" alt="Logo" style="max-height: 50px;display:inline;" src="/img/hizmet_logo.jpg" />
             </a>
         </div>
     </div>

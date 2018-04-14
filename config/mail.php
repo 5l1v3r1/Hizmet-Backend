@@ -57,7 +57,7 @@ return [
 
     'from' => [
         'address' => 'info@osmanaras.com',
-        'name' => 'Enerji Takibi',
+        'name' => 'Hizmet Guru',
     ],
 
     /*
