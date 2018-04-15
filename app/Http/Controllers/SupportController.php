@@ -49,7 +49,7 @@ class SupportController extends Controller
         if ($op == "showDetail") {
             $the_support = DB::table('support as S')
                 ->LeftJoin('support_category as SCA', 'S.category_id', 'SCA.id')
-                ->leftJoin('support_content as SC', 'S.id', 'SC.s_id')
+                ->LeftJoin('support_content as SC', 'S.id', 'SC.s_id')
                 ->where('S.id', $id)
                 ->where("S.status", '<>', 0)
                 ->first();

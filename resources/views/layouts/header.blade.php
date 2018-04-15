@@ -20,19 +20,69 @@
 
 
             $unread_count = 0;
-            $last_unread_id = "";
-            $onclick = "";
             if($total_alerts && COUNT($total_alerts)>0){
                 $unread_count = COUNT($total_alerts);
-                $last_unread_id = $total_alerts[0]->id;
-                $onclick = "mark_as_read();";
             }
 
+            $total_support = DB::table('support as A')
+                ->where('status','1')
+                ->orderBy('id','DESC')
+                ->get();
+            $show_support = DB::table('support')
+                ->orderBy('id','desc')
+                ->where('status','1')
+                ->limit('3')
+                ->get();
+            $unread_count_support = 0;
+            if($total_support && COUNT($total_support)>0){
+                $unread_count_support = COUNT($total_support);
+
+            }
 
             ?>
 
                 <li class="dropdown">
-                    <a class="dropdown-toggle count-info" data-toggle="dropdown" onclick="{{ $onclick }}" href="#" aria-expanded="true">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="true">
+                        <i class="fa fa-envelope"></i>  <span class="label label-warning">{{$unread_count_support}}</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        @foreach($show_support as $support)
+
+                            <?php
+                            $tarih= date('d.m.Y H:i:s', strtotime(str_replace('/', '-', $support->created_at)));
+                            $user_data = DB::table('clients')
+                                ->where('id',$support->created_by)
+                                ->first();
+
+                            ?>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a href="/support/detail/{{$support->id}}" class="pull-left" style="color: #000000;">
+                                <div class="media-body">
+                                    <small class="pull-right"> {!!  Helper::XZamanOnce($tarih) !!}</small>
+                                    <strong>{{$user_data->name}}</strong> tarafından oluşturulan talebin konusu <strong>{{$support->subject}}</strong></strong><br>
+                                    <small class="text-muted"> {{$tarih}}</small>
+                                </div>
+                                </a>
+
+                            </div>
+                        </li>
+
+                                <li class="divider"></li>
+                        @endforeach
+
+                            <div class="text-center link-block">
+                                <a href="/support">
+                                    <strong>Tüm Talepler</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown"  href="#" aria-expanded="true">
                         <i class="fa fa-bell"></i>  <span class="label label-primary">{{ $unread_count }}</span>
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
@@ -61,20 +111,7 @@
                             </div>
                     </ul>
 
-                    <script>
-                        function mark_as_read(){
-                            $.ajax({
-                                method:"POST",
-                                url:"/alerts/update_user_read",
-                                data:"id={{ $last_unread_id }}",
-                                success: function(return_text){
 
-
-
-                                }
-                            });
-                        }
-                    </script>
                 </li>
 
 
