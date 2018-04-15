@@ -28,8 +28,8 @@ class SupportController extends Controller
 
     public function showTable(Request $request)
     {
-        $prefix = "sm";
-        $url = "sm_get_data";
+        $prefix = "sp";
+        $url = "sp_get_data";
         $default_order = '[3,"desc"]';
         $data_table = new DataTable($prefix, $url, $this->columns, $default_order, $request);
         return view('pages.support_management')->with("SupportDataTableObj", $data_table);

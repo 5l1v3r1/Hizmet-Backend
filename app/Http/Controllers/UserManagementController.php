@@ -516,6 +516,8 @@ class UserManagementController extends Controller
         //fire event
         Helper::fire_event("profile_update", Auth::user(), "users", $request->input("user_edit_id"));
 
+        Helper::fire_alert("user", "update ", $request->input("user_edit_id"));
+
         //return update operation result via global session object
         session(['account_update_success' => true]);
 
@@ -639,7 +641,7 @@ class UserManagementController extends Controller
 
             //fire event
             Helper::fire_event("create", Auth::user(), "users", $last_insert_id);
-
+            Helper::fire_alert("user", "new ", $last_insert_id);
             //return insert operation result via global session object
             session(['new_user_insert_success' => true]);
         } else if ($op_type == "edit") { // update user's info
@@ -665,7 +667,7 @@ class UserManagementController extends Controller
 
             //fire event
             Helper::fire_event("update", Auth::user(), "users", $request->input("user_edit_id"));
-
+            Helper::fire_alert("user", "update ", $request->input("user_edit_id"));
             //return update operation result via global session object
             session(['user_update_success' => true]);
         }

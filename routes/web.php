@@ -210,7 +210,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/support', 'SupportController@showTable')->middleware('custom_authorization:view_event_logs');
-    Route::get('/sm_get_data', 'SupportController@getData')->middleware('custom_authorization:view_user_management');
+    Route::get('/sp_get_data', 'SupportController@getData')->middleware('custom_authorization:view_user_management');
     Route::post('/support/add', 'SupportController@create')->middleware('custom_authorization:add_new_user');
     Route::post('/support/message_send', 'SupportController@message_send')->middleware('custom_authorization:add_new_user');
     Route::post('/support/get_info', 'SupportController@getInfo')->middleware('custom_authorization:add_new_user');
@@ -230,6 +230,25 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['middleware'=>'auth'],function (){
+    Route::post('/alerts/update_user_read', 'AlertController@updateUserRead')->middleware('custom_authorization:view_alerts');
+    // alerts routing
+    Route::get('/alerts', 'AlertController@showTable')->middleware('custom_authorization:view_alerts');
+
+    Route::get('/al_get_data', 'AlertController@getData')->middleware('custom_authorization:view_alerts');
+
+    Route::get('/al_get_data/{type}/{id}', 'AlertController@getData')->middleware('custom_authorization:view_alerts')->where(['id' => '[0-9]{1,6}', 'type' => '(modem|meter|relay|analyzer|client_management|distributor_management)']);
+
+    Route::get('/ald_get_data', 'AlertController@getDefinitionData')->middleware('custom_authorization:view_alerts');
+
+    Route::post('/alerts/add', 'AlertController@create')->middleware('custom_authorization:add_new_alert_definition');
+
+    Route::post('/alerts/delete', 'AlertController@delete')->middleware('custom_authorization:delete_alert_definition');
+
+    Route::post('/alerts/update_user_read', 'AlertController@updateUserRead')->middleware('custom_authorization:view_alerts');
+    Route::post('/alerts/update_read', 'AlertController@updateRead')->middleware('custom_authorization:view_alerts');
+
+    Route::post('/alerts/get_definition_info', 'AlertController@getDefinitionInfo')->middleware('custom_authorization:add_new_alert_definition');
+
 	Route::get('/simulate_alert', function () {
         \App\Helpers\ScheduledTasks::detectAlarms();
         //abort(404);

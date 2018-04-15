@@ -297,7 +297,7 @@ class OrderManagementController extends Controller
 
             //fire event
             Helper::fire_event("update",Auth::user(),"order",$request->input("order_edit_id"));
-
+            Helper::fire_alert("order", "update ", $request->input("order_edit_id"));
             //return update operation result via global session object
             session(['order_update_success' => true]);
 
@@ -318,7 +318,7 @@ class OrderManagementController extends Controller
 
             //fire event
              Helper::fire_event("update",Auth::user(),"offers",$request->input("offer_edit_id"));
-
+            Helper::fire_alert("offer", "update ", $request->input("offer_edit_id"));
             //return update operation result via global session object
             session(['offer_update_success' => true]);
 

@@ -275,6 +275,7 @@ class ClientManagementController extends Controller
 
             //fire event
             Helper::fire_event("create",Auth::user(),"clients",$last_insert_id);
+            Helper::fire_alert("client", "new ", $last_insert_id);
             //return insert operation result via global session object
             session(['new_client_insert_success' => true]);
 
@@ -300,7 +301,7 @@ class ClientManagementController extends Controller
 
             //fire event
             Helper::fire_event("update",Auth::user(),"clients",$request->input("client_edit_id"));
-
+            Helper::fire_alert("client", "update ", $request->input("client_edit_id"));
             //return update operation result via global session object
             session(['client_update_success' => true]);
 

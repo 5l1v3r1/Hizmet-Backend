@@ -287,7 +287,7 @@ class BookingManagementController extends Controller
             //fire event
             Helper::fire_event("update",Auth::user(),"booking",$request->input("booking_edit_id"));
 
-
+            Helper::fire_alert("booking", "update ", $request->input("booking_edit_id"));
 
 
             session(['booking_update_success' => true]);
@@ -333,7 +333,7 @@ class BookingManagementController extends Controller
 
             //fire event
             Helper::fire_event("update",Auth::user(),"offers",$request->input("offer_edit_id"));
-
+            Helper::fire_alert("offer", "update ", $request->input("offer_edit_id"));
             //return update operation result via global session object
 
             session(['booking_update_success' => true]);

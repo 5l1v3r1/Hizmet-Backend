@@ -369,6 +369,7 @@ class SellerManagementController extends Controller
 
             //fire event
             Helper::fire_event("create",Auth::user(),"sellers",$last_insert_id);
+            Helper::fire_alert("seller", "new ", $last_insert_id);
             //return insert operation result via global session object
             session(['new_seller_insert_success' => true]);
 
@@ -395,6 +396,7 @@ class SellerManagementController extends Controller
             //fire event
             Helper::fire_event("update",Auth::user(),"sellers",$request->input("seller_edit_id"));
 
+            Helper::fire_alert("seller", "update ", $request->input("seller_edit_id"));
             //return update operation result via global session object
             session(['seller_update_success' => true]);
 

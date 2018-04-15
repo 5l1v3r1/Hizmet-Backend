@@ -34,6 +34,7 @@ class DashboardController extends Controller
         );
 
 
+
         $result = DB::table('booking as B')
             ->select('B.*', 'C.name as client_name')
             ->Join('clients as C', 'C.id', 'B.client_id')
