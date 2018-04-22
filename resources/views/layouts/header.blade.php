@@ -43,7 +43,9 @@
 
                 <li class="dropdown">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" aria-expanded="true">
-                        <i class="fa fa-envelope"></i>  <span class="label label-warning">{{$unread_count_support}}</span>
+                        <i class="fa fa-envelope"></i> @if($unread_count_support==0)
+                        @else<span class="label label-warning">{{ $unread_count_support }}</span>
+                        @endif
                     </a>
                     <ul class="dropdown-menu dropdown-messages">
                         @foreach($show_support as $support)

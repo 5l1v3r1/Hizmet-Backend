@@ -42,7 +42,7 @@ class SupportController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function userDetail(Request $request, $id, $op = "showDetail")
+    public function supportDetail(Request $request, $id, $op = "showDetail")
     {
 
 
