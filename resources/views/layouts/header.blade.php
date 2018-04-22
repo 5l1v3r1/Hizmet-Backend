@@ -83,7 +83,9 @@
 
                 <li class="dropdown">
                     <a class="dropdown-toggle count-info" data-toggle="dropdown"  href="#" aria-expanded="true">
-                        <i class="fa fa-bell"></i>  <span class="label label-primary">{{ $unread_count }}</span>
+                        <i class="fa fa-bell"></i>  @if($unread_count==0)
+                            @else<span class="label label-primary">{{ $unread_count }}</span>
+                             @endif
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
                         @foreach($show_alerts as $alert)

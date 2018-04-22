@@ -42,7 +42,7 @@ class ContactUsController extends Controller
 
 
         Mail::send('mail.contact_us', $data, function($message) use ($data) {
-            $message->to("info@ekopak.co", "Ekopak iletişim")->subject($data["subject"]);
+            $message->to("osmanaras50@gmail.com", "Ekopak iletişim")->subject($data["subject"]);
             $message->from(env('MAIL_USERNAME'),trans("global.mail_sender_name"));
         });
 
