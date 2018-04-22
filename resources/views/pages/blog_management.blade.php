@@ -16,6 +16,10 @@ $client_data = DB::table('clients')
 $blog_category = DB::table('blog_category')
     ->orderBy('id')
     ->get();
+$blog_top_category = DB::table('blog_category')
+    ->where('top_category', '0')
+    ->orderBy('id')
+    ->get();
 ?>
 
 @extends('layouts.master')
@@ -191,22 +195,104 @@ $blog_category = DB::table('blog_category')
         </div>
 
 
-
-        <div class="row" id="div_blog_dataTable">
+        <div class="row" id="div_blog_tabs">
             <div class="col-lg-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>{{ trans("booking_management.title") }}</h5>
-                        <div class="ibox-tools">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs" id="blog_detail_tabs">
+                        <li class="" tab="#tab-1">
+                            <a data-toggle="tab" href="#tab-1" aria-expanded="false">
+                                <i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i>
+                                Blog Listesi
+                            </a>
+                        </li>
+                        <li class="" tab="#tab-2">
+                            <a data-toggle="tab" href="#tab-2" aria-expanded="false">
+                                <i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i>
+                                Kategoriler
+                            </a>
+                        </li>
+                        <li class="" tab="#tab-3">
+                            <a data-toggle="tab" href="#tab-3" aria-expanded="false">
+                                <i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i>
+                               sac
+                            </a>
+                        </li>
 
-                        </div>
-                    </div>
-                    <div class="ibox-content tooltip-demo">
-                        {!! $BlogDataTableObj->html() !!}
+
+                    </ul> <!-- .nav -->
+
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane">
+                            <div class="panel-body">
+                                {!! $BlogDataTableObj->html() !!}
+                            </div>
+                        </div> <!-- .tab-1 -->
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
+
+                                <div class="col-md-4">
+                                <form  class="m-t form-horizontal" role="form" method="POST" action="{{ url('/blog/category/del') }}" id="blog_category_del">
+                                    {{ csrf_field() }}
+                                <select name="del_category" size="5" class="form-control">
+                                    @foreach($blog_category as $o_cat)
+                                    <option value="{{$o_cat->id}}">{{$o_cat->c_name}}</option>
+                                    @endforeach
+                                </select>
+                                    <button type="submit" class="btn btn-primary" id="category_delete" name="category_delete" >Sil</button>
+                                </form>
+                                </div>
+                                <div class="col-md-8">
+                                    <form  class="m-t form-horizontal" role="form" method="POST" action="{{ url('/blog/category/add') }}" id="blog_category_add">
+                                        {{ csrf_field() }}
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label"> Kategori Adı <span style="color:red;">*</span></label>
+                                            <div class="col-sm-6">
+                                                <input type="text" placeholder="" class="form-control" id="new_category_name" name="new_category_name" required minlength="3" maxlength="255">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label"> Sıralama <span style="color:red;">*</span></label>
+                                            <div class="col-sm-6">
+                                                <input type="text" placeholder="" class="form-control" id="new_category_rank" name="new_category_rank" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">Üst Kategori <span style="color:red;">*</span></label>
+                                            <div class="col-sm-6">
+                                                <select id="new_category_top" name="new_category_top" class="form-control" style="width: 100%;">
+                                                    <option value="0"></option>
+                                                    @foreach($blog_top_category as $one_list)
+                                                        <option value="{{ $one_list->id }}">{{ $one_list->c_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <br>
+
+                                        </div>
+                                        <div class="col-md-4" >
+                                        </div><div class="col-md-4" >
+                                            <input type="hidden" placeholder="" class="form-control" id="op_type" name="op_type" value="new">
+                                            <button type="submit" class="btn btn-primary" id="category_delete" name="category_delete">Ekle</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div> <!-- .tab-2 -->
+                        <div id="tab-3" class="tab-pane">
+                            <div class="panel-body">
+                                asd
+                            </div>
+                        </div> <!-- .tab-2 -->
+
+
                     </div>
                 </div>
             </div>
         </div>
+
+
+
     </div> <!-- .wrapper -->
 
 @endsection
@@ -233,7 +319,7 @@ $blog_category = DB::table('blog_category')
 
 
             $("#div_add_new_blog").hide();
-            $("#div_blog_dataTable").show();
+            $("#div_blog_tabs").show();
         }
 
         function show_add_new_form(){
@@ -270,7 +356,7 @@ $blog_category = DB::table('blog_category')
             $('#save_blog_button').html('<i class="fa fa-thumbs-o-up"></i> Kaydet');
 
             $("#div_add_new_blog").show();
-            $("#div_blog_dataTable").hide();
+            $("#div_blog_tabs").hide();
         }
 
         function validate_save_op(){
@@ -284,7 +370,7 @@ $blog_category = DB::table('blog_category')
 @endsection
 
 @section('page_document_ready')
-    {!! $BlogDataTableObj->ready() !!}
+
     @if (count($errors) > 0)
         @foreach ($errors->all() as $error)
             custom_toastr('{{ $error }}', 'error');
@@ -303,8 +389,68 @@ $blog_category = DB::table('blog_category')
 
             custom_toastr('Blog güncelleme başarılı.');
         @endif
+        @if (session()->has('new_blog_category_insert_success') && session('new_blog_category_insert_success'))
+            {{ session()->forget('new_blog_category_insert_success') }}
+
+            custom_toastr('Blog kategori ekleme başarılı.');
+        @endif
+        @if (session()->has('blog_category_delete_success') && session('blog_category_delete_success'))
+            {{ session()->forget('blog_category_delete_success') }}
+
+            custom_toastr('Blog kategori silme başarılı.');
+        @endif
 
     @endif
+
+
+
+    // Keep the current tab active after page reload
+    rememberTabSelection('#blog_detail_tabs', !localStorage);
+
+    if(document.location.hash){
+    $("#blog_detail_tabs a[href='"+document.location.hash+"']").trigger('click');
+    }
+
+    var tab_1 = false,
+    tab_2 = false,
+    tab_3 = false,
+    tab_4 = false;
+
+    function load_tab_content(selectedTab){
+    if(selectedTab == "#tab-1" && tab_1 == false){
+    tab_1 = true;
+    {!! $BlogDataTableObj->ready() !!}
+    }
+    else if(selectedTab == "#tab-2" && tab_2 == false){
+    tab_2 = true;
+    }
+    else if(selectedTab == "#tab-3" && tab_3 == false){
+    tab_3 = true;
+    }
+    else if(selectedTab == "#tab-4" && tab_4 == false){
+    tab_4 = true;
+
+
+    }
+    else{
+    return;
+    }
+    }
+
+    // Load the selected tab content When the tab is changed
+    $('#blog_detail_tabs a').on('shown.bs.tab', function(event){
+    var selectedTab = $(event.target).attr("href");
+    load_tab_content(selectedTab);
+    });
+
+    // Just install the related tab content When the page is first loaded
+    active_tab = $('#blog_detail_tabs li.active').attr("tab");
+    if( !(active_tab == "" || active_tab == null) )
+    load_tab_content(active_tab);
+    else
+    $("#blog_detail_tabs a:first").trigger('click');
+
+
 
 
 @endsection

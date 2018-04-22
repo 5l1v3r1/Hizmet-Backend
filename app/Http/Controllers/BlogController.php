@@ -228,6 +228,80 @@ class BlogController extends Controller
         return redirect()->back();
     }
 
+    public function category(Request $request)
+    {
+
+        //save the data to DB
+        if ($request->input("op_type") == "new") { // insert new user
+            $last_insert_id = DB::table('blog_category')->insertGetId(
+                [
+                    'c_name' => $request->input("new_category_name"),
+                    'rank' => $request->input("new_category_rank"),
+                    'top_category' => $request->input("new_category_top"),
+
+                ]
+            );
+
+            //fire event
+            Helper::fire_event("create", Auth::user(), "blog_category", $last_insert_id);
+
+            //return insert operation result via global session object
+            session(['new_blog_category_insert_success' => true]);
+        } else if ($request->input("del_category") != 0) { // update user's info
+            DB::table('blog_category')->where('id',$request->input("del_category"))
+                ->delete();
+
+
+
+            //fire event
+            Helper::fire_event("delete", Auth::user(), "blog_category", $request->input("del_category"));
+
+            //return update operation result via global session object
+            session(['blog_category_delete_success' => true]);
+        }
+
+
+        return redirect()->back();
+    }
+ public function tag(Request $request)
+    {
+
+        //save the data to DB
+        if ($request->input("op_type") == "new") { // insert new user
+            $last_insert_id = DB::table('blog_tag')->insertGetId(
+                [
+                    'name' => $request->input("new_tag_name"),
+                ]
+            );
+            DB::table('blog_etiket')->insert(
+                [
+                    'blog_id' => $request->input("blog_id"),
+                    'tag_id' => $last_insert_id,
+                ]
+            );
+
+            //fire event
+            Helper::fire_event("create", Auth::user(), "blog_tag", $last_insert_id);
+
+            //return insert operation result via global session object
+            session(['new_blog_category_insert_success' => true]);
+        } else if ($request->input("del_tag") != 0) { // update user's info
+            DB::table('blog_etiket')->where('id',$request->input("del_tag"))
+                ->delete();
+
+
+
+            //fire event
+            Helper::fire_event("delete", Auth::user(), "blog_etiket", $request->input("del_tag"));
+
+            //return update operation result via global session object
+            session(['blog_cetiket_delete_success' => true]);
+        }
+
+
+        return redirect()->back();
+    }
+
 
 
 }

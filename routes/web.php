@@ -226,6 +226,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/blog', 'BlogController@showTable');
     Route::get('/bg_get_data', 'BlogController@getData')->middleware('custom_authorization:view_user_management');
     Route::post('/blog/add', 'BlogController@create')->middleware('custom_authorization:add_new_user');
+    Route::post('/blog/category/add', 'BlogController@category')->middleware('custom_authorization:add_new_user');
+    Route::post('/blog/category/del', 'BlogController@category')->middleware('custom_authorization:add_new_user');
+    Route::post('/blog/tag/add', 'BlogController@tag')->middleware('custom_authorization:add_new_user');
+    Route::post('/blog/tag/del', 'BlogController@tag')->middleware('custom_authorization:add_new_user');
     Route::post('/blog/get_info', 'BlogController@getInfo')->middleware('custom_authorization:add_new_user');
     Route::get('/blog/detail/{id}', 'BlogController@blogDetail')->middleware('custom_authorization:view_user_detail')->where('id', '[0-9]{1,5}');
 
