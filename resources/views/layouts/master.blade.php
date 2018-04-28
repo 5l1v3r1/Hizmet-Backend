@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="description" content="{{ trans('global.description') }}">
         <meta name="keywords" content="{{ trans('global.description') }}">
-        <title>3Faz | @yield('title')</title>
+        <title>Hizmet Site | @yield('title')</title>
 
         <!-- Mobile Specific Metas ================================================== -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
@@ -82,6 +82,7 @@
 
     <!-- Toastr -->
     <script src="/js/plugins/toastr/toastr.min.js"></script>
+
 
     <!-- Page level javascript -->
     @yield('page_level_js')

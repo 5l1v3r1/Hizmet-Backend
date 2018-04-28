@@ -211,12 +211,6 @@ $blog_top_category = DB::table('blog_category')
                                 Kategoriler
                             </a>
                         </li>
-                        <li class="" tab="#tab-3">
-                            <a data-toggle="tab" href="#tab-3" aria-expanded="false">
-                                <i class="fa fa-unlock-alt fa-lg" aria-hidden="true"></i>
-                               sac
-                            </a>
-                        </li>
 
 
                     </ul> <!-- .nav -->
@@ -277,11 +271,6 @@ $blog_top_category = DB::table('blog_category')
                                     </form>
 
                                 </div>
-                            </div>
-                        </div> <!-- .tab-2 -->
-                        <div id="tab-3" class="tab-pane">
-                            <div class="panel-body">
-                                asd
                             </div>
                         </div> <!-- .tab-2 -->
 

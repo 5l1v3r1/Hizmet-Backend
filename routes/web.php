@@ -276,6 +276,12 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/contact_us/send_message', 'ContactUsController@sendMail')->middleware('custom_authorization:view_contact_us');
 });
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/message', 'ChatsController@index');
+    Route::get('messages', 'ChatsController@fetchMessages');
+    Route::post('messages', 'ChatsController@sendMessage');
+});
 
 // if not match anything then abort:404
 Route::group(['middleware' => 'auth'], function () {
@@ -285,3 +291,5 @@ Route::group(['middleware' => 'auth'], function () {
     })->middleware('custom_authorization:view_contact_us');
 
 });
+
+
