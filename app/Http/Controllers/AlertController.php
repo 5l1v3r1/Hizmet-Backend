@@ -156,6 +156,8 @@ class AlertController extends Controller
         } elseif($type=="order"){
             if($sub_type=="update"){
                 $link="/order_management/detail/".$device;
+            }elseif($type=="finish"){
+                $link="/order_management/detail/".$device;
             }
             else{
                 $link="/order_management/";
@@ -188,7 +190,16 @@ class AlertController extends Controller
             else{
                 $link="/seller_management/";
             }
-        }elseif($type=="finance"){
+        }
+        elseif($type=="offers"){
+            if($sub_type=="update"){
+                $link="/booking_management/offer/".$device;
+            }
+            else{
+                $link="/booking_management/offer/".$device;
+            }
+        }
+        elseif($type=="finance"){
 
                 $link="/finance/";
 

@@ -112,7 +112,7 @@
 
                         <div id="tab-1" class="tab-pane">
                             <div class="panel-body">
-                                İlan burda gösterilecek
+                                <a href="http://hizmet.site/ilan/{{$the_order->order_id}}" type="button" class="btn btn-outline btn-success"> İlanı Göster</a>
                             </div>
                         </div> <!-- .tab-1 -->
 
